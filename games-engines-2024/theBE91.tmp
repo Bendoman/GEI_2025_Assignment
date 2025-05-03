@@ -1,0 +1,75 @@
+[gd_scene load_steps=9 format=4 uid="uid://dnluh01o141d4"]
+
+[ext_resource type="Script" path="res://theremin.gd" id="1_mqdv8"]
+[ext_resource type="PackedScene" uid="uid://cme66uldrjl2i" path="res://addons/godot-xr-tools/interactables/interactable_area_button.tscn" id="1_oc48l"]
+[ext_resource type="Script" path="res://addons/godot_sfxr/SfxrStreamPlayer3D.gd" id="1_xsb8r"]
+[ext_resource type="Script" path="res://scenes/test.gd" id="2_rs8ob"]
+[ext_resource type="Script" path="res://addons/godot-xr-tools/interactables/theremin_area.gd" id="5_8ycgo"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_dj2sx"]
+top_radius = 0.25
+bottom_radius = 0.25
+height = 0.05
+
+[sub_resource type="AudioStreamWAV" id="AudioStreamWAV_fa51h"]
+data = PackedByteArray("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")
+loop_mode = 1
+loop_end = 15
+mix_rate = 2000
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_cdcgo"]
+height = 3.11527
+
+[node name="theremin" type="Node3D"]
+script = ExtResource("1_mqdv8")
+
+[node name="body" type="StaticBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="body"]
+mesh = SubResource("CylinderMesh_dj2sx")
+skeleton = NodePath("../..")
+
+[node name="Marker3D" type="Marker3D" parent="body"]
+
+[node name="SfxrStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+stream = SubResource("AudioStreamWAV_fa51h")
+volume_db = -20.0
+script = ExtResource("1_xsb8r")
+wave/type = 2
+sample_params/sound_vol = 0.25
+sample_params/sample_rate = 22050.0
+envelope/attack_time = 0.0
+envelope/sustain_time = 0.25
+envelope/punch_time = 0.0
+envelope/decay_time = 0.0
+frequency/start_frequency = 0.3
+frequency/min_freq_cutoff = 0.0
+frequency/slide = 0.0
+frequency/delta_slide = 0.0
+vibrato/depth = 0.0
+vibrato/speed = 0.0
+arpeggiation/frequency_mult = 0.0
+arpeggiation/change_speed = 0.0
+duty_cycle/duty_cycle = 0.0
+duty_cycle/sweep = 0.0
+retrigger/rate = 0.0
+flanger/offset = 0.0
+flanger/sweep = 0.0
+low_pass_filter/cutoff_frequency = 1.0
+low_pass_filter/cutoff_sweep = 0.0
+low_pass_filter/resonance = 0.0
+high_pass_filter/cutoff_frequency = 0.0
+high_pass_filter/cutoff_sweep = 0.0
+
+[node name="test" type="Node3D" parent="SfxrStreamPlayer3D"]
+script = ExtResource("2_rs8ob")
+
+[node name="InteractableAreaButton" parent="." instance=ExtResource("1_oc48l")]
+script = ExtResource("5_8ycgo")
+button = null
+displacement = null
+duration = null
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractableAreaButton"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.53628, 0)
+shape = SubResource("CylinderShape3D_cdcgo")

@@ -1,0 +1,173 @@
+[gd_scene load_steps=13 format=3 uid="uid://csa1e3teul0aj"]
+
+[ext_resource type="Script" uid="uid://uxqcd72nvx4x" path="res://scripts/rotation_planes.gd" id="1_f2gp8"]
+[ext_resource type="Material" uid="uid://dw8skocq4f01f" path="res://materials/rotation_plane.tres" id="2_dd5mj"]
+[ext_resource type="Material" uid="uid://dpe6ojv76rv0d" path="res://materials/rotation_plane_highlighted.tres" id="3_ysbea"]
+[ext_resource type="PackedScene" uid="uid://coqqhipqy4wno" path="res://scenes/rotation_plane.tscn" id="4_c6kgt"]
+[ext_resource type="Script" uid="uid://d0vkm7tk3rakp" path="res://scripts/cublets.gd" id="5_lneqx"]
+[ext_resource type="Material" uid="uid://dyt20tqm5x44a" path="res://materials/face_material_one.tres" id="6_eni4p"]
+[ext_resource type="Material" uid="uid://ih1ruj8tg1fj" path="res://materials/green_face.tres" id="7_ukcgg"]
+[ext_resource type="Material" uid="uid://0ajl5h4h5pbk" path="res://materials/orange_face.tres" id="8_lwht1"]
+[ext_resource type="PackedScene" uid="uid://t3b47lj1rvy7" path="res://scenes/cubelet.tscn" id="9_v5mvc"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_rjamp"]
+sky_top_color = Color(0.424147, 0.643234, 0.948052, 1)
+sky_horizon_color = Color(0.616777, 0.669201, 0.792429, 1)
+ground_bottom_color = Color(0.0429619, 0.03357, 0.221665, 1)
+ground_horizon_color = Color(0.616777, 0.669201, 0.792429, 1)
+
+[sub_resource type="Sky" id="Sky_1cd7g"]
+sky_material = SubResource("ProceduralSkyMaterial_rjamp")
+
+[sub_resource type="Environment" id="Environment_vad2t"]
+background_mode = 2
+sky = SubResource("Sky_1cd7g")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="Node3D" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+light_color = Color(0.920897, 0.854667, 0.393829, 1)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_vad2t")
+
+[node name="cublets" type="Node3D" parent="."]
+visible = false
+script = ExtResource("5_lneqx")
+material = ExtResource("6_eni4p")
+material2 = ExtResource("7_ukcgg")
+material3 = ExtResource("8_lwht1")
+
+[node name="Bottom row" type="Node3D" parent="cublets"]
+
+[node name="Cubelet" parent="cublets/Bottom row" instance=ExtResource("9_v5mvc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0, 0)
+
+[node name="Cubelet2" parent="cublets/Bottom row" instance=ExtResource("9_v5mvc")]
+
+[node name="Cubelet3" parent="cublets/Bottom row" instance=ExtResource("9_v5mvc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1, 0, 0)
+
+[node name="Cubelet4" parent="cublets/Bottom row" instance=ExtResource("9_v5mvc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0, -1.05)
+
+[node name="Cubelet5" parent="cublets/Bottom row" instance=ExtResource("9_v5mvc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.05)
+
+[node name="Cubelet6" parent="cublets/Bottom row" instance=ExtResource("9_v5mvc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1, 0, -1.05)
+
+[node name="Cubelet7" parent="cublets/Bottom row" instance=ExtResource("9_v5mvc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0, -2.1)
+
+[node name="Cubelet8" parent="cublets/Bottom row" instance=ExtResource("9_v5mvc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.1)
+
+[node name="Cubelet9" parent="cublets/Bottom row" instance=ExtResource("9_v5mvc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1, 0, -2.1)
+
+[node name="Middle row" type="Node3D" parent="cublets"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.05, 0)
+visible = false
+
+[node name="Cubelet" parent="cublets/Middle row" instance=ExtResource("9_v5mvc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0, 0)
+
+[node name="Cubelet2" parent="cublets/Middle row" instance=ExtResource("9_v5mvc")]
+
+[node name="Cubelet3" parent="cublets/Middle row" instance=ExtResource("9_v5mvc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1, 0, 0)
+
+[node name="Cubelet4" parent="cublets/Middle row" instance=ExtResource("9_v5mvc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0, -1.05)
+
+[node name="Cubelet5" parent="cublets/Middle row" instance=ExtResource("9_v5mvc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.05)
+
+[node name="Cubelet6" parent="cublets/Middle row" instance=ExtResource("9_v5mvc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1, 0, -1.05)
+
+[node name="Cubelet7" parent="cublets/Middle row" instance=ExtResource("9_v5mvc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0, -2.1)
+
+[node name="Cubelet8" parent="cublets/Middle row" instance=ExtResource("9_v5mvc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.1)
+
+[node name="Cubelet9" parent="cublets/Middle row" instance=ExtResource("9_v5mvc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1, 0, -2.1)
+
+[node name="Top row" type="Node3D" parent="cublets"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)
+visible = false
+
+[node name="Cubelet" parent="cublets/Top row" instance=ExtResource("9_v5mvc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0, 0)
+
+[node name="Cubelet2" parent="cublets/Top row" instance=ExtResource("9_v5mvc")]
+
+[node name="Cubelet3" parent="cublets/Top row" instance=ExtResource("9_v5mvc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1, 0, 0)
+
+[node name="Cubelet4" parent="cublets/Top row" instance=ExtResource("9_v5mvc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0, -1.05)
+
+[node name="Cubelet5" parent="cublets/Top row" instance=ExtResource("9_v5mvc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.05)
+
+[node name="Cubelet6" parent="cublets/Top row" instance=ExtResource("9_v5mvc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1, 0, -1.05)
+
+[node name="Cubelet7" parent="cublets/Top row" instance=ExtResource("9_v5mvc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0, -2.1)
+
+[node name="Cubelet8" parent="cublets/Top row" instance=ExtResource("9_v5mvc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.1)
+
+[node name="Cubelet9" parent="cublets/Top row" instance=ExtResource("9_v5mvc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1, 0, -2.1)
+
+[node name="rotation_planes" type="Node3D" parent="."]
+script = ExtResource("1_f2gp8")
+default_material = ExtResource("2_dd5mj")
+highlighted_material = ExtResource("3_ysbea")
+
+[node name="bottom_horizontal_plane" parent="rotation_planes" instance=ExtResource("4_c6kgt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0, -1.05)
+
+[node name="middle_horizontal_plane" parent="rotation_planes" instance=ExtResource("4_c6kgt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 1.05, -1.05)
+
+[node name="top_horizontal_plane" parent="rotation_planes" instance=ExtResource("4_c6kgt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 2.1, -1.05)
+visible = false
+skeleton = NodePath("../bottom_horizontal_plane")
+
+[node name="bottom_vertical_plane" parent="rotation_planes" instance=ExtResource("4_c6kgt")]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 1.05, -1.05)
+
+[node name="middle_vertical_plane" parent="rotation_planes" instance=ExtResource("4_c6kgt")]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 1.05, 1.05, -1.05)
+visible = false
+
+[node name="top_vertical_plane" parent="rotation_planes" instance=ExtResource("4_c6kgt")]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 2.1, 1.05, -1.05)
+visible = false
+
+[node name="bottom_face_plane" parent="rotation_planes" instance=ExtResource("4_c6kgt")]
+transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, 1.05, 1.05, 0)
+visible = false
+
+[node name="middle_face_plane" parent="rotation_planes" instance=ExtResource("4_c6kgt")]
+transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, 1.05, 1.05, -1.05)
+visible = false
+
+[node name="top_face_plane" parent="rotation_planes" instance=ExtResource("4_c6kgt")]
+transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, 1.05, 1.05, -2.1)
+visible = false
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 4.43419e-08, -1.69129e-07, 0, 0.967308, 0.253606, 1.74846e-07, -0.253606, 0.967308, 1.03385, 2.38203, 3.09298)

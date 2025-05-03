@@ -1,0 +1,45 @@
+[gd_scene load_steps=2 format=3 uid="uid://ungirnwga6pc"]
+
+[ext_resource type="Script" uid="uid://br67e8hgrva5n" path="res://control_pad/control_pad_display.gd" id="1_iqtwx"]
+
+[node name="ControlPadDisplay" type="TabContainer"]
+offset_right = 400.0
+offset_bottom = 200.0
+tab_alignment = 1
+current_tab = 0
+script = ExtResource("1_iqtwx")
+
+[node name="RefreshTimer" type="Timer" parent="."]
+wait_time = 0.1
+autostart = true
+
+[node name="Settings" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+metadata/_tab_index = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Settings"]
+layout_mode = 2
+alignment = 1
+
+[node name="Scale" type="HBoxContainer" parent="Settings/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Settings/VBoxContainer/Scale"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+text = "Volume:"
+
+[node name="BodyScaleSlider" type="HSlider" parent="Settings/VBoxContainer/Scale"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.001
+value = 1.0
+
+[connection signal="timeout" from="RefreshTimer" to="." method="_on_refresh_timer_timeout"]
+[connection signal="value_changed" from="Settings/VBoxContainer/Scale/BodyScaleSlider" to="." method="_on_body_scale_slider_value_changed"]

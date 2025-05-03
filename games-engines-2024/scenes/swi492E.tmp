@@ -1,0 +1,54 @@
+[gd_scene load_steps=11 format=3 uid="uid://xwgcjt6sgtgv"]
+
+[ext_resource type="Script" path="res://scenes/switch.gd" id="1_qpmh7"]
+[ext_resource type="Material" uid="uid://6bugpdcw5jrq" path="res://materials/pad_base.tres" id="1_xtk8r"]
+[ext_resource type="Material" uid="uid://48bun61q77pv" path="res://materials/switch_unpressed.tres" id="3_40ply"]
+[ext_resource type="Material" uid="uid://bkf4thllcunuq" path="res://materials/switch_pressed.tres" id="3_ekre7"]
+[ext_resource type="PackedScene" uid="uid://bddj5m7ull6g0" path="res://addons/godot-xr-tools/interactables/interactable_handle.tscn" id="5_p7577"]
+[ext_resource type="PackedScene" uid="uid://c25yxb0vt53vc" path="res://addons/godot-xr-tools/objects/grab_points/grab_point_hand_left.tscn" id="6_knoai"]
+[ext_resource type="PackedScene" uid="uid://ctw7nbntd5pcj" path="res://addons/godot-xr-tools/objects/grab_points/grab_point_hand_right.tscn" id="7_fu732"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_j7j64"]
+top_radius = 0.325
+bottom_radius = 0.325
+height = 0.05
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_t7hww"]
+material = ExtResource("3_40ply")
+top_radius = 0.25
+bottom_radius = 0.25
+height = 0.05
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_au51m"]
+height = 0.05
+radius = 0.25
+
+[node name="switch" type="Node3D"]
+script = ExtResource("1_qpmh7")
+defaultMaterial = ExtResource("3_40ply")
+activeMaterial = ExtResource("3_ekre7")
+
+[node name="body" type="Node3D" parent="."]
+
+[node name="button_base" type="MeshInstance3D" parent="body"]
+material_override = ExtResource("1_xtk8r")
+mesh = SubResource("CylinderMesh_j7j64")
+skeleton = NodePath("../..")
+
+[node name="button" type="MeshInstance3D" parent="body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, 0)
+mesh = SubResource("CylinderMesh_t7hww")
+skeleton = NodePath("../..")
+
+[node name="InteractableHandle" parent="." instance=ExtResource("5_p7577")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractableHandle"]
+shape = SubResource("CylinderShape3D_au51m")
+
+[node name="GrabPointHandLeft" parent="InteractableHandle" instance=ExtResource("6_knoai")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.145997, 0)
+visible = true
+
+[node name="GrabPointHandRight" parent="InteractableHandle" instance=ExtResource("7_fu732")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.145057, 0)
+visible = true
