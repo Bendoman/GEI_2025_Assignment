@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://bmov0u7ck0qgu"]
+[gd_scene load_steps=10 format=3 uid="uid://bmov0u7ck0qgu"]
 
 [ext_resource type="Script" uid="uid://cpek6qnsms6xd" path="res://test.gd" id="1_6uqi0"]
 [ext_resource type="Material" uid="uid://dtd0wnwdssiif" path="res://materials/ground_colour.tres" id="2_ykrsh"]
+[ext_resource type="PackedScene" uid="uid://dcsunt6lrihqa" path="res://scenes/ant.tscn" id="4_ppyta"]
 [ext_resource type="PackedScene" uid="uid://cccxu3uljmod8" path="res://scenes/ant_base.tscn" id="4_vbegm"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_n2cwj"]
@@ -51,3 +52,6 @@ transform = Transform3D(1, 0, 0, 0, 0.344807, 0.938674, 0, -0.938674, 0.344807, 
 
 [node name="AntBase" parent="." instance=ExtResource("4_vbegm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.162315, 0.175, 1.68062)
+
+[node name="Ant" parent="." instance=ExtResource("4_ppyta")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.760164, 0.1, 1.38682)

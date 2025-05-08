@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://cccxu3uljmod8"]
 
 [ext_resource type="Script" uid="uid://bjdcgwmuykbl1" path="res://scenes/ant_base.gd" id="1_cloup"]
-[ext_resource type="PackedScene" uid="uid://mu8jj620dn1l" path="res://scenes/worker_ant.tscn" id="2_mgxml"]
+[ext_resource type="PackedScene" uid="uid://dcsunt6lrihqa" path="res://scenes/ant.tscn" id="2_mgxml"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_ti84e"]
 height = 0.25
