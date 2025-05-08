@@ -18,8 +18,9 @@ func _spawn_ant() -> void:
 	if not ant_scene:
 		push_warning("No Ant scene assigned for spawning!")
 		return
+	if antCount > 15:
+		return 
 		
-	print('spawning ant')
 	var ant = ant_scene.instantiate()
 	add_child(ant)
 	antCount += 1

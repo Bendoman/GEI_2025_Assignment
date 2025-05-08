@@ -1,4 +1,4 @@
-extends CharacterBody3D
+extends Node3D
 class_name Ant
 
 # Ant physical dimensions (pill shape): radius ~0.122m, height ~0.401m
@@ -25,6 +25,10 @@ var force: Vector3 = Vector3.ZERO
 var speed: float = 0.0
 var wander_target: Vector3 = Vector3.ZERO
 
+var path := []
+@export var record_interval := 0.1  # seconds between waypoints
+var _record_timer := 0.0
+
 func _ready():
 	# Initialize wander target on the XZ plane
 	wander_target = random_point_in_unit_sphere()
@@ -47,13 +51,20 @@ func _physics_process(delta: float) -> void:
 
 	if speed > 0.0:
 		# Apply velocity and move
-		velocity = ant_velocity
-		move_and_slide()
+		#velocity = ant_velocity
+		#move_and_slide()
+		global_translate(ant_velocity * delta)
 
 		# Banking (tilt into turns)
 		var up_dir: Vector3 = global_transform.basis.y.lerp(Vector3.UP + acceleration * banking, delta * 5.0)
 		look_at(global_transform.origin + ant_velocity, up_dir)
+		
+		_record_timer += delta
+		if _record_timer >= record_interval:
+			_record_timer = 0.0
+			path.append(global_transform.origin)
 
+				
 # Generate a random point inside unit sphere (uniform distribution)
 func random_point_in_unit_sphere() -> Vector3:
 	var u: float = randf()
