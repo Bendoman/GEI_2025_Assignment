@@ -1,4 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://cccxu3uljmod8"]
+[gd_scene load_steps=6 format=3 uid="uid://cccxu3uljmod8"]
+
+[ext_resource type="Script" uid="uid://bjdcgwmuykbl1" path="res://scenes/ant_base.gd" id="1_cloup"]
+[ext_resource type="PackedScene" uid="uid://mu8jj620dn1l" path="res://scenes/worker_ant.tscn" id="2_mgxml"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_ti84e"]
 height = 0.25
@@ -12,6 +15,9 @@ material = SubResource("StandardMaterial3D_ti84e")
 height = 0.25
 
 [node name="AntBase" type="Node3D"]
+script = ExtResource("1_cloup")
+spawn_position = Vector3(0, 0.5, 0)
+ant_scene = ExtResource("2_mgxml")
 
 [node name="Area3D" type="Area3D" parent="."]
 

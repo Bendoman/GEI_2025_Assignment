@@ -51,8 +51,23 @@ mesh = SubResource("BoxMesh_16tix")
 [node name="XROrigin3D" parent="." instance=ExtResource("2_qpxi4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.55598)
 
-[node name="WorkerAnt" parent="." instance=ExtResource("4_k0juu")]
-transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0.868764, 0.27988, -0.511786)
-
 [node name="AntBase" parent="." instance=ExtResource("3_71j4m")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.926592, 0.175, 0.177432)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.969868, 0.243632, 0, -0.243632, 0.969868, 0, 1.38551, 2.63907)
+
+[node name="WorkerAnt" parent="." instance=ExtResource("4_k0juu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.10181, 0.141952, -0.501438)
+
+[node name="WorkerAnt2" parent="." instance=ExtResource("4_k0juu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6693, 0.141952, -0.358448)
+
+[node name="WorkerAnt3" parent="." instance=ExtResource("4_k0juu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.68934, 0.141952, -0.191611)
+
+[node name="WorkerAnt4" parent="." instance=ExtResource("4_k0juu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.348994, 0.141952, -0.0393905)
+
+[node name="WorkerAnt5" parent="." instance=ExtResource("4_k0juu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.09004, 0.141952, 0.24829)

@@ -1,5 +1,6 @@
-[gd_scene load_steps=17 format=3 uid="uid://mu8jj620dn1l"]
+[gd_scene load_steps=18 format=3 uid="uid://mu8jj620dn1l"]
 
+[ext_resource type="Script" uid="uid://b2d6o23dvk3xc" path="res://scenes/worker_ant.gd" id="1_2grfr"]
 [ext_resource type="Material" uid="uid://dvsjlvytlj7bj" path="res://materials/ant_head.tres" id="1_ghqjp"]
 [ext_resource type="Material" uid="uid://cnr0mcs5skttv" path="res://materials/ant_legs.tres" id="2_2grfr"]
 [ext_resource type="Material" uid="uid://bew0o6jcl78f5" path="res://materials/and_abdomem.tres" id="3_0hh7c"]
@@ -59,6 +60,7 @@ radius = 0.122028
 height = 0.401157
 
 [node name="WorkerAnt" type="CharacterBody3D"]
+script = ExtResource("1_2grfr")
 
 [node name="Head" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.170545)
