@@ -1,0 +1,70 @@
+[gd_scene load_steps=11 format=3 uid="uid://bmov0u7ck0qgu"]
+
+[ext_resource type="Script" uid="uid://cpek6qnsms6xd" path="res://test.gd" id="1_6uqi0"]
+[ext_resource type="Material" uid="uid://dtd0wnwdssiif" path="res://materials/ground_colour.tres" id="2_ykrsh"]
+[ext_resource type="PackedScene" uid="uid://dcsunt6lrihqa" path="res://scenes/ant.tscn" id="4_ppyta"]
+[ext_resource type="PackedScene" uid="uid://cccxu3uljmod8" path="res://scenes/ant_base.tscn" id="4_vbegm"]
+[ext_resource type="Script" uid="uid://4uj7kmtbga1r" path="res://ant_manager.gd" id="5_ykrsh"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_n2cwj"]
+sky_top_color = Color(0.425909, 0.569805, 0.704866, 1)
+sky_horizon_color = Color(0.618242, 0.691471, 0.767393, 1)
+ground_bottom_color = Color(0.0470588, 0.196078, 0.364706, 1)
+ground_horizon_color = Color(0.618242, 0.691471, 0.767393, 1)
+
+[sub_resource type="Sky" id="Sky_0xqbg"]
+sky_material = SubResource("ProceduralSkyMaterial_n2cwj")
+
+[sub_resource type="Environment" id="Environment_gsyhl"]
+background_mode = 2
+sky = SubResource("Sky_0xqbg")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fuouj"]
+size = Vector3(10, 0.1, 10)
+
+[sub_resource type="BoxMesh" id="BoxMesh_16tix"]
+size = Vector3(50, 0.1, 50)
+
+[node name="root" type="Node3D"]
+script = ExtResource("1_6uqi0")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_gsyhl")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+light_color = Color(1, 1, 0.898039, 1)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+collision_layer = 256
+collision_mask = 256
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("BoxShape3D_fuouj")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D/CollisionShape3D"]
+material_override = ExtResource("2_ykrsh")
+mesh = SubResource("BoxMesh_16tix")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.344807, 0.938674, 0, -0.938674, 0.344807, 0, 2.75562, 0.692274)
+
+[node name="AntBase" parent="." instance=ExtResource("4_vbegm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.162315, 0.175, 1.68062)
+
+[node name="Ant" parent="." instance=ExtResource("4_ppyta")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.760164, 0.1, 1.38682)
+
+[node name="AntManager" type="Node3D" parent="."]
+script = ExtResource("5_ykrsh")
+ant_scene = ExtResource("4_ppyta")
+max_ants = null
+spawn_interval = null
+wander_distance = null
+wander_radius = null
+wander_jitter = null
+max_speed = null
+max_force = null
+damping = null

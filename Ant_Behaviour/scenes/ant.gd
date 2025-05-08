@@ -1,5 +1,4 @@
 extends Node3D
-class_name Ant
 
 # Ant physical dimensions (pill shape): radius ~0.122m, height ~0.401m
 # Steering parameters scaled for small ant
@@ -25,20 +24,72 @@ var force: Vector3 = Vector3.ZERO
 var speed: float = 0.0
 var wander_target: Vector3 = Vector3.ZERO
 
-var path := []
+var path: Array[Vector3]= []
+var backtrack_path: Array[Vector3] = []  # working reverse list
+
 @export var record_interval := 0.1  # seconds between waypoints
 var _record_timer := 0.0
+var is_backtracking := false
 
 func _ready():
 	# Initialize wander target on the XZ plane
 	wander_target = random_point_in_unit_sphere()
 	wander_target.y = 0.0
 	wander_target = wander_target.normalized() * wander_radius
+	var timer := Timer.new()
+	timer.wait_time = 5
+	timer.one_shot = false
+	timer.autostart = true
+	add_child(timer)
+	timer.timeout.connect(Callable(self, "backtrack"))
 
+func backtrack() -> void:
+	is_backtracking = true
+	
 func _physics_process(delta: float) -> void:
 	if pause:
 		return
+	if is_backtracking:
+		_process_backtrack(delta)
+	else:
+		_process_wander(delta)
+		
+func _process_backtrack(delta):
+	# if we just entered backtrack mode, copy & reverse
+	if backtrack_path.is_empty() and path.size() > 0:
+		backtrack_path = path.duplicate()
+		backtrack_path.is_empty()  # reverse in place
 
+	# if no more points, finish backtracking
+	if backtrack_path.is_empty():
+		is_backtracking = false
+		path.clear()
+		return
+
+	# get current target waypoint
+	var target_pos: Vector3 = backtrack_path[0]
+	var to_target = (target_pos - global_transform.origin)
+	if to_target.length() < 0.05:
+		# reached it, pop and continue
+		backtrack_path.pop_front()
+		return
+
+	# seek toward it
+	var desired_vel = to_target.normalized() * max_speed
+	var steer = (desired_vel - ant_velocity).limit_length(max_force)
+	acceleration = steer / mass
+	ant_velocity += acceleration * delta
+
+	ant_velocity = ant_velocity.limit_length(max_speed)
+	ant_velocity -= ant_velocity * damping * delta
+
+	global_translate(ant_velocity * delta)
+	var up_dir = global_transform.basis.y.lerp(
+		Vector3.UP + acceleration * banking, delta * 5.0
+	)
+	look_at(global_transform.origin + ant_velocity, up_dir)
+	
+func _process_wander(delta):
 	# Calculate and apply wander steering
 	force = calculate_wander(delta)
 	acceleration = force / mass
@@ -63,7 +114,6 @@ func _physics_process(delta: float) -> void:
 		if _record_timer >= record_interval:
 			_record_timer = 0.0
 			path.append(global_transform.origin)
-
 				
 # Generate a random point inside unit sphere (uniform distribution)
 func random_point_in_unit_sphere() -> Vector3:

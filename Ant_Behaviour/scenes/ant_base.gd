@@ -1,5 +1,5 @@
 extends Node3D
-@export var spawn_interval: float = 0.1       # seconds between spawns
+@export var spawn_interval: float = 0.5       # seconds between spawns
 @export var spawn_position: Vector3 = Vector3.ZERO
 @export var ant_scene: PackedScene
 
