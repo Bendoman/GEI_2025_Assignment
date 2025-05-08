@@ -1,7 +1,7 @@
 [gd_scene load_steps=18 format=3 uid="uid://k7jxtfi4j4kd"]
 
 [ext_resource type="Script" uid="uid://n7xt2eibsqu8" path="res://scripts/beat_pad.gd" id="1_rm7xu"]
-[ext_resource type="Material" uid="uid://c53c0dahi1eg2" path="res://materials/pad_button.tres" id="2_rtjqq"]
+[ext_resource type="Material" uid="uid://c53c0dahi1eg2" path="res://materials/old/pad_button.tres" id="2_rtjqq"]
 [ext_resource type="PackedScene" uid="uid://cme66uldrjl2i" path="res://addons/godot-xr-tools/interactables/interactable_area_button.tscn" id="3_rkwm8"]
 [ext_resource type="Script" uid="uid://crvkpnh86d54v" path="res://addons/godot-xr-tools/rumble/rumbler.gd" id="4_8pyi2"]
 [ext_resource type="Resource" uid="uid://brci6umrcd157" path="res://addons/godot-xr-tools/rumble/tap_rumble.tres" id="5_xnrjh"]

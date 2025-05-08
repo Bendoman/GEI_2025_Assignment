@@ -1,0 +1,71 @@
+[gd_scene load_steps=7 format=3 uid="uid://mu8jj620dn1l"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_xeae7"]
+height = 0.7
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_hqvkx"]
+top_radius = 0.025
+bottom_radius = 0.05
+height = 0.65
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ncfb5"]
+top_radius = 0.01
+bottom_radius = 0.025
+height = 1.0
+
+[sub_resource type="PrismMesh" id="PrismMesh_xeae7"]
+size = Vector3(0.25, 0.1, 0.07)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_xeae7"]
+top_radius = 0.355
+bottom_radius = 0.25
+height = 1.5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_xeae7"]
+radius = 0.425
+height = 1.09
+
+[node name="WorkerAnt" type="Node3D"]
+
+[node name="Head" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.0885)
+mesh = SubResource("SphereMesh_xeae7")
+
+[node name="Antenae" type="Node3D" parent="Head"]
+
+[node name="Left_Antena" type="MeshInstance3D" parent="Head/Antenae"]
+transform = Transform3D(0.163565, 0.930092, 0.3289, -0.984886, 0.173201, 0, -0.0569658, -0.323929, 0.944365, 0.642757, 0.200075, -0.273412)
+mesh = SubResource("CylinderMesh_hqvkx")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Head/Antenae/Left_Antena"]
+transform = Transform3D(0.943782, -0.143247, 0.297921, -0.143247, 0.635002, 0.759114, -0.297921, -0.759113, 0.578783, -0.068972, 0.638314, -0.37015)
+mesh = SubResource("CylinderMesh_ncfb5")
+
+[node name="Left_Antena2" type="MeshInstance3D" parent="Head/Antenae"]
+transform = Transform3D(-0.128487, -0.952011, -0.277788, 0.857256, 0.0342102, -0.513754, 0.498602, -0.304146, 0.811721, -0.643, 0.2, -0.273)
+rotation_edit_mode = 1
+mesh = SubResource("CylinderMesh_hqvkx")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Head/Antenae/Left_Antena2"]
+transform = Transform3D(0.943782, -0.143247, 0.297921, -0.143247, 0.635002, 0.759114, -0.297921, -0.759113, 0.578783, -0.068972, 0.638314, -0.37015)
+mesh = SubResource("CylinderMesh_ncfb5")
+
+[node name="Mouth" type="MeshInstance3D" parent="Head"]
+transform = Transform3D(1, 0, 0, 0, -0.265994, 0.963975, 0, -0.963975, -0.265994, 0, -0.124757, -0.492362)
+mesh = SubResource("PrismMesh_xeae7")
+
+[node name="Thorax" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -0.990523)
+mesh = SubResource("CylinderMesh_xeae7")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Thorax"]
+
+[node name="Abdomem" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0.0011397)
+mesh = SubResource("CapsuleMesh_xeae7")
+
+[node name="Legs" type="Node3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Legs"]

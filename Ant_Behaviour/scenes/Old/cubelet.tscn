@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://t3b47lj1rvy7"]
 
-[ext_resource type="Material" uid="uid://6bugpdcw5jrq" path="res://materials/pad_base.tres" id="1_ojkak"]
+[ext_resource type="Material" uid="uid://6bugpdcw5jrq" path="res://materials/old/pad_base.tres" id="1_ojkak"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ppcn1"]
 

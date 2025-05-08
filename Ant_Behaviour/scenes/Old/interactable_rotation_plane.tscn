@@ -1,7 +1,7 @@
 [gd_scene load_steps=18 format=3 uid="uid://c2i58b3m6fkf0"]
 
 [ext_resource type="PackedScene" uid="uid://bslkiliv0tlty" path="res://addons/godot-xr-tools/interactables/interactable_hinge.tscn" id="1_6qtc2"]
-[ext_resource type="Material" uid="uid://i883r1hryk17" path="res://materials/handle.tres" id="2_crlx0"]
+[ext_resource type="Material" uid="uid://i883r1hryk17" path="res://materials/old/handle.tres" id="2_crlx0"]
 [ext_resource type="PackedScene" uid="uid://bddj5m7ull6g0" path="res://addons/godot-xr-tools/interactables/interactable_handle.tscn" id="2_moeun"]
 [ext_resource type="PackedScene" uid="uid://c25yxb0vt53vc" path="res://addons/godot-xr-tools/objects/grab_points/grab_point_hand_left.tscn" id="4_auo3h"]
 [ext_resource type="PackedScene" uid="uid://ctw7nbntd5pcj" path="res://addons/godot-xr-tools/objects/grab_points/grab_point_hand_right.tscn" id="5_5k04r"]

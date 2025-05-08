@@ -1,14 +1,14 @@
 [gd_scene load_steps=13 format=3 uid="uid://csa1e3teul0aj"]
 
 [ext_resource type="Script" uid="uid://uxqcd72nvx4x" path="res://scripts/rotation_planes.gd" id="1_f2gp8"]
-[ext_resource type="Material" uid="uid://dw8skocq4f01f" path="res://materials/rotation_plane.tres" id="2_dd5mj"]
-[ext_resource type="Material" uid="uid://dpe6ojv76rv0d" path="res://materials/rotation_plane_highlighted.tres" id="3_ysbea"]
-[ext_resource type="PackedScene" uid="uid://coqqhipqy4wno" path="res://scenes/rotation_plane.tscn" id="4_c6kgt"]
+[ext_resource type="Material" uid="uid://dw8skocq4f01f" path="res://materials/old/rotation_plane.tres" id="2_dd5mj"]
+[ext_resource type="Material" uid="uid://dpe6ojv76rv0d" path="res://materials/old/rotation_plane_highlighted.tres" id="3_ysbea"]
+[ext_resource type="PackedScene" uid="uid://coqqhipqy4wno" path="res://scenes/Old/rotation_plane.tscn" id="4_c6kgt"]
 [ext_resource type="Script" uid="uid://d0vkm7tk3rakp" path="res://scripts/cublets.gd" id="5_lneqx"]
-[ext_resource type="Material" uid="uid://dyt20tqm5x44a" path="res://materials/face_material_one.tres" id="6_eni4p"]
-[ext_resource type="Material" uid="uid://ih1ruj8tg1fj" path="res://materials/green_face.tres" id="7_ukcgg"]
-[ext_resource type="Material" uid="uid://0ajl5h4h5pbk" path="res://materials/orange_face.tres" id="8_lwht1"]
-[ext_resource type="PackedScene" uid="uid://t3b47lj1rvy7" path="res://scenes/cubelet.tscn" id="9_v5mvc"]
+[ext_resource type="Material" uid="uid://dyt20tqm5x44a" path="res://materials/old/face_material_one.tres" id="6_eni4p"]
+[ext_resource type="Material" uid="uid://ih1ruj8tg1fj" path="res://materials/old/green_face.tres" id="7_ukcgg"]
+[ext_resource type="Material" uid="uid://0ajl5h4h5pbk" path="res://materials/old/orange_face.tres" id="8_lwht1"]
+[ext_resource type="PackedScene" uid="uid://t3b47lj1rvy7" path="res://scenes/Old/cubelet.tscn" id="9_v5mvc"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_rjamp"]
 sky_top_color = Color(0.424147, 0.643234, 0.948052, 1)

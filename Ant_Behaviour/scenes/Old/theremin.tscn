@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" uid="uid://c5yo2r6b5pqw3" path="res://scripts/theremin.gd" id="1_mqdv8"]
 [ext_resource type="Script" uid="uid://bsmcdrdptfmni" path="res://addons/godot_sfxr/SfxrStreamPlayer3D.gd" id="1_xsb8r"]
-[ext_resource type="Material" uid="uid://dmgvoay33kbyo" path="res://materials/theremin_base.tres" id="3_fym58"]
+[ext_resource type="Material" uid="uid://dmgvoay33kbyo" path="res://materials/old/theremin_base.tres" id="3_fym58"]
 [ext_resource type="PackedScene" uid="uid://b0r6edl74ddo7" path="res://addons/godot-xr-tools/interactables/interactable_slider.tscn" id="4_83f55"]
-[ext_resource type="Material" uid="uid://r0sy8350ujvk" path="res://materials/theremin_track.tres" id="5_b0swh"]
-[ext_resource type="Material" uid="uid://cb0w5x35j58nv" path="res://materials/theremin_handle.tres" id="5_kyiwd"]
+[ext_resource type="Material" uid="uid://r0sy8350ujvk" path="res://materials/old/theremin_track.tres" id="5_b0swh"]
+[ext_resource type="Material" uid="uid://cb0w5x35j58nv" path="res://materials/old/theremin_handle.tres" id="5_kyiwd"]
 [ext_resource type="PackedScene" uid="uid://bddj5m7ull6g0" path="res://addons/godot-xr-tools/interactables/interactable_handle.tscn" id="6_hukli"]
 [ext_resource type="PackedScene" uid="uid://c25yxb0vt53vc" path="res://addons/godot-xr-tools/objects/grab_points/grab_point_hand_left.tscn" id="7_1j24s"]
 [ext_resource type="PackedScene" uid="uid://ctw7nbntd5pcj" path="res://addons/godot-xr-tools/objects/grab_points/grab_point_hand_right.tscn" id="8_ibwva"]

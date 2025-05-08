@@ -1,8 +1,8 @@
 [gd_scene load_steps=20 format=3 uid="uid://xwgcjt6sgtgv"]
 
 [ext_resource type="Script" uid="uid://diskhlp0q4yds" path="res://scripts/switch.gd" id="1_qpmh7"]
-[ext_resource type="Material" uid="uid://48bun61q77pv" path="res://materials/switch_unpressed.tres" id="3_40ply"]
-[ext_resource type="Material" uid="uid://bkf4thllcunuq" path="res://materials/switch_pressed.tres" id="3_ekre7"]
+[ext_resource type="Material" uid="uid://48bun61q77pv" path="res://materials/old/switch_unpressed.tres" id="3_40ply"]
+[ext_resource type="Material" uid="uid://bkf4thllcunuq" path="res://materials/old/switch_pressed.tres" id="3_ekre7"]
 [ext_resource type="PackedScene" uid="uid://cme66uldrjl2i" path="res://addons/godot-xr-tools/interactables/interactable_area_button.tscn" id="4_3dj1k"]
 [ext_resource type="Script" uid="uid://051kegvpho4p" path="res://addons/godot-xr-tools/interactables/switch_interactable_area_button.gd" id="5_hdwm7"]
 [ext_resource type="AudioStream" uid="uid://cdw6i1lb0nl3k" path="res://sounds/switch_sound.mp3" id="6_xvcip"]

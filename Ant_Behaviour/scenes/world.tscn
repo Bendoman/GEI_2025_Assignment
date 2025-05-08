@@ -1,9 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://c0m0jj5cxlrjs"]
+[gd_scene load_steps=9 format=3 uid="uid://c0m0jj5cxlrjs"]
 
 [ext_resource type="Script" uid="uid://bkoes3pobplvr" path="res://scripts/world.gd" id="1_mot7s"]
+[ext_resource type="Material" uid="uid://dtd0wnwdssiif" path="res://materials/ground_colour.tres" id="2_4wyf3"]
 [ext_resource type="PackedScene" uid="uid://dw7f1yfv67ywx" path="res://scenes/xrOrigin.tscn" id="2_qpxi4"]
-[ext_resource type="PackedScene" uid="uid://dvsrygsjaqq7e" path="res://scenes/interactable_cube.tscn" id="4_g8btw"]
-[ext_resource type="PackedScene" uid="uid://ja2mapygqodu" path="res://scenes/pickable_object.tscn" id="4_kn8jo"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_n2cwj"]
 sky_top_color = Color(0.425909, 0.569805, 0.704866, 1)
@@ -24,7 +23,7 @@ glow_enabled = true
 size = Vector3(10, 0.1, 10)
 
 [sub_resource type="BoxMesh" id="BoxMesh_16tix"]
-size = Vector3(10, 0.1, 10)
+size = Vector3(50, 0.1, 50)
 
 [node name="root" type="Node3D"]
 script = ExtResource("1_mot7s")
@@ -44,15 +43,7 @@ collision_mask = 256
 shape = SubResource("BoxShape3D_fuouj")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D/CollisionShape3D"]
+material_override = ExtResource("2_4wyf3")
 mesh = SubResource("BoxMesh_16tix")
 
 [node name="XROrigin3D" parent="." instance=ExtResource("2_qpxi4")]
-
-[node name="PickableObject" parent="." instance=ExtResource("4_kn8jo")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.840667, 1.41734, 0.340174)
-collision_mask = 0
-freeze_mode = 0
-release_mode = 1
-
-[node name="interactable_cube" parent="PickableObject" instance=ExtResource("4_g8btw")]
-transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, -0.21, -0.459, -0.55)
