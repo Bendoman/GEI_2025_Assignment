@@ -1,8 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://c0m0jj5cxlrjs"]
+[gd_scene load_steps=11 format=3 uid="uid://c0m0jj5cxlrjs"]
 
 [ext_resource type="Script" uid="uid://bkoes3pobplvr" path="res://scripts/world.gd" id="1_mot7s"]
 [ext_resource type="Material" uid="uid://dtd0wnwdssiif" path="res://materials/ground_colour.tres" id="2_4wyf3"]
 [ext_resource type="PackedScene" uid="uid://dw7f1yfv67ywx" path="res://scenes/xrOrigin.tscn" id="2_qpxi4"]
+[ext_resource type="PackedScene" uid="uid://cccxu3uljmod8" path="res://scenes/ant_base.tscn" id="3_71j4m"]
+[ext_resource type="PackedScene" uid="uid://mu8jj620dn1l" path="res://scenes/worker_ant.tscn" id="4_k0juu"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_n2cwj"]
 sky_top_color = Color(0.425909, 0.569805, 0.704866, 1)
@@ -47,3 +49,10 @@ material_override = ExtResource("2_4wyf3")
 mesh = SubResource("BoxMesh_16tix")
 
 [node name="XROrigin3D" parent="." instance=ExtResource("2_qpxi4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.55598)
+
+[node name="WorkerAnt" parent="." instance=ExtResource("4_k0juu")]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0.868764, 0.27988, -0.511786)
+
+[node name="AntBase" parent="." instance=ExtResource("3_71j4m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.926592, 0.175, 0.177432)

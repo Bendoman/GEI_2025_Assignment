@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://mu8jj620dn1l"]
+[gd_scene load_steps=17 format=3 uid="uid://mu8jj620dn1l"]
 
 [ext_resource type="Material" uid="uid://dvsjlvytlj7bj" path="res://materials/ant_head.tres" id="1_ghqjp"]
 [ext_resource type="Material" uid="uid://cnr0mcs5skttv" path="res://materials/ant_legs.tres" id="2_2grfr"]
@@ -6,38 +6,39 @@
 [ext_resource type="Material" uid="uid://dk8gcqd5r3glh" path="res://materials/and_body.tres" id="4_4ro5m"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_xeae7"]
-height = 0.7
+radius = 0.05
+height = 0.07
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_hqvkx"]
-top_radius = 0.025
-bottom_radius = 0.05
-height = 0.65
+top_radius = 0.003
+bottom_radius = 0.005
+height = 0.065
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_ncfb5"]
-top_radius = 0.01
-bottom_radius = 0.025
-height = 1.0
+top_radius = 0.001
+bottom_radius = 0.003
+height = 0.1
 
 [sub_resource type="PrismMesh" id="PrismMesh_xeae7"]
-size = Vector3(0.25, 0.1, 0.07)
+size = Vector3(0.025, 0.01, 0.007)
 
 [sub_resource type="SphereMesh" id="SphereMesh_ghqjp"]
-radius = 0.06
-height = 0.05
+radius = 0.006
+height = 0.005
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_xeae7"]
-top_radius = 0.05
-bottom_radius = 0.25
-height = 1.5
+top_radius = 0.005
+bottom_radius = 0.025
+height = 0.15
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_2grfr"]
-top_radius = 0.25
-bottom_radius = 0.13
-height = 0.365
+top_radius = 0.025
+bottom_radius = 0.013
+height = 0.036
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_xeae7"]
-radius = 0.345
-height = 1.055
+radius = 0.035
+height = 0.106
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_aj41f"]
 top_radius = 0.1
@@ -49,74 +50,81 @@ top_radius = 0.025
 bottom_radius = 0.01
 height = 0.65
 
-[node name="WorkerAnt" type="Node3D"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_ghqjp"]
+height = 0.25
+radius = 2.0
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ghqjp"]
+radius = 0.122028
+height = 0.401157
+
+[node name="WorkerAnt" type="CharacterBody3D"]
 
 [node name="Head" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.0885)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.170545)
 material_override = ExtResource("1_ghqjp")
 mesh = SubResource("SphereMesh_xeae7")
 
 [node name="Antenae" type="Node3D" parent="Head"]
 
 [node name="Left_Antena" type="MeshInstance3D" parent="Head/Antenae"]
-transform = Transform3D(0.163565, 0.930092, 0.3289, -0.984886, 0.173201, 0, -0.0569658, -0.323929, 0.944365, 0.642757, 0.200075, -0.273412)
+transform = Transform3D(0.163565, 0.930092, 0.3289, -0.984886, 0.173201, 0, -0.0569658, -0.323929, 0.944365, 0.0763038, 0.0136754, -0.0252571)
 material_override = ExtResource("2_2grfr")
 mesh = SubResource("CylinderMesh_hqvkx")
 skeleton = NodePath("../..")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Head/Antenae/Left_Antena"]
-transform = Transform3D(0.943782, -0.143247, 0.297921, -0.143247, 0.635002, 0.759114, -0.297921, -0.759113, 0.578783, -0.068972, 0.638314, -0.37015)
+transform = Transform3D(0.943782, -0.143247, 0.297921, -0.143247, 0.635002, 0.759114, -0.297921, -0.759113, 0.578783, -0.00753504, 0.0623302, -0.039288)
 material_override = ExtResource("2_2grfr")
 mesh = SubResource("CylinderMesh_ncfb5")
 
-[node name="Left_Antena2" type="MeshInstance3D" parent="Head/Antenae"]
-transform = Transform3D(-0.0489788, -0.944813, -0.323929, 0.865446, 0.121754, -0.485983, 0.498602, -0.304146, 0.811721, -0.643, 0.2, -0.273)
-rotation_edit_mode = 1
+[node name="Right_Antena" type="MeshInstance3D" parent="Head/Antenae"]
+transform = Transform3D(-0.121069, -0.924002, -0.362716, 0.784577, 0.134773, -0.605207, 0.608097, -0.357851, 0.708633, -0.0764128, 0.0115741, -0.0250001)
 material_override = ExtResource("2_2grfr")
 mesh = SubResource("CylinderMesh_hqvkx")
 skeleton = NodePath("../..")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Head/Antenae/Left_Antena2"]
-transform = Transform3D(0.943782, -0.143247, 0.297921, -0.143247, 0.635002, 0.759114, -0.297921, -0.759113, 0.578783, -0.068972, 0.638314, -0.37015)
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Head/Antenae/Right_Antena"]
+transform = Transform3D(0.943782, -0.143247, 0.297921, -0.143247, 0.635002, 0.759114, -0.297921, -0.759113, 0.578783, -0.00753504, 0.0623302, -0.039288)
 material_override = ExtResource("2_2grfr")
 mesh = SubResource("CylinderMesh_ncfb5")
 
 [node name="Mouth" type="MeshInstance3D" parent="Head"]
-transform = Transform3D(1, 0, 0, 0, -0.265994, 0.963975, 0, -0.963975, -0.265994, 0, -0.124757, -0.492362)
+transform = Transform3D(1, 0, 0, 0, -0.265994, 0.963975, 0, -0.963975, -0.265994, 0, -0.0135682, -0.050885)
 material_override = ExtResource("3_0hh7c")
 mesh = SubResource("PrismMesh_xeae7")
 
 [node name="Eyes" type="Node3D" parent="Head"]
 
 [node name="Left_eye" type="MeshInstance3D" parent="Head/Eyes"]
-transform = Transform3D(0.93677, 0.305767, -0.170202, -0.0721065, 0.644583, 0.761126, 0.342436, -0.700728, 0.625874, 0.16447, 0.110934, -0.419859)
+transform = Transform3D(0.93677, 0.305767, -0.170202, -0.0721065, 0.644583, 0.761126, 0.342436, -0.700728, 0.625874, 0.0266049, 0.0140211, -0.0375614)
 material_override = ExtResource("3_0hh7c")
 mesh = SubResource("SphereMesh_ghqjp")
 skeleton = NodePath("../..")
 
-[node name="Left_eye3" type="MeshInstance3D" parent="Head/Eyes"]
-transform = Transform3D(0.901847, -0.283795, 0.325778, -0.0721065, 0.644583, 0.761126, -0.425995, -0.709911, 0.560852, -0.164, 0.111, -0.42)
+[node name="Right_eye" type="MeshInstance3D" parent="Head/Eyes"]
+transform = Transform3D(0.932497, -0.227209, 0.28076, -0.0721065, 0.644583, 0.761126, -0.353908, -0.729993, 0.584688, -0.027, 0.014, -0.0380001)
 material_override = ExtResource("3_0hh7c")
 mesh = SubResource("SphereMesh_ghqjp")
 skeleton = NodePath("../..")
 
 [node name="Thorax" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -0.634025)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -0.0139686)
 material_override = ExtResource("4_4ro5m")
 mesh = SubResource("CylinderMesh_xeae7")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Thorax"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.933402, 4.08003e-08)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.092483, 4.04255e-09)
 material_override = ExtResource("4_4ro5m")
 mesh = SubResource("CylinderMesh_2grfr")
 
 [node name="Abdomem" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0.587316)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0.105029)
 material_override = ExtResource("3_0hh7c")
 mesh = SubResource("CapsuleMesh_xeae7")
 
 [node name="Left_Legs" type="Node3D" parent="."]
-transform = Transform3D(0.914551, -0.404471, 0, 0.404471, 0.914551, 0, 0, 0, 1, 0, 0, 0)
+transform = Transform3D(0.0914551, -0.0404471, 0, 0.0404471, 0.0914551, 0, 0, 0, 0.1, 0, 0, 0.0516906)
 
 [node name="Left_front" type="MeshInstance3D" parent="Left_Legs"]
 transform = Transform3D(0.572446, 0.819942, -3.58408e-08, 8.679e-16, -4.37114e-08, -1, -0.819942, 0.572446, -2.50224e-08, -0.714855, 0, -1.42512)
@@ -149,7 +157,7 @@ material_override = ExtResource("4_4ro5m")
 mesh = SubResource("CylinderMesh_ghqjp")
 
 [node name="Right_Legs" type="Node3D" parent="."]
-transform = Transform3D(0.920505, 0.390731, 0, -0.390731, 0.920505, 0, 0, 0, 1, 0, 0, 0)
+transform = Transform3D(0.0920505, 0.0390731, 0, -0.0390731, 0.0920505, 0, 0, 0, 0.1, 0, 0, 0.0516906)
 
 [node name="Right_front" type="MeshInstance3D" parent="Right_Legs"]
 transform = Transform3D(-0.545459, -0.838138, -3.66362e-08, 3.45871e-15, -4.37114e-08, 1, -0.838138, 0.545459, 2.38427e-08, 0.715, 0, -1.41158)
@@ -183,3 +191,12 @@ skeleton = NodePath("../../Left_Legs")
 transform = Transform3D(0.955485, -0.295041, 1.28967e-08, 0.295041, 0.955485, 1.94583e-09, -1.28967e-08, 1.94583e-09, 1, 0.0966794, -1.06266, 4.64505e-08)
 material_override = ExtResource("4_4ro5m")
 mesh = SubResource("CylinderMesh_ghqjp")
+
+[node name="SenseArea" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SenseArea"]
+shape = SubResource("CylinderShape3D_ghqjp")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -0.0410929)
+shape = SubResource("CapsuleShape3D_ghqjp")
