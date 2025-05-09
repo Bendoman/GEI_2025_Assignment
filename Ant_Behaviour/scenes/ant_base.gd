@@ -1,5 +1,5 @@
 extends Node3D
-@export var spawn_interval: float = 0.5       # seconds between spawns
+@export var spawn_interval: float = 0.25       # seconds between spawns
 @export var spawn_position: Vector3 = Vector3.ZERO
 @export var ant_scene: PackedScene
 
@@ -11,15 +11,15 @@ func _ready():
 	spawn_timer.wait_time = spawn_interval
 	spawn_timer.one_shot = false
 	spawn_timer.autostart = true
-	add_child(spawn_timer)
-	spawn_timer.timeout.connect(Callable(self, "_spawn_ant"))
+	#add_child(spawn_timer)
+	#spawn_timer.timeout.connect(Callable(self, "_spawn_ant"))
 
 func _spawn_ant() -> void:
 	if not ant_scene:
 		push_warning("No Ant scene assigned for spawning!")
 		return
-	if antCount > 15:
-		return 
+	#if antCount > 15:
+		#return 
 		
 	var ant = ant_scene.instantiate()
 	add_child(ant)
