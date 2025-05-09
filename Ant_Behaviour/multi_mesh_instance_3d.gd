@@ -1,6 +1,6 @@
 extends MultiMeshInstance3D
 
-@export var instance_count := 10000
+@export var instance_count := 2000
 @export var spawn_radius := 20.0
 @export var mesh_to_use: Mesh
 @export var material_to_use: Material
@@ -28,6 +28,7 @@ func _ready():
 
 
 func _physics_process(delta):
+	return
 	for i in antData.size():
 		var pos = antData[i].position + Vector3(-1, 0, 0)
 		antData[i].position = pos
