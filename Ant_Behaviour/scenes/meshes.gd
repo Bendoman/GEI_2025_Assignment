@@ -13,7 +13,7 @@ func _ready():
 
 	for mesh_instance in meshes: 
 		var mesh = mesh_instance.mesh
-		var transform = mesh_instance.global_transform 
+		var transform = mesh_instance.transform 
 		
 		for surface_index in mesh.get_surface_count():
 			var arrays = mesh.surface_get_arrays(surface_index).duplicate(true)
