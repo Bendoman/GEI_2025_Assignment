@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://dcsunt6lrihqa" path="res://scenes/ant.tscn" id="4_ppyta"]
 [ext_resource type="PackedScene" uid="uid://cccxu3uljmod8" path="res://scenes/ant_base.tscn" id="4_vbegm"]
 [ext_resource type="Script" uid="uid://dm83gotx1cipr" path="res://multi_mesh_instance_3d.gd" id="5_ykrsh"]
-[ext_resource type="ArrayMesh" uid="uid://dxrema3po8wyj" path="res://CombinedAntMesh.tres" id="6_g14j6"]
+[ext_resource type="ArrayMesh" path="res://CombinedAntMesh.tres" id="6_g14j6"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_n2cwj"]
 sky_top_color = Color(0.425909, 0.569805, 0.704866, 1)
@@ -65,3 +65,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.361205, 0.1, 0.557558)
 script = ExtResource("5_ykrsh")
 mesh_to_use = ExtResource("6_g14j6")
 material_to_use = SubResource("StandardMaterial3D_g14j6")
+backtracking = true

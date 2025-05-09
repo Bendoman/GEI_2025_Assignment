@@ -1,13 +1,15 @@
 extends MultiMeshInstance3D
 
-@export var instance_count := 100
+@export var instance_count := 2000
 @export var spawn_radius := 20.0
 @export var mesh_to_use: Mesh
 @export var material_to_use: Material
 
 @export var antSpeed: float = .15
 @export var wander_distance := 1
-@export var wander_angle_deg := 90.0
+@export var wander_angle_deg := 60.0
+
+@export var backtracking := false 
 
 var paths = [] 
 var antData = [] 
@@ -26,32 +28,45 @@ func _ready():
 		var pos = Vector3(0, 1, 0)
 		var transform = Transform3D(Basis(), pos)
 		multimesh.set_instance_transform(i, transform)
+		
+		var offset_x = randf_range(-0.1, 0.1)
+		var offset_z = randf_range(-0.1, 0.1)		
 		antData.append({
 			"position": pos, 
-			"path": [pos + Vector3(1, 0, 0)]
+			"path": [pos + Vector3(offset_x, 0, offset_z)],
+			"backtracking": false
 		})
 
 func _physics_process(delta):
 	for i in antData.size():
-		#var offset_x = randf_range(-0.1, 0.1)
-		#var offset_z = randf_range(-0.1, 0.1)
+		if(antData[i].path.size() == 0): 
+			antData[i].backtracking = false 
+			var offset_x = randf_range(-0.1, 0.1)
+			var offset_z = randf_range(-0.1, 0.1)
+			antData[i].path.append(Vector3(offset_x, 1, offset_z))
+		elif(antData[i].path.size() >= 5):
+			antData[i].backtracking = true 
+			
 		var path = antData[i].path
 		var currentPos:Vector3 = antData[i].position
-		
 		var targetPos:Vector3 = path[path.size() - 1]
 		
+			
 		if(currentPos.distance_to(targetPos) < 0.1):
-			var forward = (targetPos - currentPos).normalized() 
-	
-			var angle_deg = randf_range(-wander_angle_deg / 2.0, wander_angle_deg / 2.0)
-			var angle_rad = deg_to_rad(angle_deg)
-			
-			var rotated_forward = forward.rotated(Vector3.UP, angle_rad).normalized()
-			var new_target = (currentPos + rotated_forward) * wander_distance
-			
-			#print(targetPos, new_target)
-			antData[i].path.append(new_target)
-			#targetPos = new_target
+			if not antData[i].backtracking:
+				var forward = (targetPos - currentPos).normalized() 
+		
+				var angle_deg = randf_range(-wander_angle_deg / 2.0, wander_angle_deg / 2.0)
+				var angle_rad = deg_to_rad(angle_deg)
+				
+				var rotated_forward = forward.rotated(Vector3.UP, angle_rad).normalized()
+				var new_target = (currentPos + rotated_forward) * wander_distance
+				
+				antData[i].path.append(new_target)
+			else: 
+				# Backtrack 
+				antData[i].path.pop_back()
+				pass
 			
 		var direction = (targetPos - currentPos).normalized()
 		var move_vector = direction * antSpeed * delta
@@ -65,17 +80,3 @@ func _physics_process(delta):
 		antData[i].position = new_pos
 		var transform = Transform3D(smoothed_basis, new_pos)
 		multimesh.set_instance_transform(i, transform)
-		
-		#var offset_x = -0.1
-		#var offset_z = 0.1
-		#var offset = Vector3(offset_x, 0, offset_z)
-		#var pos = antData[i].position + Vector3(offset_x, 0, offset_z)
-		
-		#var direction = offset.normalized()
-		#
-		#var basis = Basis().looking_at(direction, Vector3.UP)
-		#
-		#antData[i].position = pos
-		#var transform = Transform3D(basis, pos)
-		
-		#multimesh.set_instance_transform(i, transform)
