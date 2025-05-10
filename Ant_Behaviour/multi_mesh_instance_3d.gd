@@ -1,31 +1,36 @@
 extends MultiMeshInstance3D
 
-@export var instance_count := 2000
+@export var instance_count := 1
 @export var spawn_radius := 20.0
 @export var mesh_to_use: Mesh
 @export var material_to_use: Material
 
-@export var antSpeed: float = .15
+@export var antSpeed: float = .05
 @export var wander_distance := 1
 @export var wander_angle_deg := 60.0
 
 @export var backtracking := false 
+var world_grid
 
 var paths = [] 
 var antData = [] 
 
 func _ready():
+	await get_tree().process_frame
+	world_grid = get_parent().world_grid
+	
 	# Create and configure the MultiMesh
 	var multimesh = MultiMesh.new()
 	multimesh.mesh = mesh_to_use
 	multimesh.transform_format = MultiMesh.TRANSFORM_3D
 	multimesh.instance_count = instance_count
+	material_override = material_to_use
 	self.multimesh = multimesh
 
 	# Set transform for each instance (e.g. random spread)
 	for i in instance_count:
 		#var pos = Vector3(randf() * 2 - 1, 0, randf() * 2 - 1).normalized() * randf() * spawn_radius
-		var pos = Vector3(0, 1, 0)
+		var pos = position
 		var transform = Transform3D(Basis(), pos)
 		multimesh.set_instance_transform(i, transform)
 		
@@ -34,7 +39,8 @@ func _ready():
 		antData.append({
 			"position": pos, 
 			"path": [pos + Vector3(offset_x, 0, offset_z)],
-			"backtracking": false
+			"backtracking": false,
+			"cell": Vector2i(0, 0)
 		})
 
 func _physics_process(delta):
@@ -43,7 +49,7 @@ func _physics_process(delta):
 			antData[i].backtracking = false 
 			var offset_x = randf_range(-0.1, 0.1)
 			var offset_z = randf_range(-0.1, 0.1)
-			antData[i].path.append(Vector3(offset_x, 1, offset_z))
+			antData[i].path.append(Vector3(offset_x, 0, offset_z))
 		elif(antData[i].path.size() >= 5):
 			antData[i].backtracking = true 
 			
@@ -77,6 +83,15 @@ func _physics_process(delta):
 		var current_basis = current_transform.basis
 		var smoothed_basis = current_basis.slerp(target_basis, 0.2)  # 0.2 = smoothing factor
 		
+		#world_grid.unregister_entity(to_global(antData[i].position), {"type": "ant", "position": to_global(new_pos)} )
 		antData[i].position = new_pos
+		
+		if world_grid.position_to_cell(to_global(new_pos)) != antData[i].cell:
+			antData[i].cell = world_grid.position_to_cell(to_global(new_pos))
+			print('Chaning cells to %s' % antData[i].cell)
+		
+		
+		#world_grid.register_entity(to_global(new_pos), {"type": "ant", "position": to_global(new_pos)})
+		
 		var transform = Transform3D(smoothed_basis, new_pos)
 		multimesh.set_instance_transform(i, transform)

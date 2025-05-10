@@ -4,8 +4,11 @@ extends Node3D
 @export var ant_scene: PackedScene
 
 var antCount: int
+var world_grid
 
-func _ready(): 
+func _ready():
+	world_grid = get_node("../WorldGrid") 
+	world_grid.test()
 	# Spawn timer setup
 	var spawn_timer := Timer.new()
 	spawn_timer.wait_time = spawn_interval

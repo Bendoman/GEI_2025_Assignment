@@ -1,7 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://cccxu3uljmod8"]
+[gd_scene load_steps=9 format=3 uid="uid://cccxu3uljmod8"]
 
 [ext_resource type="Script" uid="uid://bjdcgwmuykbl1" path="res://scenes/ant_base.gd" id="1_cloup"]
 [ext_resource type="PackedScene" uid="uid://dcsunt6lrihqa" path="res://scenes/ant.tscn" id="2_mgxml"]
+[ext_resource type="Script" uid="uid://dm83gotx1cipr" path="res://multi_mesh_instance_3d.gd" id="3_anh4v"]
+[ext_resource type="ArrayMesh" uid="uid://bxtem42bc018t" path="res://CombinedAntMesh.tres" id="4_agbvd"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_ti84e"]
 height = 0.25
@@ -14,9 +16,8 @@ albedo_color = Color(0.244158, 0.1909, 0.83, 0.27451)
 material = SubResource("StandardMaterial3D_ti84e")
 height = 0.25
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mgxml"]
-radius = 0.01
-height = 0.05
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8ognt"]
+albedo_color = Color(0, 0, 0, 1)
 
 [node name="AntBase" type="Node3D"]
 script = ExtResource("1_cloup")
@@ -31,6 +32,8 @@ shape = SubResource("CylinderShape3D_ti84e")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("CylinderMesh_ti84e")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
-shape = SubResource("CapsuleShape3D_mgxml")
+[node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="."]
+script = ExtResource("3_anh4v")
+mesh_to_use = ExtResource("4_agbvd")
+material_to_use = SubResource("StandardMaterial3D_8ognt")
+antSpeed = 0.25
