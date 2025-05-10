@@ -1,10 +1,9 @@
-[gd_scene load_steps=13 format=3 uid="uid://bmov0u7ck0qgu"]
+[gd_scene load_steps=12 format=3 uid="uid://bmov0u7ck0qgu"]
 
 [ext_resource type="Script" uid="uid://cpek6qnsms6xd" path="res://test.gd" id="1_6uqi0"]
 [ext_resource type="Material" uid="uid://dtd0wnwdssiif" path="res://materials/ground_colour.tres" id="2_ykrsh"]
 [ext_resource type="Script" uid="uid://bsa24v84vydkc" path="res://world_grid.gd" id="4_ppyta"]
 [ext_resource type="PackedScene" uid="uid://cccxu3uljmod8" path="res://scenes/ant_base.tscn" id="4_vbegm"]
-[ext_resource type="PackedScene" uid="uid://cyxbrl25i8okg" path="res://FoodSource.tscn" id="5_ykrsh"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_n2cwj"]
 sky_top_color = Color(0.425909, 0.569805, 0.704866, 1)
@@ -66,6 +65,5 @@ spawn_position = Vector3(0, 0, 0)
 script = ExtResource("4_ppyta")
 debug_mesh = SubResource("BoxMesh_ppyta")
 debug_material = SubResource("StandardMaterial3D_ykrsh")
-
-[node name="FoodSource" parent="." instance=ExtResource("5_ykrsh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.629218, 0.175, -3.58532)
+debug_scale = null
+debug_height_offset = null

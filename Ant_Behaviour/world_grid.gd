@@ -20,25 +20,32 @@ func register_entity(pos: Vector3, entity):
 		grid[cell] = [] 
 	
 	grid[cell].append(entity)
-	print(grid)
+	#print(grid)
 	
-	draw_debug_mesh_at_cell(cell)
+	#draw_debug_mesh_at_cell(cell, 1)
 	#print(pos, cell)
 	
-func unregister_entity(pos: Vector3, entity) -> void:
-	var cell = position_to_cell(pos)
+func unregister_entity(pos: Vector3, entity, exactCell=null):
+	var cell
+	if exactCell != null: 
+		cell = exactCell
+	else:
+		cell = position_to_cell(pos)
+		
 	if not grid.has(cell):
 		return
-
-	for i in range(grid[cell].size()):
+	
+	for i in range(grid[cell].size() - 1, -1, -1):
 		var entry = grid[cell][i]
+		#print(grid[cell])
 		if entry.type == entity.type:
 			grid[cell].remove_at(i)
-
-
+			if(entry.type == "mesh_instance"):
+				entry.instance.queue_free()
+				pass
+			break
 	if grid[cell].is_empty():
 		grid.erase(cell)
-
 
 @export var debug_mesh: Mesh
 @export var debug_material: Material  # Optional: can be null
@@ -56,7 +63,6 @@ func draw_debug_mesh_at_cell(cell: Vector2i, duration: float = 0.0) -> void:
 		instance.material_override = debug_material
 
 	var world_pos = cell_to_position(cell)
-	print(world_pos)
 	instance.transform.origin = Vector3(
 		world_pos.x + (cell_size / 2),
 		debug_height_offset,
@@ -65,10 +71,9 @@ func draw_debug_mesh_at_cell(cell: Vector2i, duration: float = 0.0) -> void:
 	instance.scale = debug_scale
 
 	add_child(instance)
-	#grid[cell].append({"type": "mesh_instance", "instance": instance})
-	#print(grid)
-	
-
+	grid[cell].append({"type": "mesh_instance", "instance": instance})
 	if duration > 0.0:
 		await get_tree().create_timer(duration).timeout
-		instance.queue_free()
+		print('freeing mesh')
+		unregister_entity(cell_to_position(cell), {"type": "mesh_instance", "instance": instance}, cell)
+		#instance.queue_free()

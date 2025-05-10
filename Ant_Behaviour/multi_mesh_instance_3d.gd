@@ -1,6 +1,6 @@
 extends MultiMeshInstance3D
 
-@export var instance_count := 1
+@export var instance_count := 1000
 @export var spawn_radius := 20.0
 @export var mesh_to_use: Mesh
 @export var material_to_use: Material
@@ -83,15 +83,15 @@ func _physics_process(delta):
 		var current_basis = current_transform.basis
 		var smoothed_basis = current_basis.slerp(target_basis, 0.2)  # 0.2 = smoothing factor
 		
-		#world_grid.unregister_entity(to_global(antData[i].position), {"type": "ant", "position": to_global(new_pos)} )
+		if world_grid.position_to_cell(to_global(new_pos)) != antData[i].cell:
+			world_grid.unregister_entity(to_global(antData[i].position), {"type": "ant", "position": to_global(new_pos)})
+			antData[i].cell = world_grid.position_to_cell(to_global(new_pos))
+			world_grid.register_entity(to_global(new_pos), {"type": "ant", "position": to_global(new_pos)})
+			
 		antData[i].position = new_pos
 		
-		if world_grid.position_to_cell(to_global(new_pos)) != antData[i].cell:
-			antData[i].cell = world_grid.position_to_cell(to_global(new_pos))
-			print('Chaning cells to %s' % antData[i].cell)
 		
 		
-		#world_grid.register_entity(to_global(new_pos), {"type": "ant", "position": to_global(new_pos)})
 		
 		var transform = Transform3D(smoothed_basis, new_pos)
 		multimesh.set_instance_transform(i, transform)

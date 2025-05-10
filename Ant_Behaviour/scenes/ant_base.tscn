@@ -8,12 +8,12 @@
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_ti84e"]
 height = 0.25
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ti84e"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_anh4v"]
 transparency = 1
 albedo_color = Color(0.244158, 0.1909, 0.83, 0.27451)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_ti84e"]
-material = SubResource("StandardMaterial3D_ti84e")
+material = SubResource("StandardMaterial3D_anh4v")
 height = 0.25
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8ognt"]
