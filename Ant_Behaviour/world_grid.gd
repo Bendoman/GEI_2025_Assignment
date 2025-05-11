@@ -1,6 +1,6 @@
 extends Node3D
 
-var cell_size := 0.1
+var cell_size := 0.25
 var grid := {}
 
 func test():
@@ -19,7 +19,7 @@ func get_entities_at_cell(cell: Vector2i) -> Array:
 
 func register_entity(pos: Vector3, entity):
 	var cell := position_to_cell(pos)
-	
+	#print(cell)
 	if not grid.has(cell):
 		grid[cell] = [] 
 	
@@ -78,6 +78,6 @@ func draw_debug_mesh_at_cell(cell: Vector2i, duration: float = 0.0) -> void:
 	grid[cell].append({"type": "mesh_instance", "instance": instance})
 	if duration > 0.0:
 		await get_tree().create_timer(duration).timeout
-		print('freeing mesh')
+		#print('freeing mesh')
 		unregister_entity(cell_to_position(cell), {"type": "mesh_instance", "instance": instance}, cell)
 		#instance.queue_free()

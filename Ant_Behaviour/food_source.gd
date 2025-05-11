@@ -8,7 +8,10 @@ var world_grid
 func _ready():
 	world_grid = get_node("../WorldGrid") 
 	world_grid.test()
-	world_grid.register_entity(global_position, {"type": "foodsource", "position": global_position})
+	var pos = Vector3(global_position.x, 0, global_position.z)
+	world_grid.register_entity(global_position, {"type": "foodsource", "position": pos})
+	world_grid.draw_debug_mesh_at_cell(world_grid.position_to_cell(global_position))
+
 	print(world_grid.grid)
 	
 	mesh_instance_3d.top_radius = radius
