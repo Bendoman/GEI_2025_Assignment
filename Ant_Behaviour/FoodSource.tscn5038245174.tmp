@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://cyxbrl25i8okg"]
+
+[ext_resource type="Script" uid="uid://3vswf82hur3v" path="res://food_source.gd" id="1_qoa6f"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ti84e"]
+transparency = 1
+albedo_color = Color(0.329372, 0.83, 0.1909, 0.27451)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_8ktdi"]
+material = SubResource("StandardMaterial3D_ti84e")
+height = 0.25
+
+[node name="FoodSource" type="Node3D"]
+script = ExtResource("1_qoa6f")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CylinderMesh_8ktdi")

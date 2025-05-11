@@ -12,6 +12,10 @@ func position_to_cell(pos: Vector3) -> Vector2i:
 func cell_to_position(cell: Vector2i) -> Vector3:
 	return Vector3(cell.x * cell_size, 0.0, cell.y * cell_size)
 
+func get_entities_at_cell(cell: Vector2i) -> Array:
+	if grid.has(cell):
+		return grid[cell]
+	return []
 
 func register_entity(pos: Vector3, entity):
 	var cell := position_to_cell(pos)

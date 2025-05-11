@@ -1,6 +1,6 @@
 extends MultiMeshInstance3D
 
-@export var instance_count := 1000
+@export var instance_count := 5000
 @export var spawn_radius := 20.0
 @export var mesh_to_use: Mesh
 @export var material_to_use: Material
@@ -8,6 +8,8 @@ extends MultiMeshInstance3D
 @export var antSpeed: float = .05
 @export var wander_distance := 1
 @export var wander_angle_deg := 60.0
+
+@export var search_depth: int = 4
 
 @export var backtracking := false 
 var world_grid
@@ -43,6 +45,29 @@ func _ready():
 			"cell": Vector2i(0, 0)
 		})
 
+func find_nearest_food(global_pos: Vector3):
+	var center_cell = world_grid.position_to_cell(global_pos)
+	var best_food_pos = null
+	var best_dist := INF
+	#print(center_cell)
+
+	for x in range(center_cell.x - search_depth, center_cell.x + search_depth + 1):
+		for z in range(center_cell.y - search_depth, center_cell.y + search_depth + 1):
+			var cell = Vector2i(x, z)
+			#print(cell)
+			#var entries = world_grid.get_entities_at_cell(cell)
+			#print(cell)
+			#for entry in entries:
+				#if entry.type == "food" and entry.has("position"):
+					#print(entry)
+					#var food_pos = entry.position
+					#var dist = global_pos.distance_to(food_pos)
+					#if dist < best_dist:
+						#best_dist = dist
+						#best_food_pos = food_pos
+
+	#return best_food_pos
+
 func _physics_process(delta):
 	for i in antData.size():
 		if(antData[i].path.size() == 0): 
@@ -57,7 +82,6 @@ func _physics_process(delta):
 		var currentPos:Vector3 = antData[i].position
 		var targetPos:Vector3 = path[path.size() - 1]
 		
-			
 		if(currentPos.distance_to(targetPos) < 0.1):
 			if not antData[i].backtracking:
 				var forward = (targetPos - currentPos).normalized() 
@@ -84,6 +108,7 @@ func _physics_process(delta):
 		var smoothed_basis = current_basis.slerp(target_basis, 0.2)  # 0.2 = smoothing factor
 		
 		if world_grid.position_to_cell(to_global(new_pos)) != antData[i].cell:
+			find_nearest_food(to_global(antData[i].position))	
 			world_grid.unregister_entity(to_global(antData[i].position), {"type": "ant", "position": to_global(new_pos)})
 			antData[i].cell = world_grid.position_to_cell(to_global(new_pos))
 			world_grid.register_entity(to_global(new_pos), {"type": "ant", "position": to_global(new_pos)})
