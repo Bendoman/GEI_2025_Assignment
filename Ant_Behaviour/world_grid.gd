@@ -26,7 +26,8 @@ func register_entity(pos: Vector3, entity):
 	grid[cell].append(entity)
 	#print(grid)
 	
-	#draw_debug_mesh_at_cell(cell, 1)
+	if(entity.type == "foodTrail"):
+		draw_debug_mesh_at_cell(cell, 1)
 	#print(pos, cell)
 	
 func unregister_entity(pos: Vector3, entity, exactCell=null):

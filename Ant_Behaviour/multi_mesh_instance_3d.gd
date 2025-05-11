@@ -1,6 +1,9 @@
 extends MultiMeshInstance3D
 
-@export var instance_count := 2000
+@export var instance_count := 20
+
+
+
 @export var spawn_radius := 20.0
 @export var mesh_to_use: Mesh
 @export var material_to_use: Material
@@ -43,10 +46,15 @@ func _ready():
 			"path": [pos + Vector3(offset_x, 0, offset_z)],
 			"backtracking": false,
 			"targetingFood": false,
-			"cell": Vector2i(0, 0)
+			"followingTrail": false,
+			"cell": Vector2i(0, 0),
+			"trailIndex": 0
 		})
 
 func find_nearest_food(global_pos: Vector3):
+	var foodPos
+	var trail
+	
 	var center_cell = world_grid.position_to_cell(global_pos)
 	for x in range(center_cell.x - search_depth, center_cell.x + search_depth + 1):
 		for z in range(center_cell.y - search_depth, center_cell.y + search_depth + 1):
@@ -56,10 +64,16 @@ func find_nearest_food(global_pos: Vector3):
 			var entries = world_grid.get_entities_at_cell(cell)
 			for entry in entries:
 				if entry.type == "foodsource" and entry.has("position"):
-					return entry.position
-
+					foodPos = entry.position
+				elif entry.type == "foodTrail":
+					trail = entry.path
+					
+	return {"foodPos": foodPos, "trail": trail}
+	
 func add_path_to_grid(path): 
 	for node in path: 
+		# Add trail index here too
+		world_grid.register_entity(to_global(node), {"type": "foodTrail", "path": path})
 		print(node)
 
 func _physics_process(delta):
@@ -74,15 +88,21 @@ func _physics_process(delta):
 			
 		var path = antData[i].path
 		var currentPos:Vector3 = antData[i].position
-		var targetPos:Vector3 = path[path.size() - 1]
 		
+		var targetPos:Vector3 = path[path.size() - 1]
+		if(antData[i].followingTrail): 
+			targetPos = path[antData[i].trailIndex]
+			
 		if(currentPos.distance_to(targetPos) < 0.1):
+			if(antData[i].followingTrail): 
+				antData[i].trailIndex += 1
+					
 			if(antData[i].targetingFood):
 				antData[i].backtracking = true 
 				antData[i].targetingFood = false 
 				add_path_to_grid(antData[i].path)
 				
-			if not antData[i].backtracking:
+			if not antData[i].backtracking and !antData[i].followingTrail:
 				var forward = (targetPos - currentPos).normalized() 
 		
 				var angle_deg = randf_range(-wander_angle_deg / 2.0, wander_angle_deg / 2.0)
@@ -107,8 +127,14 @@ func _physics_process(delta):
 		var smoothed_basis = current_basis.slerp(target_basis, 0.2)  # 0.2 = smoothing factor
 		
 		if !antData[i].backtracking and world_grid.position_to_cell(to_global(new_pos)) != antData[i].cell:
-			var foodPos = find_nearest_food(to_global(antData[i].position))	
-			if(foodPos != null): 
+			var test = find_nearest_food(to_global(antData[i].position))	
+			var foodPos = test.foodPos
+			var trail = test.trail
+			
+			if(trail != null and !antData[i].followingTrail): 
+				antData[i].path = trail
+				antData[i].followingTrail = true
+			elif(foodPos != null): 
 				var local = to_local(foodPos)
 				antData[i].path.pop_back()
 				antData[i].path.append(Vector3(local.x, antData[i].position.y, local.z))
