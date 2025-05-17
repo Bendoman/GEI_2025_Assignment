@@ -98,7 +98,12 @@ func add_path_to_grid(path):
 	for node in path: 
 		trail.append(to_global(node))
 		# Add trail index here too
-		world_grid.register_entity(to_global(node), {"type": "foodTrail", "trailIndex": trailIndex, "nodeIndex": trail.size() - 1})
+		world_grid.register_entity(to_global(node), {
+			"type": "foodTrail", 
+			"trailIndex": trailIndex, 
+			"nodeIndex": trail.size() - 1,
+			"team": team
+		})
 	trails.append({
 		"path": trail,
 		"value": 100
@@ -199,13 +204,11 @@ func _physics_process(delta):
 
 				if(trail != null and !ant.followingTrail):
 					# Existing food trail found
-					print(trail, nodeIndex)
 					ant.trailIndex = trail
 					ant.followingTrail = true
-					ant.path = trails[trailIndex].path.duplicate() 
-					print(trails[trailIndex].path)
+					for x in range(nodeIndex):
+						ant.path.append(to_local(trails[trailIndex].path[x]))
 					ant.path.resize(nodeIndex + 1)
-					print(ant.path)
 					
 				if(foodPos != null and !ant.followingTrail): 
 					# Target found food
