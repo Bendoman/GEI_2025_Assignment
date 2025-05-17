@@ -71,13 +71,13 @@ debug_mesh = SubResource("BoxMesh_ppyta")
 debug_material = SubResource("StandardMaterial3D_ykrsh")
 
 [node name="FoodSource" parent="." instance=ExtResource("5_ykrsh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0656353, 0.175, -0.520728)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0656353, 0.175, 0.327687)
 
 [node name="FoodSource2" parent="." instance=ExtResource("5_ykrsh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.85464, 0.175, 1.82364)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.38014, 0.175, 1.82364)
 
 [node name="FoodSource3" parent="." instance=ExtResource("5_ykrsh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0287657, 0.175, 3.45211)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0287657, 0.175, 3.01542)
 
 [node name="FoodSource4" parent="." instance=ExtResource("5_ykrsh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.54528, 0.175, 1.48774)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.11799, 0.175, 1.48774)

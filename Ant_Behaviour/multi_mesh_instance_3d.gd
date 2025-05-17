@@ -11,6 +11,7 @@ extends MultiMeshInstance3D
 @export var wander_angle_deg := 60.0
 
 @export var search_depth: int = 1
+@export var consumptionRate: int = 20
 
 @export var backtracking := false 
 
@@ -106,10 +107,21 @@ func add_path_to_grid(path):
 		})
 	trails.append({
 		"path": trail,
-		"value": 100
+		"value": 100,
+		"assignedAnts": 0
 	})
+	print(world_grid.grid)
 	return trailIndex
 
+func remove_trail_from_grid(index): 
+	for i in trails[index].path.size():
+		var node = trails[index].path[i]
+		world_grid.unregister_entity(node, {
+			"type": "foodTrail", 
+			"trailIndex": index, 
+			"nodeIndex": i,
+			"team": team
+		})
 # "position": pos, 
 # "cell": Vector2i(0, 0),
 # "path": [pos + Vector3(offset_x, 0, offset_z)],
@@ -152,17 +164,37 @@ func _physics_process(delta):
 			# Ant reaches target
 			 #or ant.path[pathLength - 1] == trails[trailIndex][trailLength - 1]
 			if(ant.targetingFood): 
-				# Ant reaches food
+				# Ant reaches newly found food
 				ant.backtracking = true
 				ant.carryingFood = true
 				ant.targetingFood = false 
 				ant.trailIndex = add_path_to_grid(antData[i].path)
+				trails[ant.trailIndex].assignedAnts += 1
+				trails[ant.trailIndex].value -= consumptionRate
+				print(trails[ant.trailIndex])
+				
 				
 			if(!ant.backtracking):
 				if(ant.followingTrail):
-					if(ant.path[pathLength - 1] == to_local(trails[trailIndex].path[trailLength - 1])):
+					if(trails[trailIndex].value <= 0):
+						# Food saturated 
+						trails[trailIndex].assignedAnts -= 1
+						if(trails[trailIndex].assignedAnts <= 0):
+							remove_trail_from_grid(trailIndex)
+						
+						ant.trailIndex = -1
+						ant.followingTrail = false 
+						ant.backtracking = true
+						print(ant.trailIndex)
+					elif(ant.path[pathLength - 1] == to_local(trails[trailIndex].path[trailLength - 1])):
+						# Ant reaches food from trail
 						ant.backtracking = true
 						ant.carryingFood = true
+						trails[trailIndex].value -= 100
+						print(trails[trailIndex])
+					elif ant.backtracking:
+						# Backtrack
+						ant.path.pop_back() 
 					else:
 						# Add next path node in trail
 						ant.path.append(to_local(trails[trailIndex].path[pathLength]))
@@ -206,10 +238,10 @@ func _physics_process(delta):
 					# Existing food trail found
 					ant.trailIndex = trail
 					ant.followingTrail = true
+					trails[ant.trailIndex].assignedAnts += 1
 					for x in range(nodeIndex):
-						ant.path.append(to_local(trails[trailIndex].path[x]))
+						ant.path.append(to_local(trails[ant.trailIndex].path[x]))
 					ant.path.resize(nodeIndex + 1)
-					
 				if(foodPos != null and !ant.followingTrail): 
 					# Target found food
 					var local = to_local(foodPos)

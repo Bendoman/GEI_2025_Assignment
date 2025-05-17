@@ -39,15 +39,17 @@ func unregister_entity(pos: Vector3, entity, exactCell=null):
 		
 	if not grid.has(cell):
 		return
-	
 	for i in range(grid[cell].size() - 1, -1, -1):
 		var entry = grid[cell][i]
-		#print(grid[cell])
+
 		if entry.type == entity.type:
-			grid[cell].remove_at(i)
+			if(entry.type == "foodTrail" and entry.trailIndex == entity.trailIndex):
+				print('removing food trail')
+				grid[cell].remove_at(i)
+			elif(entry.type == "ant"):
+				grid[cell].remove_at(i)
 			if(entry.type == "mesh_instance"):
 				entry.instance.queue_free()
-				pass
 			break
 	if grid[cell].is_empty():
 		grid.erase(cell)
@@ -78,7 +80,8 @@ func draw_debug_mesh_at_cell(cell: Vector2i, duration: float = 0.0) -> void:
 	add_child(instance)
 	grid[cell].append({"type": "mesh_instance", "instance": instance})
 	if duration > 0.0:
-		await get_tree().create_timer(duration).timeout
+		pass
+		#await get_tree().create_timer(duration).timeout
 		#print('freeing mesh')
 		unregister_entity(cell_to_position(cell), {"type": "mesh_instance", "instance": instance}, cell)
 		#instance.queue_free()
