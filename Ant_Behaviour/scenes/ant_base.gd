@@ -3,6 +3,9 @@ extends Node3D
 @export var spawn_position: Vector3 = Vector3.ZERO
 @export var ant_scene: PackedScene
 
+@export var team: int
+@onready var ant_renderer = $AntRenderer
+
 var antCount: int
 var world_grid
 

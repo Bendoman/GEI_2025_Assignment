@@ -1,7 +1,6 @@
-[gd_scene load_steps=14 format=3 uid="uid://bmov0u7ck0qgu"]
+[gd_scene load_steps=13 format=3 uid="uid://bmov0u7ck0qgu"]
 
 [ext_resource type="Script" uid="uid://cpek6qnsms6xd" path="res://test.gd" id="1_6uqi0"]
-[ext_resource type="Script" uid="uid://dlydu00bphbhx" path="res://collision_shape_3d.gd" id="2_g14j6"]
 [ext_resource type="Material" uid="uid://dtd0wnwdssiif" path="res://materials/ground_colour.tres" id="2_ykrsh"]
 [ext_resource type="Script" uid="uid://bsa24v84vydkc" path="res://world_grid.gd" id="4_ppyta"]
 [ext_resource type="PackedScene" uid="uid://cccxu3uljmod8" path="res://scenes/ant_base.tscn" id="4_vbegm"]
@@ -51,7 +50,6 @@ collision_mask = 256
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
 shape = SubResource("BoxShape3D_fuouj")
-script = ExtResource("2_g14j6")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D/CollisionShape3D"]
 material_override = ExtResource("2_ykrsh")
@@ -71,13 +69,13 @@ debug_mesh = SubResource("BoxMesh_ppyta")
 debug_material = SubResource("StandardMaterial3D_ykrsh")
 
 [node name="FoodSource" parent="." instance=ExtResource("5_ykrsh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0656353, 0.175, -0.520728)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0656353, 0.175, -0.821055)
 
 [node name="FoodSource2" parent="." instance=ExtResource("5_ykrsh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.85464, 0.175, 1.82364)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.463668, 0.175, 3.86114)
 
 [node name="FoodSource3" parent="." instance=ExtResource("5_ykrsh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0287657, 0.175, 3.45211)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.61737, 0.175, 1.7063)
 
 [node name="FoodSource4" parent="." instance=ExtResource("5_ykrsh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.54528, 0.175, 1.48774)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.00165, 0.175, 1.47345)

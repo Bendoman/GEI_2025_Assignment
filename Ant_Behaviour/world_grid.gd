@@ -1,6 +1,6 @@
 extends Node3D
 
-var cell_size := 0.25
+var cell_size := .5
 var grid := {}
 
 func test():
@@ -27,9 +27,9 @@ func register_entity(pos: Vector3, entity):
 	#print(grid)
 	
 	if(entity.type == "foodTrail"):
-		draw_debug_mesh_at_cell(cell, 1)
+		draw_debug_mesh_at_cell(cell, 5)
 	#print(pos, cell)
-	
+
 func unregister_entity(pos: Vector3, entity, exactCell=null):
 	var cell
 	if exactCell != null: 
