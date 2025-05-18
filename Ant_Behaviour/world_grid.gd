@@ -3,9 +3,6 @@ extends Node3D
 var cell_size := .5
 var grid := {}
 
-func test():
-	print_debug('test')
-
 func printGrid():
 	print_debug(JSON.stringify(grid, "\t"))
 
@@ -51,13 +48,14 @@ func unregister_entity(pos: Vector3, entity, exactCell=null):
 		var entry = grid[cell][i]
 
 		if entry.type == entity.type:
-			#print_debug("entry: ", entry, "\nEntity: ", entity)
+			#if(entry.type != "ant"):
+				#print_debug("entry: ", entry, "\nEntity: ", entity)
 			if(entry.type == "foodTrail" and entry.trailIndex == entity.trailIndex):
 				#print_debug("removing trail in here: ", entry)
 				grid[cell].remove_at(i)
 			elif(entry.type == "ant"):
 				grid[cell].remove_at(i)
-			elif(entry.type == "mesh_instance"):
+			#elif(entry.type == "mesh_instance"):
 				entry.instance.queue_free()
 			elif(entry.type == "foodsource" and entry.position == entity.position):
 				#print_debug("Removing foor source: ")

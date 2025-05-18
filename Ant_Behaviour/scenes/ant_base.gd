@@ -27,6 +27,11 @@ var spawn_in_progress := false
 var progress_duration := 3.0
 var progress_elapsed := 0.0
 
+var warriorCount: int
+
+func increaseWarriorCount():
+	warriorCount += 1
+	warriors_label.text = str(warriorCount)	
 
 func increaseAntCount(): 
 	antCount += 1
@@ -39,7 +44,6 @@ func incrementFoodLevel(amount: int):
 		start_ant_spawn_progress()
 func _ready():
 	world_grid = get_node("../WorldGrid") 
-	world_grid.test()
 	# Spawn timer setup
 	var spawn_timer := Timer.new()
 	spawn_timer.wait_time = spawn_interval
@@ -53,8 +57,6 @@ func start_ant_spawn_progress():
 	progress = 0.0
 	progress_elapsed = 0.0
 	foodLevel -= 10  # Consume food for the spawn
-	
-	print('starting')
 
 func reset_spawn_progress():
 	spawn_in_progress = false

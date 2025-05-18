@@ -11,7 +11,6 @@ var entity
 
 func _ready():
 	world_grid = get_node("../WorldGrid") 
-	world_grid.test()
 	var pos = Vector3(global_position.x, 0, global_position.z)
 	var cell = world_grid.position_to_cell(pos)
 	entity = world_grid.register_entity(global_position, {"type": "foodsource", "position": pos, "foodLeft": 100, "cell": cell}, cell)
