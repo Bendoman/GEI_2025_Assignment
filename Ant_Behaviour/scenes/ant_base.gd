@@ -7,7 +7,11 @@ extends Node3D
 
 @export var team: int
 @onready var ant_renderer = $AntRenderer
-@onready var worker_progress = $MeshInstance3D/WorkerProgress
+@onready var warrior_ant_renderer = $WarriorAntRenderer
+
+@onready var base_mesh = $BaseMesh
+var worker_progress
+#@onready var worker_progress = $MeshInstance3D/WorkerProgress
 
 var antCount: int
 var world_grid
@@ -21,13 +25,45 @@ var foodLevel: int
 
 
 var nextAnt = "worker"
-
+	
 var progress := 0.0
 var spawn_in_progress := false
 var progress_duration := 3.0
 var progress_elapsed := 0.0
 
 var warriorCount: int
+
+const ANT_BASE = preload("res://scenes/ant_base.gdshader")
+
+func _ready():
+	#await get_tree().process_frame
+	world_grid = get_node("../WorldGrid") 
+	# Spawn timer setup
+	#var spawn_timer := Timer.new()
+	#spawn_timer.wait_time = spawn_interval
+	#spawn_timer.one_shot = false
+	#spawn_timer.autostart = true
+	#add_child(spawn_timer)
+	#spawn_timer.timeout.connect(Callable(self, "progressAntCreation"))
+	var mesh_instance := MeshInstance3D.new()
+	var quad := QuadMesh.new()
+	quad.size = Vector2(1.5, 1.5)  # Set size as needed
+	mesh_instance.mesh = quad
+	mesh_instance.rotation_degrees.x = -90
+	
+	var shader_material = ShaderMaterial.new() 
+	shader_material.shader = ANT_BASE
+	mesh_instance.material_override = shader_material
+	
+	worker_progress = mesh_instance
+	add_child(worker_progress)
+	
+	
+func getAnt(team: int, index: int, type): 
+	if(type == "worker"):
+		return get_parent().bases[team].ant_renderer.antData[index]
+	elif(type == "warrior"):
+		return get_parent().bases[team].warrior_ant_renderer.antData[index]
 
 func increaseWarriorCount():
 	warriorCount += 1
@@ -42,15 +78,7 @@ func incrementFoodLevel(amount: int):
 	food_level_label.text = str(foodLevel)
 	if(foodLevel >= 10 and !spawn_in_progress):
 		start_ant_spawn_progress()
-func _ready():
-	world_grid = get_node("../WorldGrid") 
-	# Spawn timer setup
-	var spawn_timer := Timer.new()
-	spawn_timer.wait_time = spawn_interval
-	spawn_timer.one_shot = false
-	spawn_timer.autostart = true
-	#add_child(spawn_timer)
-	#spawn_timer.timeout.connect(Callable(self, "progressAntCreation"))
+
 
 func start_ant_spawn_progress():
 	spawn_in_progress = true

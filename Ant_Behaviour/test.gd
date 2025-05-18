@@ -2,14 +2,18 @@
 extends Node
 class_name World
 
-@onready var ant_base = $AntBase
 
 @onready var world_grid = $WorldGrid
+
+@onready var ant_base = $AntBase
+@onready var ant_base_2 = $AntBase2
+var bases
 
 @export var show_fps: bool = true
 var _fps_label: Label
 
 func _ready() -> void:
+	bases = [ant_base, ant_base_2]
 	print(ant_base.antCount)
 	if show_fps:
 		var fps_layer := CanvasLayer.new()

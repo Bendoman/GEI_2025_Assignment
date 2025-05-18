@@ -1,6 +1,6 @@
 shader_type spatial;
 
-uniform float progress : hint_range(0.0, 1.0) = 1;
+uniform float progress : hint_range(0.0, 1.0) = 0.0;
 uniform vec4 color : source_color = vec4(0.0, 1.0, 0.0, 1.0); // Green
 
 void fragment() {

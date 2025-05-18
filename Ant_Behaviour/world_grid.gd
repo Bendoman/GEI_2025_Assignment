@@ -55,7 +55,7 @@ func unregister_entity(pos: Vector3, entity, exactCell=null):
 				grid[cell].remove_at(i)
 			elif(entry.type == "ant"):
 				grid[cell].remove_at(i)
-			#elif(entry.type == "mesh_instance"):
+			elif(entry.type == "mesh_instance"):
 				entry.instance.queue_free()
 			elif(entry.type == "foodsource" and entry.position == entity.position):
 				#print_debug("Removing foor source: ")
