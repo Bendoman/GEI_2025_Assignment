@@ -2,16 +2,20 @@
 
 [ext_resource type="Script" uid="uid://3vswf82hur3v" path="res://food_source.gd" id="1_qoa6f"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ti84e"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qoa6f"]
 transparency = 1
-albedo_color = Color(0.329372, 0.83, 0.1909, 0.27451)
+albedo_color = Color(0.3741, 0.87, 0.431955, 0.592157)
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_8ktdi"]
-material = SubResource("StandardMaterial3D_ti84e")
-height = 0.25
+[sub_resource type="SphereMesh" id="SphereMesh_fwco3"]
+material = SubResource("StandardMaterial3D_qoa6f")
+radius = 0.25
+height = 0.5
 
 [node name="FoodSource" type="Node3D"]
 script = ExtResource("1_qoa6f")
 
+[node name="FoodLeftLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.25, 0)
+
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("CylinderMesh_8ktdi")
+mesh = SubResource("SphereMesh_fwco3")

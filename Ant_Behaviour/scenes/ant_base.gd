@@ -9,6 +9,8 @@ extends Node3D
 var antCount: int
 var world_grid
 
+var foodLevel: int
+
 func _ready():
 	world_grid = get_node("../WorldGrid") 
 	world_grid.test()

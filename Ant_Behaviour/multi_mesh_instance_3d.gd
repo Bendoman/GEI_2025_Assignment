@@ -20,9 +20,10 @@ var world_grid
 
 var paths = [] 
 var antData = [] 
-
+var base
 func _ready():
 	await get_tree().process_frame
+	base = get_parent() 
 	world_grid = get_parent().world_grid
 	team = get_parent().team
 	#print_debug(team)
@@ -60,7 +61,8 @@ func _ready():
 			"trailIndex": -1,
 			"followingTrail": false,
 			
-			"source": null
+			"source": null,
+			"carringMesh": null
 		})
 
 func get_random_index(arr: Array):
@@ -180,6 +182,11 @@ func _physics_process(delta):
 		
 		if(ant.path.size() == 0):
 			# Ant is at base
+			if(ant.carryingFood):
+				base.foodLevel += consumptionRate
+				print("Food returned to base: ", base.foodLevel)
+			ant.carryingFood = false
+			
 			ant.backtracking = false 
 			if(ant.followingTrail and trailIndex != -1):
 				ant.path.append(to_local(trails[trailIndex].path[0]))
