@@ -54,7 +54,15 @@ func _ready():
 
 	# Set transform for each instance (e.g. random spread)
 	for i in instance_count:
-		return
+		#return
+		var offset_x = randf_range(-0.1, 0.1)
+		var offset_z = randf_range(-0.1, 0.1)	
+		
+		if(team == 0):
+			return
+		else:
+			offset_x = -0.1
+			offset_z = 0.1
 		if i >= 1:
 			continue
 		base.increaseWarriorCount()
@@ -64,10 +72,11 @@ func _ready():
 		var transform = Transform3D(Basis(), pos)
 		multimesh.set_instance_transform(i, transform)
 		
-		var offset_x = randf_range(-0.1, 0.1)
-		var offset_z = randf_range(-0.1, 0.1)		
+	
 		antData.append({
 			"position": pos, 
+			"global_position": to_global(pos),
+
 			"cell": Vector2i(0, 0),
 			"path": [pos + Vector3(offset_x, 0, offset_z)],
 			
@@ -192,12 +201,6 @@ func _physics_process(delta):
 
 			var offset_x = randf_range(-0.1, 0.1)
 			var offset_z = randf_range(-0.1, 0.1)
-			if(team == 0):
-				offset_x = 0.1
-				offset_z = 0.1
-			else:
-				offset_x = -0.1
-				offset_z = 0.1
 			ant.path.append(Vector3(offset_x, 0, offset_z))
 		elif(antData[i].path.size() >= 5):
 			antData[i].backtracking = true 
@@ -226,9 +229,15 @@ func _physics_process(delta):
 		if(currentPos.distance_to(targetPos) < 0.1):
 			# Ant reaches target
 			if(ant.targetingAnt != null):
-				ant.targetingAnt = null
-				ant.backtracking = true
-				
+				if(currentPos.distance_to(to_local(ant.targetingAnt.global_position)) < 0.1):
+					print('caught ant')
+					ant.targetingAnt.dead = true
+					ant.targetingAnt = null
+					ant.backtracking = true
+				else: 
+					print("still pursuing")
+					ant.path.append(to_local(ant.targetingAnt.global_position))
+					#ant.path.append(to_local(ant.targetingAnt.path[ant.targetingAnt.path.size() - 1]))
 			if(!ant.backtracking):
 				if(ant.followingTrail):
 					if(ant.path[pathLength - 1] == to_local(trails[trailIndex].path[trailLength - 1])):
@@ -278,11 +287,11 @@ func _physics_process(delta):
 			var discoveredEnemyWorker = search.discoveredEnemyWorker
 
 			var enemyAnt
-			if(discoveredEnemyWorker != null):
+			if(discoveredEnemyWorker != null and ant.path.size() > 0 and ant.targetingAnt == null):
 				#print(base.getAnt(discoveredEnemyWorker.team, discoveredEnemyWorker.index, "worker"))
 				enemyAnt = base.getAnt(discoveredEnemyWorker.team, discoveredEnemyWorker.index, "worker")
-				print("Warrior detected, ", enemyAnt)
-				enemyAnt.fleeing = true
+				#print("Warrior detected, ", enemyAnt)
+				enemyAnt.fleeing = [team, i]
 				ant.followingTrail = false 
 				ant.trailIndex = -1
 				ant.targetingAnt = enemyAnt
@@ -311,12 +320,13 @@ func _physics_process(delta):
 						if index > nodeIndex:
 							break
 					ant.path.resize(nodeIndex + 1)	
-			world_grid.unregister_entity(to_global(ant.position), {"type": "ant", "team": team, "index": i})
+			world_grid.unregister_entity(to_global(ant.position), {"type": "warrior", "team": team, "index": i})
 			ant.cell = world_grid.position_to_cell(to_global(new_pos))
-			world_grid.register_entity(to_global(new_pos), {"type": "ant", "team": team, "index": i})
+			world_grid.register_entity(to_global(new_pos), {"type": "warrior", "team": team, "index": i})
 
 		
 		ant.position = new_pos
+		ant.global_position = to_global(ant.position)
 
 		var transform = Transform3D(smoothed_basis, new_pos)
 		multimesh.set_instance_transform(i, transform)
@@ -337,11 +347,12 @@ func spawn_ant():
 	var offset_z = randf_range(-0.1, 0.1)		
 	antData.append({
 		"position": pos, 
+		"global_position": to_global(pos),	
 		"cell": Vector2i(0, 0),
 		"path": [pos + Vector3(offset_x, 0, offset_z)],
 		
 		"backtracking": false,
-		"targetingAnt": false,
+		"targetingAnt": null,
 
 		"trail": [],
 		"trailIndex": -1,

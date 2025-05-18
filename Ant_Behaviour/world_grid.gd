@@ -54,6 +54,7 @@ func unregister_entity(pos: Vector3, entity, exactCell=null):
 				#print_debug("removing trail in here: ", entry)
 				grid[cell].remove_at(i)
 			elif(entry.type == "ant"):
+				#print("removing ant: ", entry)
 				grid[cell].remove_at(i)
 			elif(entry.type == "mesh_instance"):
 				entry.instance.queue_free()

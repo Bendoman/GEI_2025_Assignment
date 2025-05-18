@@ -74,7 +74,8 @@ func increaseWarriorCount():
 func increaseAntCount(): 
 	antCount += 1
 	workers_label.text = str(antCount)
-	ant_renderer.maxWarriors = int(1 + (ant_renderer.antData.size() / 10))
+	#ant_renderer.maxWarriors = int(1 + (ant_renderer.antData.size() / 10))
+	ant_renderer.maxWarriors = 10
 	#print("New max warriors: ", ant_renderer.maxWarriors)
 
 

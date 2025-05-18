@@ -14,7 +14,7 @@ var _fps_label: Label
 
 func _ready() -> void:
 	bases = [ant_base, ant_base_2]
-	print(ant_base.antCount)
+	#print(ant_base.antCount)
 	if show_fps:
 		var fps_layer := CanvasLayer.new()
 		add_child(fps_layer)
