@@ -4,6 +4,7 @@ class_name World
 
 @onready var ant_base = $AntBase
 
+@onready var world_grid = $WorldGrid
 
 @export var show_fps: bool = true
 var _fps_label: Label
@@ -19,6 +20,10 @@ func _ready() -> void:
 		# Position the label 10px in from the top-left
 		_fps_label.position = Vector2(10, 10)
 		fps_layer.add_child(_fps_label)
+
+func _input(event):
+	if Input.is_key_pressed(KEY_K):
+		world_grid.printGrid()
 
 func _process(delta: float) -> void:
 	if show_fps and _fps_label:

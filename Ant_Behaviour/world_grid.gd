@@ -4,9 +4,12 @@ var cell_size := .5
 var grid := {}
 
 func test():
-	print('test')
+	print_debug('test')
 
-func position_to_cell(pos: Vector3) -> Vector2i:
+func printGrid():
+	print_debug(JSON.stringify(grid, "\t"))
+
+func position_to_cell(pos: Vector3) -> Vector2i: 
 	return Vector2i(floor(pos.x / cell_size), floor(pos.z / cell_size))
 
 func cell_to_position(cell: Vector2i) -> Vector3:
@@ -17,18 +20,22 @@ func get_entities_at_cell(cell: Vector2i) -> Array:
 		return grid[cell]
 	return []
 
-func register_entity(pos: Vector3, entity):
-	var cell := position_to_cell(pos)
-	#print(cell)
+func register_entity(pos: Vector3, entity, exactCell=null):
+	var cell
+	if exactCell != null: 
+		cell = exactCell
+	else:
+		cell = position_to_cell(pos)
+	#print_debug(cell)
 	if not grid.has(cell):
 		grid[cell] = [] 
 	
 	grid[cell].append(entity)
-	#print(grid)
+	#print_debug(grid)
 	
-	if(entity.type == "foodTrail"):
-		draw_debug_mesh_at_cell(cell, 5)
-	#print(pos, cell)
+	#if(entity.type == "foodTrail"):
+		#draw_debug_mesh_at_cell(cell)
+	#print_debug(pos, cell)
 
 func unregister_entity(pos: Vector3, entity, exactCell=null):
 	var cell
@@ -43,14 +50,19 @@ func unregister_entity(pos: Vector3, entity, exactCell=null):
 		var entry = grid[cell][i]
 
 		if entry.type == entity.type:
+			#print_debug("entry: ", entry, "\nEntity: ", entity)
 			if(entry.type == "foodTrail" and entry.trailIndex == entity.trailIndex):
-				print('removing food trail')
+				#print_debug("removing trail in here: ", entry)
 				grid[cell].remove_at(i)
 			elif(entry.type == "ant"):
 				grid[cell].remove_at(i)
-			if(entry.type == "mesh_instance"):
+			elif(entry.type == "mesh_instance"):
 				entry.instance.queue_free()
-			break
+			elif(entry.type == "foodsource" and entry.position == entity.position):
+				#print_debug("Removing foor source: ")
+				grid[cell].remove_at(i)
+				
+			
 	if grid[cell].is_empty():
 		grid.erase(cell)
 
@@ -80,8 +92,5 @@ func draw_debug_mesh_at_cell(cell: Vector2i, duration: float = 0.0) -> void:
 	add_child(instance)
 	grid[cell].append({"type": "mesh_instance", "instance": instance})
 	if duration > 0.0:
-		pass
-		#await get_tree().create_timer(duration).timeout
-		#print('freeing mesh')
+		await get_tree().create_timer(duration).timeout
 		unregister_entity(cell_to_position(cell), {"type": "mesh_instance", "instance": instance}, cell)
-		#instance.queue_free()
