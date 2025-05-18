@@ -1,6 +1,6 @@
 extends MultiMeshInstance3D
 
-@export var instance_count := 5
+@export var instance_count := 101
 
 @export var spawn_radius := 20.0
 @export var mesh_to_use: Mesh
@@ -41,6 +41,7 @@ func _ready():
 
 	# Set transform for each instance (e.g. random spread)
 	for i in instance_count:
+		return
 		if i >= 1:
 			continue
 		base.increaseWarriorCount()
@@ -166,11 +167,6 @@ func _physics_process(delta):
 		
 		if(ant.path.size() == 0):
 			# Ant is at base
-			if(ant.carryingFood):
-				base.incrementFoodLevel(consumptionRate)
-				#print("Food returned to base: ", base.foodLevel)
-			ant.carryingFood = false
-			carried_food_renderer.removeCarriedFood(i)
 			
 			ant.backtracking = false 
 			if(ant.followingTrail and trailIndex != -1):
@@ -191,7 +187,6 @@ func _physics_process(delta):
 				trailIndex = -1
 				ant.trailIndex = -1
 				ant.followingTrail = false
-				ant.source = null
 			else:
 				trailLength = trails[trailIndex].path.size()
 
@@ -336,7 +331,7 @@ func spawn_ant():
 	if(antData.size() >= instance_count):
 		return 
 		
-	base.increaseAntCount()
+	base.increaseWarriorCount()
 	#var pos = Vector3(randf() * 2 - 1, 0, randf() * 2 - 1).normalized() * randf() * spawn_radius
 	var index = antData.size()
 	

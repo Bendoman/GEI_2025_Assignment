@@ -11,10 +11,14 @@ extends MultiMeshInstance3D
 @export var wander_angle_deg := 60.0
 
 @export var search_depth: int = 1 
-@export var consumptionRate: int = 10
+@export var consumptionRate: int = 1
+@onready var warrior_ant_renderer = $"../WarriorAntRenderer"
 
 @export var backtracking := false 
 @onready var carried_food_renderer = $"../CarriedFoodRenderer"
+
+var maxWarriors = 1
+var currentWarriors = 0
 
 var team 
 var world_grid
@@ -162,7 +166,7 @@ func remove_trail_from_grid(index):
 		var node = trails[index].path[i]
 		#print_debug("node index: ", i)
 		var cell = trails[index].cells[i]
-		print(cell)
+		#print(cell)
 		world_grid.unregister_entity(node, {
 			"type": "foodTrail", 
 			"trailIndex": index, 
@@ -193,6 +197,15 @@ func _physics_process(delta):
 		
 		if(ant.path.size() == 0):
 			# Ant is at base
+			#print("ant at base: ", i)
+			#if(ant.reportingEnemy):
+				#warrior_ant_renderer.spawn_ant()
+				
+			if(ant.reportingEnemy):
+				if(currentWarriors < maxWarriors):
+					warrior_ant_renderer.spawn_ant()
+					currentWarriors += 1
+				
 			if(ant.carryingFood):
 				base.incrementFoodLevel(consumptionRate)
 				#print("Food returned to base: ", base.foodLevel)
@@ -316,10 +329,10 @@ func _physics_process(delta):
 			var enemyAnt
 			
 			if(discoveredEnemyWorker != null):
-				print(base.getAnt(discoveredEnemyWorker.team, discoveredEnemyWorker.index, "worker"))
+				#print(base.getAnt(discoveredEnemyWorker.team, discoveredEnemyWorker.index, "worker"))
 				enemyAnt = base.getAnt(discoveredEnemyWorker.team, discoveredEnemyWorker.index, "worker")
 				
-			if(discoveredTrail != null):
+			if(discoveredTrail != null and !ant.carryingFood and !ant.reportingEnemy):
 				trail = discoveredTrail.trailIndex
 				nodeIndex = discoveredTrail.nodeIndex
 				trailSource = discoveredTrail.source
@@ -330,11 +343,15 @@ func _physics_process(delta):
 				foodPos = search.foodPos.position
 				ant.source = source
 				
-			if(enemyAnt != null): 
+			if(enemyAnt != null and ant.path.size() > 1): 
 				# Found enemey ant
-				ant.path.append(to_local(enemyAnt.global_position))
-				print("Path to enemey found: ", ant.backtracking, ant.reportingEnemy)
-				ant.path.pop_back()
+				#ant.path.append(to_local(enemyAnt.global_position))
+				#print("Path to enemey found: ", ant, ant.backtracking, ant.reportingEnemy)
+				if(currentWarriors < maxWarriors):
+					if(ant.path.size() > 1):
+						ant.path.pop_back()
+					ant.backtracking = true
+					ant.reportingEnemy = true
 				
 			elif(trail != null and !ant.followingTrail):
 				# Existing food trail found
@@ -352,7 +369,7 @@ func _physics_process(delta):
 							break
 					ant.path.resize(nodeIndex + 1)	
 					ant.backtracking = false
-					print_debug("reseting backtracking here")
+					#print_debug("reseting backtracking here")
 			elif(foodPos != null and !ant.followingTrail): 
 				#print_debug("in here")
 				# Target found food
@@ -363,9 +380,9 @@ func _physics_process(delta):
 				ant.followingTrail = true
 				ant.source = source
 				
-			world_grid.unregister_entity(to_global(ant.position), {"type": "ant", "team": team, "index": i})
+			world_grid.unregister_entity(to_global(ant.position), {"type": "ant", "team": team, "index": i}, ant.cell)
 			ant.cell = world_grid.position_to_cell(to_global(new_pos))
-			world_grid.register_entity(to_global(new_pos), {"type": "ant", "team": team, "index": i})
+			world_grid.register_entity(to_global(new_pos), {"type": "ant", "team": team, "index": i}, ant.cell)
 
 		
 		ant.position = new_pos
