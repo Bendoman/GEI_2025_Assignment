@@ -14,6 +14,8 @@ var worker_progress
 #@onready var worker_progress = $MeshInstance3D/WorkerProgress
 
 var antCount: int
+
+@export var antSpeed: int = 0.1
 var world_grid
 
 @onready var workers_label = $WorkerCountLabel/workersLabel
@@ -73,7 +75,7 @@ func increaseAntCount():
 	antCount += 1
 	workers_label.text = str(antCount)
 	ant_renderer.maxWarriors = int(1 + (ant_renderer.antData.size() / 10))
-	print("New max warriors: ", ant_renderer.maxWarriors)
+	#print("New max warriors: ", ant_renderer.maxWarriors)
 
 
 func incrementFoodLevel(amount: int): 

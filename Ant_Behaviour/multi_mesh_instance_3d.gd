@@ -6,7 +6,7 @@ extends MultiMeshInstance3D
 @export var mesh_to_use: Mesh
 @export var material_to_use: Material
 
-@export var antSpeed: float = .1
+var antSpeed: float = .25
 @export var wander_distance := 1
 @export var wander_angle_deg := 60.0
 
@@ -34,18 +34,31 @@ func _ready():
 	#print_debug(team)
 	
 	
+	# Create navy material
+	var navy_material := StandardMaterial3D.new()
+	navy_material.albedo_color = Color(0.0, 0.0, 0.5)  # Navy
+
+	# Create black material
+	var black_material := StandardMaterial3D.new()
+	black_material.albedo_color = Color(0.0, 0.0, 0.0)  # Black
+
 	# Create and configure the MultiMesh
 	var multimesh = MultiMesh.new()
 	multimesh.mesh = mesh_to_use
 	multimesh.transform_format = MultiMesh.TRANSFORM_3D
 	multimesh.instance_count = instance_count
-	material_override = material_to_use
+	
+	if(team == 1):
+		material_override = black_material
+	else: 
+		material_override = navy_material
+	
 	self.multimesh = multimesh
 
 	# Set transform for each instance (e.g. random spread)
 	for i in instance_count:
-		if i >= 1:
-			continue
+		#if i >= 1:
+			#continue
 		base.increaseAntCount()
 			
 		#var pos = Vector3(randf() * 2 - 1, 0, randf() * 2 - 1).normalized() * randf() * spawn_radius
@@ -55,6 +68,12 @@ func _ready():
 		
 		var offset_x = randf_range(-0.1, 0.1)
 		var offset_z = randf_range(-0.1, 0.1)		
+		if(team == 0):
+			offset_x = 0.1
+			offset_z = 0.1
+		else:
+			offset_x = -0.1
+			offset_z = 0.1
 		antData.append({
 			"position": pos, 
 			"global_position": to_global(pos),
@@ -64,6 +83,7 @@ func _ready():
 			"carryingFood": false, 
 			"backtracking": false,
 			"targetingFood": false,
+			"fleeing": false,
 			
 			"reportingEnemy": false, 
 			
@@ -83,7 +103,7 @@ func find_nearest_food(center_cell):
 	var foodPositions = []
 	var discoveredTrails = [] 
 	var workers = [] 
-
+	
 	for x in range(center_cell.x - search_depth, center_cell.x + search_depth + 1):
 		for z in range(center_cell.y - search_depth, center_cell.y + search_depth + 1):
 			var cell = Vector2i(x, z)
@@ -195,6 +215,10 @@ func _physics_process(delta):
 		var ant = antData[i]
 		var trailIndex = ant.trailIndex
 		
+		if(ant.fleeing):
+			world_grid.unregister_entity(to_global(ant.position), {"type": "ant", "team": team, "index": i}, ant.cell)
+			continue
+		
 		if(ant.path.size() == 0):
 			# Ant is at base
 			#print("ant at base: ", i)
@@ -220,7 +244,7 @@ func _physics_process(delta):
 				var offset_x = randf_range(-0.1, 0.1)
 				var offset_z = randf_range(-0.1, 0.1)
 				ant.path.append(Vector3(offset_x, 0, offset_z))
-		elif(antData[i].path.size() >= 5):
+		elif(antData[i].path.size() >= 5 and !ant.followingTrail):
 			antData[i].backtracking = true 
 		
 		var path = ant.path 
@@ -265,7 +289,7 @@ func _physics_process(delta):
 				#print(ant.source.foodLeft)
 			# Ant reaches target
 			 #or ant.path[pathLength - 1] == trails[trailIndex][trailLength - 1]
-			if(ant.targetingFood): 
+			if(ant.targetingFood and ant.source != null): 
 				# Ant reaches newly found food
 				ant.backtracking = true
 				ant.carryingFood = true
@@ -273,6 +297,7 @@ func _physics_process(delta):
 
 				ant.targetingFood = false 
 				ant.trailIndex = add_path_to_grid(ant.path, ant.source)
+				ant.followingTrail = true
 				trails[ant.trailIndex].assignedAnts += 1
 				trails[ant.trailIndex].value -= consumptionRate
 				ant.source.foodLeft -= consumptionRate
@@ -352,8 +377,9 @@ func _physics_process(delta):
 						ant.path.pop_back()
 					ant.backtracking = true
 					ant.reportingEnemy = true
+					ant.targetingFood = false
 				
-			elif(trail != null and !ant.followingTrail):
+			if(trail != null and !ant.followingTrail and !ant.reportingEnemy):
 				# Existing food trail found
 				ant.trailIndex = trail
 				ant.followingTrail = true
@@ -370,14 +396,13 @@ func _physics_process(delta):
 					ant.path.resize(nodeIndex + 1)	
 					ant.backtracking = false
 					#print_debug("reseting backtracking here")
-			elif(foodPos != null and !ant.followingTrail): 
+			elif(foodPos != null and !ant.followingTrail and !ant.reportingEnemy): 
 				#print_debug("in here")
 				# Target found food
 				var local = to_local(foodPos)
 				ant.path.pop_back()
 				ant.path.append(Vector3(local.x, ant.position.y, local.z))
 				ant.targetingFood = true
-				ant.followingTrail = true
 				ant.source = source
 				
 			world_grid.unregister_entity(to_global(ant.position), {"type": "ant", "team": team, "index": i}, ant.cell)
@@ -414,6 +439,7 @@ func spawn_ant():
 		"carryingFood": false, 
 		"backtracking": false,
 		"targetingFood": false,
+		"fleeing": false,	
 		
 		"reportingEnemy": false, 
 		
@@ -447,6 +473,7 @@ func spawn_ant_at(world_pos: Vector3):
 		"carryingFood": false, 
 		"backtracking": false,
 		"targetingFood": false,
+		"fleeing": false,
 		
 		"reportingEnemy": false, 
 		

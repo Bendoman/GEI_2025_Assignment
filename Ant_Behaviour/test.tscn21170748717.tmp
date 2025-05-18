@@ -74,4 +74,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.86991, 0.175, 1.75741)
 team = 1
 
 [node name="FoodSource" parent="." instance=ExtResource("5_ykrsh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.51995, 0.3, 2.77405)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.51995, 0.3, 4.38409)

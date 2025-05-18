@@ -35,7 +35,6 @@ mesh = SubResource("CylinderMesh_ti84e")
 script = ExtResource("3_anh4v")
 mesh_to_use = ExtResource("4_agbvd")
 material_to_use = SubResource("StandardMaterial3D_8ognt")
-antSpeed = 0.25
 
 [node name="CarriedFoodRenderer" type="MultiMeshInstance3D" parent="."]
 script = ExtResource("5_agbvd")
