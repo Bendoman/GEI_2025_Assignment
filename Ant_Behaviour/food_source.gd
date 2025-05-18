@@ -18,8 +18,8 @@ func _ready():
 	
 	# Create the cylinder mesh
 	cylinder_mesh = CylinderMesh.new()
-	cylinder_mesh.top_radius = radius
-	cylinder_mesh.bottom_radius = radius
+	cylinder_mesh.top_radius = world_grid.cell_size * 2
+	cylinder_mesh.bottom_radius = world_grid.cell_size * 2
 	cylinder_mesh.height = .5
 	
 	# Create the mesh instance and assign the mesh

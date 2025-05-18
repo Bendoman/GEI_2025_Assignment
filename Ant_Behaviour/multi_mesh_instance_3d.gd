@@ -11,7 +11,7 @@ extends MultiMeshInstance3D
 @export var wander_angle_deg := 60.0
 
 @export var search_depth: int = 1
-@export var consumptionRate: int = 50
+@export var consumptionRate: int = 1
 
 @export var backtracking := false 
 @onready var carried_food_renderer = $"../CarriedFoodRenderer"
@@ -42,6 +42,8 @@ func _ready():
 	for i in instance_count:
 		if i >= 1:
 			continue
+		base.increaseAntCount()
+			
 		#var pos = Vector3(randf() * 2 - 1, 0, randf() * 2 - 1).normalized() * randf() * spawn_radius
 		var pos = position
 		var transform = Transform3D(Basis(), pos)
@@ -184,7 +186,7 @@ func _physics_process(delta):
 			# Ant is at base
 			if(ant.carryingFood):
 				base.incrementFoodLevel(consumptionRate)
-				print("Food returned to base: ", base.foodLevel)
+				#print("Food returned to base: ", base.foodLevel)
 			ant.carryingFood = false
 			carried_food_renderer.removeCarriedFood(i)
 			
@@ -348,10 +350,12 @@ func _physics_process(delta):
 		var transform = Transform3D(smoothed_basis, new_pos)
 		multimesh.set_instance_transform(i, transform)
 
-func spawn_ant_at(world_pos: Vector3):
+func spawn_ant(): 
 	if(antData.size() >= instance_count):
 		return 
 		
+	base.increaseAntCount()
+	#var pos = Vector3(randf() * 2 - 1, 0, randf() * 2 - 1).normalized() * randf() * spawn_radius
 	var index = antData.size()
 	
 	var pos = position
@@ -360,6 +364,36 @@ func spawn_ant_at(world_pos: Vector3):
 	
 	var offset_x = randf_range(-0.1, 0.1)
 	var offset_z = randf_range(-0.1, 0.1)		
+	antData.append({
+		"position": pos, 
+		"cell": Vector2i(0, 0),
+		"path": [pos + Vector3(offset_x, 0, offset_z)],
+		
+		"carryingFood": false, 
+		"backtracking": false,
+		"targetingFood": false,
+
+		"trail": [],
+		"trailIndex": -1,
+		"followingTrail": false,
+		
+		"source": null,
+	})
+
+func spawn_ant_at(world_pos: Vector3):
+	if(antData.size() >= instance_count):
+		return 
+		
+	base.increaseAntCount()
+		
+	var index = antData.size()
+	
+	var pos = position
+	var transform = Transform3D(Basis(), pos)
+	multimesh.set_instance_transform(index, transform)
+	
+	var offset_x = randf_range(-0.1, 0.1)
+	var offset_z = randf_range(-0.1, 0.1)
 	antData.append({
 		"position": pos, 
 		"cell": Vector2i(0, 0),

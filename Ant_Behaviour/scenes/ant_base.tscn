@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://cccxu3uljmod8"]
+[gd_scene load_steps=12 format=3 uid="uid://cccxu3uljmod8"]
 
 [ext_resource type="Script" uid="uid://bjdcgwmuykbl1" path="res://scenes/ant_base.gd" id="1_cloup"]
 [ext_resource type="PackedScene" uid="uid://dcsunt6lrihqa" path="res://scenes/ant.tscn" id="2_mgxml"]
+[ext_resource type="Shader" uid="uid://c7ek65nymkmh8" path="res://scenes/ant_base.gdshader" id="3_8ognt"]
 [ext_resource type="Script" uid="uid://dm83gotx1cipr" path="res://multi_mesh_instance_3d.gd" id="3_anh4v"]
 [ext_resource type="ArrayMesh" uid="uid://bxtem42bc018t" path="res://CombinedAntMesh.tres" id="4_agbvd"]
 [ext_resource type="Script" uid="uid://cy0l3nuebs2rf" path="res://scenes/carried_food_renderer.gd" id="5_agbvd"]
@@ -12,7 +13,19 @@ albedo_color = Color(0.244158, 0.1909, 0.83, 0.27451)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_ti84e"]
 material = SubResource("StandardMaterial3D_anh4v")
+top_radius = 0.8
+bottom_radius = 0.8
 height = 0.25
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ca7l2"]
+render_priority = 0
+shader = ExtResource("3_8ognt")
+shader_parameter/progress = 0.0
+shader_parameter/color = Color(0, 1, 0, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_agbvd"]
+material = SubResource("ShaderMaterial_ca7l2")
+size = Vector2(1.5, 1.5)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8ognt"]
 albedo_color = Color(0, 0, 0, 1)
@@ -24,6 +37,10 @@ ant_scene = ExtResource("2_mgxml")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("CylinderMesh_ti84e")
+
+[node name="WorkerProgress" type="MeshInstance3D" parent="MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("QuadMesh_agbvd")
 
 [node name="AntRenderer" type="MultiMeshInstance3D" parent="."]
 script = ExtResource("3_anh4v")
