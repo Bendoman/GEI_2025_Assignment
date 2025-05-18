@@ -14,6 +14,7 @@ extends MultiMeshInstance3D
 @export var consumptionRate: int = 50
 
 @export var backtracking := false 
+@onready var carried_food_renderer = $"../CarriedFoodRenderer"
 
 var team 
 var world_grid
@@ -62,7 +63,6 @@ func _ready():
 			"followingTrail": false,
 			
 			"source": null,
-			"carringMesh": null
 		})
 
 func get_random_index(arr: Array):
@@ -183,9 +183,10 @@ func _physics_process(delta):
 		if(ant.path.size() == 0):
 			# Ant is at base
 			if(ant.carryingFood):
-				base.foodLevel += consumptionRate
+				base.incrementFoodLevel(consumptionRate)
 				print("Food returned to base: ", base.foodLevel)
 			ant.carryingFood = false
+			carried_food_renderer.removeCarriedFood(i)
 			
 			ant.backtracking = false 
 			if(ant.followingTrail and trailIndex != -1):
@@ -234,6 +235,8 @@ func _physics_process(delta):
 				# Ant reaches newly found food
 				ant.backtracking = true
 				ant.carryingFood = true
+				carried_food_renderer.addCarriedFood(i)
+
 				ant.targetingFood = false 
 				ant.trailIndex = add_path_to_grid(ant.path, ant.source)
 				trails[ant.trailIndex].assignedAnts += 1
@@ -246,6 +249,7 @@ func _physics_process(delta):
 						# Ant reaches food from trail
 						ant.backtracking = true
 						ant.carryingFood = true
+						carried_food_renderer.addCarriedFood(i)
 						trails[trailIndex].value -= consumptionRate
 						ant.source.foodLeft -= consumptionRate
 						#print_debug(ant.source.foodLeft)
@@ -293,7 +297,6 @@ func _physics_process(delta):
 			# Ant moves to new cell in grid 
 			
 			if(!ant.backtracking):
-				
 				var search = find_nearest_food(currentCell)
 				
 				var trail

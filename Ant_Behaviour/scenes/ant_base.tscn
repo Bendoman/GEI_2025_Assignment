@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://cccxu3uljmod8"]
+[gd_scene load_steps=9 format=3 uid="uid://cccxu3uljmod8"]
 
 [ext_resource type="Script" uid="uid://bjdcgwmuykbl1" path="res://scenes/ant_base.gd" id="1_cloup"]
 [ext_resource type="PackedScene" uid="uid://dcsunt6lrihqa" path="res://scenes/ant.tscn" id="2_mgxml"]
 [ext_resource type="Script" uid="uid://dm83gotx1cipr" path="res://multi_mesh_instance_3d.gd" id="3_anh4v"]
 [ext_resource type="ArrayMesh" uid="uid://bxtem42bc018t" path="res://CombinedAntMesh.tres" id="4_agbvd"]
+[ext_resource type="Script" uid="uid://cy0l3nuebs2rf" path="res://scenes/carried_food_renderer.gd" id="5_agbvd"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_anh4v"]
 transparency = 1
@@ -29,3 +30,33 @@ script = ExtResource("3_anh4v")
 mesh_to_use = ExtResource("4_agbvd")
 material_to_use = SubResource("StandardMaterial3D_8ognt")
 antSpeed = 0.25
+
+[node name="CarriedFoodRenderer" type="MultiMeshInstance3D" parent="."]
+script = ExtResource("5_agbvd")
+
+[node name="FoodLevelLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.125, 0.0894814)
+text = "0"
+
+[node name="WorkerCountLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.16088, 0.125, -0.0786627)
+text = "Workers"
+font_size = 10
+outline_size = 9
+
+[node name="workersLabel" type="Label3D" parent="WorkerCountLabel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0828036, 2.98023e-08)
+text = "0
+"
+font_size = 10
+
+[node name="WarriorCountLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.161, 0.125, -0.0785186)
+text = "Warriors"
+font_size = 10
+outline_size = 9
+
+[node name="warriorsLabel" type="Label3D" parent="WarriorCountLabel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.083, 0)
+text = "0"
+font_size = 10

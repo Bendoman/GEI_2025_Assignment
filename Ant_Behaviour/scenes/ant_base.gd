@@ -9,7 +9,19 @@ extends Node3D
 var antCount: int
 var world_grid
 
+@onready var workers_label = $WorkerCountLabel/workersLabel
+@onready var warriors_label = $WarriorCountLabel/warriorsLabel
+
 var foodLevel: int
+@onready var food_level_label = $FoodLevelLabel
+func increaseAntCount(): 
+	antCount += 1
+	workers_label.text = str(antCount)
+	
+
+func incrementFoodLevel(amount: int): 
+	foodLevel += amount
+	food_level_label.text = str(foodLevel)
 
 func _ready():
 	world_grid = get_node("../WorldGrid") 
