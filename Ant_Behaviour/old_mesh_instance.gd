@@ -1,85 +1,111 @@
 extends MultiMeshInstance3D
 
-const AntData = preload("res://ant_data.gd")
+@export var instance_count := 10
 
-# Multimesh properties
+@export var spawn_radius := 20.0
 @export var mesh_to_use: Mesh
-@export var instance_count = 10
-@export var starting_count = 1
+@export var material_to_use: Material
 
-# Wandering
-@export var ant_speed: float = .25
-@export var wander_distance := 2
-@export var wander_frequency := 0.3
+var ant_speed: float = .25
+@export var wander_distance := 1
 @export var wander_angle_deg := 60.0
 
-# Grid searching
+
+
 @export var search_depth: int = 1 
 @export var consumptionRate: int = 1
-
-# Renderer references
 @onready var warrior_ant_renderer = $"../WarriorAntRenderer"
+
+@export var backtracking := false 
 @onready var carried_food_renderer = $"../CarriedFoodRenderer"
 
-var noise:FastNoiseLite = FastNoiseLite.new()
+var max_warriors = 1
+var currentWarriors = 0
 
-var base
 var team 
 var world_grid
-# var ant_mass = 1
-var max_warriors = 1
-var current_warriors = 0
 
 var paths = [] 
 var ant_data = [] 
-
-var colors = [
-	Color(0.0, 0.0, 0.5), 
-	Color(0.0, 0.0, 0.0)
-]
-
+var base
 func _ready():
 	await get_tree().process_frame
-	
 	base = get_parent() 
-	team = get_parent().team
 	world_grid = get_parent().world_grid
+	team = get_parent().team
+	#print_debug(team)
 	
-	# Create and configure the MultiMesh
-	var material = StandardMaterial3D.new()
-	material.albedo_color = colors[team]
+	
+	# Create navy material
+	var navy_material := StandardMaterial3D.new()
+	navy_material.albedo_color = Color(0.0, 0.0, 0.5)  # Navy
 
+	# Create black material
+	var black_material := StandardMaterial3D.new()
+	black_material.albedo_color = Color(0.0, 0.0, 0.0)  # Black
+
+	# Create and configure the MultiMesh
 	var multimesh = MultiMesh.new()
 	multimesh.mesh = mesh_to_use
 	multimesh.transform_format = MultiMesh.TRANSFORM_3D
 	multimesh.instance_count = instance_count
-	# Need to be changed
-	material_override = material
+	
+	if(team == 1):
+		material_override = black_material
+	else: 
+		material_override = navy_material
+	
 	self.multimesh = multimesh
 
-	noise.seed = randi()
-	noise.set_noise_type(FastNoiseLite.TYPE_PERLIN)
-	noise.set_frequency(0.01)
-	noise.set_fractal_lacunarity(2)
-	noise.set_fractal_gain(0.5)
-
-	# Set initial transform for each instance
+	# Set transform for each instance (e.g. random spread)
 	for i in instance_count:
-		if i >= starting_count:
-			break
-
+		if i >= 3:
+			continue
+			
+		var offset_x = randf_range(-0.1, 0.1)
+		var offset_z = randf_range(-0.1, 0.1)		
+		if(team == 0):
+			offset_x = 0.1
+			offset_z = 0.1
+		else:
+			offset_x = -0.1
+			offset_z = 0.1
+			return
+			
+		base.increaseAntCount()
+			
+		#var pos = Vector3(randf() * 2 - 1, 0, randf() * 2 - 1).normalized() * randf() * spawn_radius
 		var pos = position
 		var transform = Transform3D(Basis(), pos)
 		multimesh.set_instance_transform(i, transform)
 		
-		var ant = AntData.new() 
-		ant.position = pos
-		ant.global_position = to_global(pos)
-		ant.cell = world_grid.position_to_cell(ant.global_position)
 
-		ant_data.append(ant)		
-		base.increaseAntCount()
+		ant_data.append({
+			"position": pos, 
+			"global_position": to_global(pos),
+			"cell": Vector2i(0, 0),
+			"path": [pos + Vector3(offset_x, 0, offset_z)],
+			"dead": false,
 
+			"carrying_food": false, 
+			"backtracking": false,
+			"targeting_food": false,
+			"fleeing": null,
+			"fleeingBool": false,
+			
+			"reporting_enemy": false, 
+			
+			"trail": [],
+			"trail_index": -1,
+			"following_trail": false,
+			
+			"source": null,
+		})
+
+func get_random_index(arr: Array):
+	if arr.is_empty():
+		return -1
+	return randi_range(0, arr.size() - 1)
 
 func find_nearest_food(center_cell):
 	var foodPositions = []
@@ -108,12 +134,12 @@ func find_nearest_food(center_cell):
 	var discoveredTrail = null
 	var discoveredEnemyWorker = null 
 	if(discoveredTrails.size() > 0):
-		var index = Utils.get_random_index(discoveredTrails)
+		var index = get_random_index(discoveredTrails)
 		discoveredTrail = discoveredTrails[index]
 	if(foodPositions.size() > 0):
-		foodPos = foodPositions[Utils.get_random_index(foodPositions)]
+		foodPos = foodPositions[get_random_index(foodPositions)]
 	if(workers.size() > 0):
-		var index = Utils.get_random_index(workers)
+		var index = get_random_index(workers)
 		discoveredEnemyWorker = workers[index]
 		
 	return {"foodPos": foodPos, "discoveredTrail": discoveredTrail, "discoveredEnemyWorker": discoveredEnemyWorker}
@@ -138,13 +164,13 @@ func add_path_to_grid(path, source):
 		trail.append(to_global(node))
 		var cell = world_grid.position_to_cell(to_global(node))
 		cells.append(cell)
-		world_grid.register_entity(cell, {
+		world_grid.register_entity(to_global(node), {
 			"type": "foodTrail", 
 			"trail_index": trail_index, 
 			"nodeIndex": trail.size() - 1,
 			"team": team,
 			"source": source
-		})
+		}, cell)
 	#print_debug("Added path: ", path, "\n to trail: ", trail)
 	var added = false
 	
@@ -163,104 +189,60 @@ func add_path_to_grid(path, source):
 	return trail_index
 
 func remove_trail_from_grid(index): 
+	#print("removing trail: ", trails[index])
 	for i in range(trails[index].path.size()):
 		var node = trails[index].path[i]
+		#print_debug("node index: ", i)
 		var cell = trails[index].cells[i]
-
-		world_grid.unregister_entity(cell, {
+		#print(cell)
+		world_grid.unregister_entity(node, {
 			"type": "foodTrail", 
 			"trail_index": index, 
 			"nodeIndex": i,
 			"team": team
-		})
-
-func remove_food_source_from_grid(food_source): 
-	world_grid.unregister_entity(food_source.cell, food_source)
-
-func handle_saturated_foodsource(trail_index, food_source): 
-	remove_trail_from_grid(trail_index)
-	remove_food_source_from_grid(food_source)
-
-func new_physics_process(delta): 
-	for i in ant_data.size(): 
-		var ant = ant_data[i]
-		var path_length = ant.path.size() 
-		
-		# Unregister foodsource and trail from grid if not already done 
-		if(ant.food_source != null and ant.food_source.food_left <= 0):
-			if(trails[ant.trail_index] != null):
-				handle_saturated_foodsource(ant.trail_index, ant.food_source)
-				removeTrail(ant.trail_index)
-			ant.trail_index = -1 
-			ant.backtracking = true 
-			ant.following_trail = false 
-			ant.food_source == null
-
-		var currentPos:Vector3 = ant.position
-
-		# Calculate steering
-		if(ant.dead): 
-			pass
-		elif(ant.backtracking):
-			# Follow trail backwards
-			if(ant.path_index == 0):
-				# Ant has returned to base 
-				ant.backtracking = false
-		elif(ant.following_trail):
-			pass
-			# Follow trail
-		else: 
-			var force = Utils.calculate_noise_wander(noise, delta, ant.theta, multimesh.get_instance_transform(i), wander_distance)
-			ant.theta += wander_frequency * delta * PI * 2.0
-			pass
-			# Wandering
+		}, cell)
+	#print_debug("Removing trail ", world_grid.grid)
 
 
-@export var damping = 0.1
 
+
+
+# "position": pos, 
+# "cell": Vector2i(0, 0),
+# "path": [pos + Vector3(offset_x, 0, offset_z)],
+
+# "carrying_food": true, 
+# "backtracking": false,
+# "targeting_food": false,
+
+# "trail": [],
+# "trail_index": 0,
+# "following_trail": false,
 func _physics_process(delta):
 	for i in ant_data.size():
 		var ant = ant_data[i]
 		var trail_index = ant.trail_index
-		var ant_transform = multimesh.get_instance_transform(i)
-
-		var target = Utils.calculate_noise_wander(noise, delta, ant.theta, ant_transform, wander_distance)
-		ant.theta += wander_frequency * delta * PI * 2.0
-		var force = Utils.calculate_seek_force(target, ant_transform, ant_speed, ant.velocity)
-
-		var new_velocity = force * delta 
-		new_velocity -= new_velocity * delta * damping
-		ant.velocity = new_velocity
-
-		var new_position = ant.position + (new_velocity * delta)
-
-		var test_transform = Transform3D(Basis(), new_position)
-		multimesh.set_instance_transform(i, test_transform)
-
-		print(force)
-
-
-		return
+		
 		if(ant.dead):
-			world_grid.unregister_entity(ant.cell, {"type": "ant", "team": team, "index": i})
+			world_grid.unregister_entity(to_global(ant.position), {"type": "ant", "team": team, "index": i}, ant.cell)
 			continue
 		
-		#if(ant.fleeing != null and !ant.fleeingBool):
-			#ant.fleeingBool = true
-			#var enemyAnt = base.getAnt(ant.fleeing[0], ant.fleeing[1], "warrior")
-			#ant.following_trail = false
-			#ant.backtracking = false 
-			#ant.targeting_food = false 
-			#ant.trail_index = -1	
-			#var forward = (ant.global_position - enemyAnt.global_position).normalized()
-			#var angle_deg = randf_range(-wander_angle_deg / 2.0, wander_angle_deg / 2.0)
-			#var angle_rad = deg_to_rad(angle_deg)
-			#
-			#var rotated_forward = forward.rotated(Vector3.UP, angle_rad).normalized()
-			#var new_target = (ant.position + rotated_forward) * wander_distance
-			#ant.path.append(new_target)
-					#
-			#print("Ant fleeing from: ", enemyAnt)
+		if(ant.fleeing != null and !ant.fleeingBool):
+			ant.fleeingBool = true
+			var enemyAnt = base.getAnt(ant.fleeing[0], ant.fleeing[1], "warrior")
+			ant.following_trail = false
+			ant.backtracking = false 
+			ant.targeting_food = false 
+			ant.trail_index = -1	
+			var forward = (ant.global_position - enemyAnt.global_position).normalized()
+			var angle_deg = randf_range(-wander_angle_deg / 2.0, wander_angle_deg / 2.0)
+			var angle_rad = deg_to_rad(angle_deg)
+			
+			var rotated_forward = forward.rotated(Vector3.UP, angle_rad).normalized()
+			var new_target = (ant.position + rotated_forward) * wander_distance
+			ant.path.append(new_target)
+					
+			print("Ant fleeing from: ", enemyAnt)
 
 			#world_grid.unregister_entity(to_global(ant.position), {"type": "ant", "team": team, "index": i}, ant.cell)
 			#continue
@@ -272,9 +254,9 @@ func _physics_process(delta):
 				#warrior_ant_renderer.spawn_ant()
 				
 			if(ant.reporting_enemy):
-				if(current_warriors < max_warriors):
+				if(currentWarriors < max_warriors):
 					warrior_ant_renderer.spawn_ant()
-					current_warriors += 1
+					currentWarriors += 1
 				
 			if(ant.carrying_food):
 				base.incrementFoodLevel(consumptionRate)
@@ -317,7 +299,7 @@ func _physics_process(delta):
 				remove_trail_from_grid(trail_index)
 				#print(ant.food_source)
 				var pos = Vector3(ant.food_source.position.x, 0, ant.food_source.position.z)
-				world_grid.unregister_entity(ant.food_source.cell, {"type": "foodsource", "position": pos, "food_left": ant.food_source.food_left})
+				world_grid.unregister_entity(global_position, {"type": "foodsource", "position": pos, "food_left": ant.food_source.food_left}, ant.food_source.cell)
 				
 						
 			trails[trail_index].assignedAnts -= 1
@@ -348,7 +330,7 @@ func _physics_process(delta):
 				trails[ant.trail_index].value -= consumptionRate
 				ant.food_source.food_left -= consumptionRate
 				
-			if(!ant.backtracking): # and !ant.fleeingBool
+			if(!ant.backtracking and !ant.fleeingBool):
 				if(ant.following_trail):
 					if(ant.path[pathLength - 1] == to_local(trails[trail_index].path[trailLength - 1])):
 						# Ant reaches food from trail
@@ -370,19 +352,19 @@ func _physics_process(delta):
 					var rotated_forward = forward.rotated(Vector3.UP, angle_rad).normalized()
 					var new_target = (currentPos + rotated_forward) * wander_distance
 					ant.path.append(new_target)
-			else:#elif(!ant.fleeingBool): 
+			elif(!ant.fleeingBool): 
 				# Backtrack
 				ant.path.pop_back() 
-			#elif(ant.fleeingBool):
-				#print('process next flee target')
-				#var enemyAnt = base.getAnt(ant.fleeing[0], ant.fleeing[1], "warrior")	
-				#var forward = (ant.global_position - enemyAnt.global_position).normalized()
-				#var angle_deg = randf_range(-wander_angle_deg / 2.0, wander_angle_deg / 2.0)
-				#var angle_rad = deg_to_rad(angle_deg)
-				#
-				#var rotated_forward = forward.rotated(Vector3.UP, angle_rad).normalized()
-				#var new_target = (ant.position + rotated_forward) * wander_distance
-				#ant.path.append(new_target)
+			elif(ant.fleeingBool):
+				print('process next flee target')
+				var enemyAnt = base.getAnt(ant.fleeing[0], ant.fleeing[1], "warrior")	
+				var forward = (ant.global_position - enemyAnt.global_position).normalized()
+				var angle_deg = randf_range(-wander_angle_deg / 2.0, wander_angle_deg / 2.0)
+				var angle_rad = deg_to_rad(angle_deg)
+				
+				var rotated_forward = forward.rotated(Vector3.UP, angle_rad).normalized()
+				var new_target = (ant.position + rotated_forward) * wander_distance
+				ant.path.append(new_target)
 		
 		#var offset_x = randf_range(-0.075, 0.075)
 		#var offset_z = randf_range(-0.05, 0.05)
@@ -399,8 +381,6 @@ func _physics_process(delta):
 		var smoothed_basis = current_basis.slerp(target_basis, 0.2)  # 0.2 = smoothing factor
 
 		var currentCell = world_grid.position_to_cell(to_global(new_pos))
-		var current_movement_cell = world_grid.position_to_movement_cell(to_global(new_pos))
-		
 		if(currentCell != ant.cell and !ant.reporting_enemy):
 			# Ant moves to new cell in grid 
 			var search = find_nearest_food(currentCell)
@@ -430,7 +410,7 @@ func _physics_process(delta):
 				# Found enemey ant
 				#ant.path.append(to_local(enemyAnt.global_position))
 				#print("Path to enemey found: ", ant, ant.backtracking, ant.reporting_enemy)
-				if(current_warriors < max_warriors):
+				if(currentWarriors < max_warriors):
 					if(ant.path.size() > 1):
 						ant.path.pop_back()
 					ant.backtracking = true
@@ -462,29 +442,17 @@ func _physics_process(delta):
 				ant.path.append(Vector3(local.x, ant.position.y, local.z))
 				ant.targeting_food = true
 				ant.food_source = source
-		
-		var new_global = to_global(new_pos)
-		
-		if(current_movement_cell != ant.movement_cell):
-			ant.movement_cell = current_movement_cell
-		
+				
 		if(currentCell != ant.cell):
-			world_grid.unregister_entity( 
-			{"type": "ant", "team": team, "index": i, "global_position": ant.previous_global}, 
-			ant.cell)
-			
-			ant.cell = world_grid.position_to_cell(new_global)
-			world_grid.register_entity(ant.cell, 
-			{"type": "ant", "team": team, "index": i, "global_position": new_global})
-			ant.previous_global = new_global
+			world_grid.unregister_entity(to_global(ant.position), {"type": "ant", "team": team, "index": i}, ant.cell)
+			ant.cell = world_grid.position_to_cell(to_global(new_pos))
+			world_grid.register_entity(to_global(new_pos), {"type": "ant", "team": team, "index": i}, ant.cell)
 
-		ant.velocity = ant.position - new_pos
+		
 		ant.position = new_pos
-		ant.global_position = new_global
-
+		ant.global_position = to_global(ant.position)
 
 		var transform = Transform3D(smoothed_basis, new_pos)
-
 		multimesh.set_instance_transform(i, transform)
 
 func spawn_ant(): 
@@ -492,6 +460,7 @@ func spawn_ant():
 		return 
 		
 	base.increaseAntCount()
+	#var pos = Vector3(randf() * 2 - 1, 0, randf() * 2 - 1).normalized() * randf() * spawn_radius
 	var index = ant_data.size()
 	
 	var pos = position

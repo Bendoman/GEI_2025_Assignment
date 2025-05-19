@@ -39,7 +39,7 @@ func _ready():
 var instances = 0
 
 func addCarriedFood(antIndex: int):
-	foodData[antIndex].ant = ant_renderer.antData[antIndex]
+	foodData[antIndex].ant = ant_renderer.ant_data[antIndex]
 
 func removeCarriedFood(antIndex: int):
 	foodData[antIndex].ant = null

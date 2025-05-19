@@ -1,11 +1,11 @@
-[gd_scene load_steps=13 format=3 uid="uid://bmov0u7ck0qgu"]
+[gd_scene load_steps=14 format=3 uid="uid://bmov0u7ck0qgu"]
 
 [ext_resource type="Script" uid="uid://cpek6qnsms6xd" path="res://test.gd" id="1_6uqi0"]
+[ext_resource type="Script" uid="uid://dlydu00bphbhx" path="res://collision_shape_3d.gd" id="2_g14j6"]
 [ext_resource type="Material" uid="uid://dtd0wnwdssiif" path="res://materials/ground_colour.tres" id="2_ykrsh"]
-[ext_resource type="PackedScene" uid="uid://dcsunt6lrihqa" path="res://scenes/ant.tscn" id="4_ppyta"]
+[ext_resource type="Script" uid="uid://bsa24v84vydkc" path="res://world_grid.gd" id="4_ppyta"]
 [ext_resource type="PackedScene" uid="uid://cccxu3uljmod8" path="res://scenes/ant_base.tscn" id="4_vbegm"]
-[ext_resource type="Script" uid="uid://dm83gotx1cipr" path="res://multi_mesh_instance_3d.gd" id="5_ykrsh"]
-[ext_resource type="ArrayMesh" uid="uid://cmxa3hlyhjeh3" path="res://CombinedAntMesh.tres" id="6_g14j6"]
+[ext_resource type="PackedScene" uid="uid://cyxbrl25i8okg" path="res://FoodSource.tscn" id="5_ykrsh"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_n2cwj"]
 sky_top_color = Color(0.425909, 0.569805, 0.704866, 1)
@@ -28,8 +28,12 @@ size = Vector3(10, 0.1, 10)
 [sub_resource type="BoxMesh" id="BoxMesh_16tix"]
 size = Vector3(50, 0.1, 50)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g14j6"]
-albedo_color = Color(1, 0.0527971, 0.0527971, 1)
+[sub_resource type="BoxMesh" id="BoxMesh_ppyta"]
+size = Vector3(0.5, 0.5, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ykrsh"]
+transparency = 1
+albedo_color = Color(0.28, 0.388, 1, 0.376471)
 
 [node name="root" type="Node3D"]
 script = ExtResource("1_6uqi0")
@@ -47,26 +51,29 @@ collision_mask = 256
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
 shape = SubResource("BoxShape3D_fuouj")
+script = ExtResource("2_g14j6")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D/CollisionShape3D"]
 material_override = ExtResource("2_ykrsh")
 mesh = SubResource("BoxMesh_16tix")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.344807, 0.938674, 0, -0.938674, 0.344807, 0, 2.75562, 0.692274)
+transform = Transform3D(1, 0, 0, 0, 0.344807, 0.938674, 0, -0.938674, 0.344807, 0.329309, 4.71466, 2.99572)
 
 [node name="AntBase" parent="." instance=ExtResource("4_vbegm")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.162315, 0.175, 1.68062)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.46909, 0.175, 1.68062)
+spawn_position = Vector3(0, 0, 0)
 
-[node name="Ant" parent="." instance=ExtResource("4_ppyta")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.361205, 0.1, 0.557558)
+[node name="WorldGrid" type="Node3D" parent="."]
+script = ExtResource("4_ppyta")
+debug_mesh = SubResource("BoxMesh_ppyta")
+debug_material = SubResource("StandardMaterial3D_ykrsh")
+debug_scale = null
+debug_height_offset = null
 
-[node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="."]
-script = ExtResource("5_ykrsh")
-instance_count = null
-spawn_radius = null
-mesh_to_use = ExtResource("6_g14j6")
-material_to_use = SubResource("StandardMaterial3D_g14j6")
-ant_speed = null
-wander_distance = null
-wander_angle_deg = null
+[node name="AntBase2" parent="." instance=ExtResource("4_vbegm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.86991, 0.175, 1.75741)
+team = 1
+
+[node name="FoodSource" parent="." instance=ExtResource("5_ykrsh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.51995, 0.3, 3.65522)

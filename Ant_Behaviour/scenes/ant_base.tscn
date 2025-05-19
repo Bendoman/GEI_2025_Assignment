@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cccxu3uljmod8"]
+[gd_scene load_steps=10 format=3 uid="uid://cccxu3uljmod8"]
 
 [ext_resource type="Script" uid="uid://bjdcgwmuykbl1" path="res://scenes/ant_base.gd" id="1_cloup"]
 [ext_resource type="PackedScene" uid="uid://dcsunt6lrihqa" path="res://scenes/ant.tscn" id="2_mgxml"]
@@ -17,9 +17,6 @@ top_radius = 0.8
 bottom_radius = 0.8
 height = 0.25
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8ognt"]
-albedo_color = Color(0, 0, 0, 1)
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ca7l2"]
 albedo_color = Color(1, 0.026491, 0.026491, 1)
 
@@ -34,7 +31,6 @@ mesh = SubResource("CylinderMesh_ti84e")
 [node name="AntRenderer" type="MultiMeshInstance3D" parent="."]
 script = ExtResource("3_anh4v")
 mesh_to_use = ExtResource("4_agbvd")
-material_to_use = SubResource("StandardMaterial3D_8ognt")
 
 [node name="CarriedFoodRenderer" type="MultiMeshInstance3D" parent="."]
 script = ExtResource("5_agbvd")

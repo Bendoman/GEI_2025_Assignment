@@ -15,7 +15,7 @@ var worker_progress
 
 var antCount: int
 
-@export var antSpeed: int = 0.1
+@export var ant_speed: int = 0.1
 var world_grid
 
 @onready var workers_label = $WorkerCountLabel/workersLabel
@@ -63,9 +63,9 @@ func _ready():
 	
 func getAnt(team: int, index: int, type): 
 	if(type == "worker"):
-		return get_parent().bases[team].ant_renderer.antData[index]
+		return get_parent().bases[team].ant_renderer.ant_data[index]
 	elif(type == "warrior"):
-		return get_parent().bases[team].warrior_ant_renderer.antData[index]
+		return get_parent().bases[team].warrior_ant_renderer.ant_data[index]
 
 func increaseWarriorCount():
 	warriorCount += 1
@@ -74,9 +74,9 @@ func increaseWarriorCount():
 func increaseAntCount(): 
 	antCount += 1
 	workers_label.text = str(antCount)
-	#ant_renderer.maxWarriors = int(1 + (ant_renderer.antData.size() / 10))
-	ant_renderer.maxWarriors = 10
-	#print("New max warriors: ", ant_renderer.maxWarriors)
+	#ant_renderer.max_warriors = int(1 + (ant_renderer.ant_data.size() / 10))
+	ant_renderer.max_warriors = 10
+	#print("New max warriors: ", ant_renderer.max_warriors)
 
 
 func incrementFoodLevel(amount: int): 

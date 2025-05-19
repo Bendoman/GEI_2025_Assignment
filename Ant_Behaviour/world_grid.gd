@@ -3,8 +3,14 @@ extends Node3D
 var cell_size := .5
 var grid := {}
 
+var movement_cell_size := .2
+var movement_grid := {} 
+
 func printGrid():
 	print_debug(JSON.stringify(grid, "\t"))
+
+func position_to_movement_cell(pos: Vector3) -> Vector2i:
+	return Vector2i(floor(pos.x / movement_cell_size), floor(pos.z / movement_cell_size))
 
 func position_to_cell(pos: Vector3) -> Vector2i: 
 	return Vector2i(floor(pos.x / cell_size), floor(pos.z / cell_size))
@@ -17,53 +23,33 @@ func get_entities_at_cell(cell: Vector2i) -> Array:
 		return grid[cell]
 	return []
 
-func register_entity(pos: Vector3, entity, exactCell=null):
-	var cell
-	if exactCell != null: 
-		cell = exactCell
-	else:
-		cell = position_to_cell(pos)
-	#print_debug(cell)
+func register_entity(cell, entity):
 	if not grid.has(cell):
 		grid[cell] = [] 
+	draw_debug_mesh_at_cell(cell, 1)
 	
 	grid[cell].append(entity)
 	return grid[cell][grid[cell].size() - 1]
-	#print_debug(grid)
+
+
+func unregister_entity(entity, cell):
+	if(!grid.has(cell)): 
+		return 
 	
-	#if(entity.type == "foodTrail"):
-		#draw_debug_mesh_at_cell(cell)
-	#print_debug(pos, cell)
-
-func unregister_entity(pos: Vector3, entity, exactCell=null):
-	var cell
-	if exactCell != null: 
-		cell = exactCell
-	else:
-		cell = position_to_cell(pos)
+	for i in range(grid[cell].size() - 1, -1, -1): 
+		var grid_entity = grid[cell][i]
+		if(entity.type != grid_entity.type): 
+			continue 
 		
-	if not grid.has(cell):
-		return
-	for i in range(grid[cell].size() - 1, -1, -1):
-		var entry = grid[cell][i]
-
-		if entry.type == entity.type:
-			#if(entry.type != "ant"):
-				#print_debug("entry: ", entry, "\nEntity: ", entity)
-			if(entry.type == "foodTrail" and entry.trailIndex == entity.trailIndex):
-				#print_debug("removing trail in here: ", entry)
-				grid[cell].remove_at(i)
-			elif(entry.type == "ant"):
-				#print("removing ant: ", entry)
-				grid[cell].remove_at(i)
-			elif(entry.type == "mesh_instance"):
-				entry.instance.queue_free()
-			elif(entry.type == "foodsource" and entry.position == entity.position):
-				#print_debug("Removing foor source: ")
-				grid[cell].remove_at(i)
-				
-			
-	if grid[cell].is_empty():
+		if(entity.has("global_position") and entity.global_position == grid_entity.global_position):
+			grid[cell].remove_at(i)
+		elif(entity.type == "foodTrail" and entity.trail_index == grid_entity.trail_index):
+			grid[cell].remove_at(i)
+		elif(entity.type == "mesh_instance"):
+			entity.instance.queue_free()
+			grid[cell].remove_at(i)
+		
+	if(grid[cell].is_empty()):
 		grid.erase(cell)
 
 @export var debug_mesh: Mesh
@@ -75,7 +61,7 @@ func draw_debug_mesh_at_cell(cell: Vector2i, duration: float = 0.0) -> void:
 	if debug_mesh == null:
 		push_warning("No debug_mesh assigned!")
 		return
-
+	print(' in here')
 	var instance := MeshInstance3D.new()
 	instance.mesh = debug_mesh
 	if debug_material:
@@ -93,4 +79,4 @@ func draw_debug_mesh_at_cell(cell: Vector2i, duration: float = 0.0) -> void:
 	grid[cell].append({"type": "mesh_instance", "instance": instance})
 	if duration > 0.0:
 		await get_tree().create_timer(duration).timeout
-		unregister_entity(cell_to_position(cell), {"type": "mesh_instance", "instance": instance}, cell)
+		unregister_entity(cell, {"type": "mesh_instance", "instance": instance})

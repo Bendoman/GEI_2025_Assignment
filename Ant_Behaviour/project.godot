@@ -19,6 +19,7 @@ config/features=PackedStringArray("4.4", "Forward Plus")
 XRToolsUserSettings="*res://addons/godot-xr-tools/user_settings/user_settings.gd"
 XRToolsRumbleManager="*res://addons/godot-xr-tools/rumble/rumble_manager.gd"
 Global="*res://scripts/Global.gd"
+Utils="*res://scripts/utils.gd"
 
 [display]
 
@@ -103,5 +104,4 @@ rotate_down={
 
 [xr]
 
-openxr/enabled=true
 shaders/enabled=true

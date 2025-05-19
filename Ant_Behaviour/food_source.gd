@@ -6,14 +6,14 @@ var world_grid
 
 var cylinder_mesh
 
-var foodLeft
+var food_left
 var entity
 
 func _ready():
 	world_grid = get_node("../WorldGrid") 
 	var pos = Vector3(global_position.x, 0, global_position.z)
 	var cell = world_grid.position_to_cell(pos)
-	entity = world_grid.register_entity(global_position, {"type": "foodsource", "position": pos, "foodLeft": 100, "cell": cell}, cell)
+	entity = world_grid.register_entity(cell, {"type": "foodsource", "position": pos, "food_left": 100, "cell": cell})
 	
 	# Create the cylinder mesh
 	cylinder_mesh = CylinderMesh.new()
@@ -36,15 +36,15 @@ func _ready():
 
 
 func _process(delta):
-	if(entity.foodLeft != foodLeft):
-		foodLeft = entity.foodLeft
-		food_left_label.text = str(foodLeft)
+	if(entity.food_left != food_left):
+		food_left = entity.food_left
+		food_left_label.text = str(food_left)
 		
-		var scale_factor = foodLeft / 100.0
+		var scale_factor = food_left / 100.0
 		cylinder_mesh.top_radius = radius * scale_factor
 		cylinder_mesh.bottom_radius = radius * scale_factor
 	
-	if(entity.foodLeft <= 0):
+	if(entity.food_left <= 0):
 		queue_free()
 		
 func register_to_grid(): 
