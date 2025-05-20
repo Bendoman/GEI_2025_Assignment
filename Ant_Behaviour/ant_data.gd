@@ -1,6 +1,7 @@
 class_name ant_data 
 extends Object 
 
+var team 
 var cell: Vector2i
 var movement_cell: Vector2i
 
@@ -25,3 +26,5 @@ var food_source: Variant = null
 var fleeing_from: Variant = null
 
 var theta = 0 
+
+var targeting = null

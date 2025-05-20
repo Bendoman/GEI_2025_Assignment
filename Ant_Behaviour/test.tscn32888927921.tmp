@@ -1,11 +1,10 @@
-[gd_scene load_steps=14 format=3 uid="uid://bmov0u7ck0qgu"]
+[gd_scene load_steps=13 format=3 uid="uid://bmov0u7ck0qgu"]
 
 [ext_resource type="Script" uid="uid://cpek6qnsms6xd" path="res://test.gd" id="1_6uqi0"]
 [ext_resource type="Script" uid="uid://dlydu00bphbhx" path="res://collision_shape_3d.gd" id="2_g14j6"]
 [ext_resource type="Material" uid="uid://dtd0wnwdssiif" path="res://materials/ground_colour.tres" id="2_ykrsh"]
 [ext_resource type="Script" uid="uid://bsa24v84vydkc" path="res://world_grid.gd" id="4_ppyta"]
 [ext_resource type="PackedScene" uid="uid://cccxu3uljmod8" path="res://scenes/ant_base.tscn" id="4_vbegm"]
-[ext_resource type="PackedScene" uid="uid://cyxbrl25i8okg" path="res://FoodSource.tscn" id="5_ykrsh"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_n2cwj"]
 sky_top_color = Color(0.425909, 0.569805, 0.704866, 1)
@@ -29,7 +28,7 @@ size = Vector3(10, 0.1, 10)
 size = Vector3(50, 0.1, 50)
 
 [sub_resource type="BoxMesh" id="BoxMesh_ppyta"]
-size = Vector3(0.5, 0.5, 0.5)
+size = Vector3(2, 0.5, 2)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ykrsh"]
 transparency = 1
@@ -61,7 +60,7 @@ mesh = SubResource("BoxMesh_16tix")
 transform = Transform3D(1, 0, 0, 0, 0.344807, 0.938674, 0, -0.938674, 0.344807, 0.329309, 4.71466, 2.99572)
 
 [node name="AntBase" parent="." instance=ExtResource("4_vbegm")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.960651, 0.175, 1.11513)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.46909, 0.175, 1.68062)
 spawn_position = Vector3(0, 0, 0)
 
 [node name="WorldGrid" type="Node3D" parent="."]
@@ -69,5 +68,6 @@ script = ExtResource("4_ppyta")
 debug_mesh = SubResource("BoxMesh_ppyta")
 debug_material = SubResource("StandardMaterial3D_ykrsh")
 
-[node name="FoodSource" parent="." instance=ExtResource("5_ykrsh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.78411, 0.3, 3.05726)
+[node name="AntBase2" parent="." instance=ExtResource("4_vbegm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.29387, 0.175, 1.3098)
+team = 1

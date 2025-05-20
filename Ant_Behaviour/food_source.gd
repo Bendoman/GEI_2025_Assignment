@@ -13,7 +13,7 @@ func _ready():
 	world_grid = get_node("../WorldGrid") 
 	var pos = Vector3(global_position.x, 0, global_position.z)
 	var cell = world_grid.position_to_cell(pos)
-	entity = world_grid.register_entity(cell, {"type": "foodsource", "position": pos, "food_left": 100, "cell": cell})
+	entity = world_grid.register_entity(cell, {"type": "food_source", "global_position": pos, "food_left": 100, "cell": cell})
 	
 	# Create the cylinder mesh
 	cylinder_mesh = CylinderMesh.new()

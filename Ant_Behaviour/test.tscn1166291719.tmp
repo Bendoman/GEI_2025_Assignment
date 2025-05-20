@@ -61,7 +61,7 @@ mesh = SubResource("BoxMesh_16tix")
 transform = Transform3D(1, 0, 0, 0, 0.344807, 0.938674, 0, -0.938674, 0.344807, 0.329309, 4.71466, 2.99572)
 
 [node name="AntBase" parent="." instance=ExtResource("4_vbegm")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.960651, 0.175, 1.11513)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.46909, 0.175, 1.68062)
 spawn_position = Vector3(0, 0, 0)
 
 [node name="WorldGrid" type="Node3D" parent="."]
@@ -70,4 +70,4 @@ debug_mesh = SubResource("BoxMesh_ppyta")
 debug_material = SubResource("StandardMaterial3D_ykrsh")
 
 [node name="FoodSource" parent="." instance=ExtResource("5_ykrsh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.78411, 0.3, 3.05726)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.51995, 0.3, 3.65522)

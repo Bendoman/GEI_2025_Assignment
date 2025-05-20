@@ -3,7 +3,7 @@ extends Node3D
 var cell_size := .5
 var grid := {}
 
-var movement_cell_size := .2
+var movement_cell_size := .35
 var movement_grid := {} 
 
 func printGrid():
@@ -25,17 +25,15 @@ func get_entities_at_cell(cell: Vector2i) -> Array:
 
 func register_entity(cell, entity):
 	if not grid.has(cell):
-		grid[cell] = [] 
-	draw_debug_mesh_at_cell(cell, 1)
-	
+		grid[cell] = [] 	
+	#draw_debug_mesh_at_cell(cell, 1)
 	grid[cell].append(entity)
 	return grid[cell][grid[cell].size() - 1]
-
 
 func unregister_entity(entity, cell):
 	if(!grid.has(cell)): 
 		return 
-	
+		
 	for i in range(grid[cell].size() - 1, -1, -1): 
 		var grid_entity = grid[cell][i]
 		if(entity.type != grid_entity.type): 
@@ -61,7 +59,6 @@ func draw_debug_mesh_at_cell(cell: Vector2i, duration: float = 0.0) -> void:
 	if debug_mesh == null:
 		push_warning("No debug_mesh assigned!")
 		return
-	print(' in here')
 	var instance := MeshInstance3D.new()
 	instance.mesh = debug_mesh
 	if debug_material:
@@ -79,4 +76,4 @@ func draw_debug_mesh_at_cell(cell: Vector2i, duration: float = 0.0) -> void:
 	grid[cell].append({"type": "mesh_instance", "instance": instance})
 	if duration > 0.0:
 		await get_tree().create_timer(duration).timeout
-		unregister_entity(cell, {"type": "mesh_instance", "instance": instance})
+		unregister_entity({"type": "mesh_instance", "instance": instance}, cell)

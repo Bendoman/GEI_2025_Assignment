@@ -37,9 +37,17 @@ var warriorCount: int
 
 const ANT_BASE = preload("res://scenes/ant_base.gdshader")
 
+var ant_renderers = []
+var warrior_renderers = [] 
+
 func _ready():
-	#await get_tree().process_frame
 	world_grid = get_node("../WorldGrid") 
+	await get_tree().process_frame
+	
+	for base in get_parent().bases:
+		ant_renderers.append(base.ant_renderer)
+		warrior_renderers.append(base.warrior_ant_renderer)
+		
 	# Spawn timer setup
 	#var spawn_timer := Timer.new()
 	#spawn_timer.wait_time = spawn_interval

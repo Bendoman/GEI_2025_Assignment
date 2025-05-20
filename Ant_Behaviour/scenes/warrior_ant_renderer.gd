@@ -54,7 +54,7 @@ func _ready():
 
 	# Set transform for each instance (e.g. random spread)
 	for i in instance_count:
-		#return
+		return
 		var offset_x = randf_range(-0.1, 0.1)
 		var offset_z = randf_range(-0.1, 0.1)	
 		
@@ -166,7 +166,7 @@ func find_nearest_food(center_cell):
 				if(entry.has("team") and entry.team != team):
 					continue
 					
-				if entry.type == "foodsource" and entry.has("position"):
+				if entry.type == "food_source" and entry.has("position"):
 					foodPositions.append(entry)
 				elif entry.type == "foodTrail":
 					#print_debug(entry)
@@ -265,7 +265,7 @@ func _physics_process(delta):
 						#print_debug("pre removing trail from grid")
 						remove_trail_from_grid(trail_index)
 						var pos = Vector3(ant.food_source.position.x, 0, ant.food_source.position.z)
-						world_grid.unregister_entity(ant.food_source.cell, {"type": "foodsource", "position": pos, "food_left": ant.food_source.food_left})
+						world_grid.unregister_entity(ant.food_source.cell, {"type": "food_source", "position": pos, "food_left": ant.food_source.food_left})
 				else: 
 					# Wander to new target
 					var forward = (targetPos - currentPos).normalized() 
@@ -347,7 +347,6 @@ func _physics_process(delta):
 func spawn_ant(): 
 	if(ant_data.size() >= instance_count):
 		return 
-		
 	base.increaseWarriorCount()
 	#var pos = Vector3(randf() * 2 - 1, 0, randf() * 2 - 1).normalized() * randf() * spawn_radius
 	var index = ant_data.size()
