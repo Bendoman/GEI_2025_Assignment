@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bmov0u7ck0qgu"]
+[gd_scene load_steps=14 format=3 uid="uid://bmov0u7ck0qgu"]
 
 [ext_resource type="Script" uid="uid://cpek6qnsms6xd" path="res://test.gd" id="1_6uqi0"]
 [ext_resource type="Script" uid="uid://dlydu00bphbhx" path="res://collision_shape_3d.gd" id="2_g14j6"]
@@ -6,8 +6,6 @@
 [ext_resource type="Script" uid="uid://bsa24v84vydkc" path="res://world_grid.gd" id="4_ppyta"]
 [ext_resource type="PackedScene" uid="uid://cccxu3uljmod8" path="res://scenes/ant_base.tscn" id="4_vbegm"]
 [ext_resource type="PackedScene" uid="uid://cyxbrl25i8okg" path="res://FoodSource.tscn" id="5_ykrsh"]
-[ext_resource type="Material" uid="uid://da4eontgchxa2" path="res://materials/wall.tres" id="7_vbegm"]
-[ext_resource type="PackedScene" uid="uid://dw7f1yfv67ywx" path="res://scenes/xrOrigin.tscn" id="8_ehkex"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_n2cwj"]
 sky_top_color = Color(0.425909, 0.569805, 0.704866, 1)
@@ -36,12 +34,6 @@ size = Vector3(0.5, 0.5, 0.5)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ykrsh"]
 transparency = 1
 albedo_color = Color(0.28, 0.388, 1, 0.376471)
-
-[sub_resource type="BoxMesh" id="BoxMesh_ehkex"]
-size = Vector3(20, 1, 0.5)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_vbegm"]
-size = Vector3(20, 1, 0.5)
 
 [node name="root" type="Node3D"]
 script = ExtResource("1_6uqi0")
@@ -89,51 +81,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.72489, 0.3, -0.498145)
 
 [node name="FoodSource3" parent="." instance=ExtResource("5_ykrsh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.64311, 0, -0.250476)
-
-[node name="Walls" type="Node3D" parent="."]
-
-[node name="StaticBody3D" type="StaticBody3D" parent="Walls"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Walls/StaticBody3D"]
-material_override = ExtResource("7_vbegm")
-mesh = SubResource("BoxMesh_ehkex")
-skeleton = NodePath("../..")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/StaticBody3D"]
-shape = SubResource("BoxShape3D_vbegm")
-
-[node name="StaticBody3D2" type="StaticBody3D" parent="Walls"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="Walls/StaticBody3D2"]
-material_override = ExtResource("7_vbegm")
-mesh = SubResource("BoxMesh_ehkex")
-skeleton = NodePath("../..")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/StaticBody3D2"]
-shape = SubResource("BoxShape3D_vbegm")
-
-[node name="StaticBody3D3" type="StaticBody3D" parent="Walls"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 10, 0, 0)
-
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="Walls/StaticBody3D3"]
-material_override = ExtResource("7_vbegm")
-mesh = SubResource("BoxMesh_ehkex")
-skeleton = NodePath("../..")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/StaticBody3D3"]
-shape = SubResource("BoxShape3D_vbegm")
-
-[node name="StaticBody3D4" type="StaticBody3D" parent="Walls"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -10, 0, 0)
-
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="Walls/StaticBody3D4"]
-material_override = ExtResource("7_vbegm")
-mesh = SubResource("BoxMesh_ehkex")
-skeleton = NodePath("../..")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/StaticBody3D4"]
-shape = SubResource("BoxShape3D_vbegm")
-
-[node name="XROrigin3D" parent="." instance=ExtResource("8_ehkex")]

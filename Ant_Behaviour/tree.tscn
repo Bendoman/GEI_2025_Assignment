@@ -1,0 +1,37 @@
+[gd_scene load_steps=6 format=3 uid="uid://ctklq1esgqach"]
+
+[ext_resource type="Material" uid="uid://ditkjjo4i2xck" path="res://materials/tree.tres" id="1_brfkd"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uc1xx"]
+albedo_color = Color(0.343861, 0.188261, 0.0407689, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_brfkd"]
+material = SubResource("StandardMaterial3D_uc1xx")
+size = Vector3(0.5, 2, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nnvrw"]
+size = Vector3(0.5, 2, 0.5)
+
+[sub_resource type="SphereMesh" id="SphereMesh_d2g23"]
+radius = 0.87
+height = 1.655
+
+[node name="Node3D" type="Node3D"]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("BoxMesh_brfkd")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_nnvrw")
+
+[node name="Leaves" type="Node3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Leaves"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.69034, 0)
+material_override = ExtResource("1_brfkd")
+mesh = SubResource("SphereMesh_d2g23")

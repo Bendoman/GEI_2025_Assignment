@@ -17,9 +17,10 @@ func _ready():
 	
 	# Create the cylinder mesh
 	cylinder_mesh = CylinderMesh.new()
-	cylinder_mesh.top_radius = world_grid.cell_size * 2
-	cylinder_mesh.bottom_radius = world_grid.cell_size * 2
+	cylinder_mesh.top_radius = world_grid.cell_size
+	cylinder_mesh.bottom_radius = world_grid.cell_size
 	cylinder_mesh.height = .5
+	
 	
 	# Create the mesh instance and assign the mesh
 	var mesh_instance_3d = MeshInstance3D.new()
@@ -29,7 +30,8 @@ func _ready():
 
 	# Create and apply a 50% transparent green material
 	var green_material := StandardMaterial3D.new()
-	green_material.albedo_color = Color("#5fde6e97")  # Green with 50% alpha
+	#green_material.albedo_color = Color("#5fde6e97")  # Green with 50% alpha
+	green_material.albedo_color = Color("#FFE60010")  # 50% transparent yellow
 	green_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	green_material.flags_transparent = true
 	mesh_instance_3d.material_override = green_material

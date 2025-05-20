@@ -8,8 +8,8 @@ albedo_color = Color(0.3741, 0.87, 0.431955, 0.592157)
 
 [sub_resource type="SphereMesh" id="SphereMesh_fwco3"]
 material = SubResource("StandardMaterial3D_qoa6f")
-radius = 0.25
-height = 0.5
+radius = 0.07
+height = 0.17
 
 [node name="FoodSource" type="Node3D"]
 script = ExtResource("1_qoa6f")
