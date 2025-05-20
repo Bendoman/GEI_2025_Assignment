@@ -1,0 +1,39 @@
+[gd_scene load_steps=6 format=3 uid="uid://ow1q4unc5k5a"]
+
+[ext_resource type="Script" uid="uid://l46lkk0m1r3i" path="res://meshmaker.gd" id="1_wk7nh"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_3rsbn"]
+radius = 0.02
+height = 0.001
+
+[sub_resource type="SphereMesh" id="SphereMesh_gd548"]
+radius = 0.025
+height = 0.001
+
+[sub_resource type="SphereMesh" id="SphereMesh_yn64c"]
+radius = 0.015
+height = 0.001
+
+[sub_resource type="SphereMesh" id="SphereMesh_7p42d"]
+radius = 0.02
+height = 0.001
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_wk7nh")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("SphereMesh_3rsbn")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0158957, 0, 0.0176135)
+mesh = SubResource("SphereMesh_gd548")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0252183, 0, -0.00660837)
+mesh = SubResource("SphereMesh_yn64c")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0148689, 0, 0.0149668)
+mesh = SubResource("SphereMesh_7p42d")

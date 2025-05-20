@@ -1,14 +1,17 @@
 extends MultiMeshInstance3D
 
-@export var instance_count := 10
+@export var instance_count := 1000
+@export var starting_count = 1000
 
 @export var spawn_radius := 20.0
 @export var mesh_to_use: Mesh
 @export var material_to_use: Material
+@onready var food_trail_renderer = $"../FoodTrailRenderer"
 
 var antSpeed: float = .25
 @export var wander_distance := 1
 @export var wander_angle_deg := 60.0
+@onready var dead_warrior_renderer = $"../DeadWarriorRenderer"
 
 @export var search_depth: int = 1 
 @export var consumptionRate: int = 1
@@ -57,18 +60,20 @@ func _ready():
 
 	# Set transform for each instance (e.g. random spread)
 	for i in instance_count:
-		if i >= 3:
+		#if team == 1:
+			#return
+		if i >= starting_count:
 			continue
 			
 		var offset_x = randf_range(-0.1, 0.1)
 		var offset_z = randf_range(-0.1, 0.1)		
-		if(team == 0):
-			offset_x = 0.1
-			offset_z = 0.1
-		else:
-			offset_x = -0.1
-			offset_z = 0.1
-			return
+		#if(team == 0):
+			#offset_x = 0.1
+			#offset_z = 0.1
+		#else:
+			#offset_x = -0.1
+			#offset_z = 0.1
+			#return
 			
 		base.increaseAntCount()
 			
@@ -84,12 +89,14 @@ func _ready():
 			"cell": Vector2i(0, 0),
 			"path": [pos + Vector3(offset_x, 0, offset_z)],
 			"dead": false,
+			"index": antData.size() - 1,
 
 			"carryingFood": false, 
 			"backtracking": false,
 			"targetingFood": false,
 			"fleeing": null,
 			"fleeingBool": false,
+			"handled_Death": false,
 			
 			"reportingEnemy": false, 
 			
@@ -109,6 +116,7 @@ func find_nearest_food(center_cell):
 	var foodPositions = []
 	var discoveredTrails = [] 
 	var workers = [] 
+	var discoveredEnemyWorker = null 
 	
 	for x in range(center_cell.x - search_depth, center_cell.x + search_depth + 1):
 		for z in range(center_cell.y - search_depth, center_cell.y + search_depth + 1):
@@ -118,7 +126,7 @@ func find_nearest_food(center_cell):
 			var entries = world_grid.get_entities_at_cell(cell)
 			for entry in entries:
 				if entry.type == "ant" and entry.team != team:
-					workers.append(entry)
+					discoveredEnemyWorker = entry
 				
 				if(entry.has("team") and entry.team != team):
 					continue
@@ -130,15 +138,15 @@ func find_nearest_food(center_cell):
 
 	var foodPos = null
 	var discoveredTrail = null
-	var discoveredEnemyWorker = null 
+	#var discoveredEnemyWorker = null 
 	if(discoveredTrails.size() > 0):
 		var index = get_random_index(discoveredTrails)
 		discoveredTrail = discoveredTrails[index]
 	if(foodPositions.size() > 0):
 		foodPos = foodPositions[get_random_index(foodPositions)]
-	if(workers.size() > 0):
-		var index = get_random_index(workers)
-		discoveredEnemyWorker = workers[index]
+	#if(workers.size() > 0):
+		#var index = get_random_index(workers)
+		#discoveredEnemyWorker = workers[index]
 		
 	return {"foodPos": foodPos, "discoveredTrail": discoveredTrail, "discoveredEnemyWorker": discoveredEnemyWorker}
 	#return {"foodPos": foodPos, "trailIndex": trailIndex, "nodeIndex": nodeIndex, "trailSource": trailSource}
@@ -158,6 +166,7 @@ func add_path_to_grid(path, source):
 			break
 	
 	for node in path: 
+		#food_trail_renderer.addTrailNode(to_global(node))
 		# Add trail index here too
 		trail.append(to_global(node))
 		var cell = world_grid.position_to_cell(to_global(node))
@@ -221,8 +230,12 @@ func _physics_process(delta):
 		var ant = antData[i]
 		var trailIndex = ant.trailIndex
 		
-		if(ant.dead):
+		if(ant.dead and !ant.handled_Death):
 			world_grid.unregister_entity(to_global(ant.position), {"type": "ant", "team": team, "index": i}, ant.cell)
+			#dead_warrior_renderer.addDeadAnt(i)
+			ant.handled_Death = true
+		
+		if(ant.dead):
 			continue
 		
 		if(ant.fleeing != null and !ant.fleeingBool):
@@ -240,7 +253,7 @@ func _physics_process(delta):
 			var new_target = (ant.position + rotated_forward) * wander_distance
 			ant.path.append(new_target)
 					
-			print("Ant fleeing from: ", enemyAnt)
+			#print("Ant fleeing from: ", enemyAnt)
 
 			#world_grid.unregister_entity(to_global(ant.position), {"type": "ant", "team": team, "index": i}, ant.cell)
 			#continue
@@ -253,8 +266,9 @@ func _physics_process(delta):
 				
 			if(ant.reportingEnemy):
 				if(currentWarriors < maxWarriors):
-					warrior_ant_renderer.spawn_ant()
+					base.warriorQueue += 1
 					currentWarriors += 1
+					#warrior_ant_renderer.spawn_ant()
 				
 			if(ant.carryingFood):
 				base.incrementFoodLevel(consumptionRate)
@@ -354,7 +368,7 @@ func _physics_process(delta):
 				# Backtrack
 				ant.path.pop_back() 
 			elif(ant.fleeingBool):
-				print('process next flee target')
+				#print('process next flee target')
 				var enemyAnt = base.getAnt(ant.fleeing[0], ant.fleeing[1], "warrior")	
 				var forward = (ant.global_position - enemyAnt.global_position).normalized()
 				var angle_deg = randf_range(-wander_angle_deg / 2.0, wander_angle_deg / 2.0)
@@ -379,7 +393,7 @@ func _physics_process(delta):
 		var smoothed_basis = current_basis.slerp(target_basis, 0.2)  # 0.2 = smoothing factor
 
 		var currentCell = world_grid.position_to_cell(to_global(new_pos))
-		if(currentCell != ant.cell and !ant.reportingEnemy):
+		if(currentCell != ant.cell and !ant.reportingEnemy and ant.fleeing == null):
 			# Ant moves to new cell in grid 
 			var search = find_nearest_food(currentCell)
 			var trail
@@ -472,6 +486,8 @@ func spawn_ant():
 		"global_position": to_global(pos),
 		"cell": Vector2i(0, 0),
 		"path": [pos + Vector3(offset_x, 0, offset_z)],
+		"index": antData.size() - 1,
+	
 		"dead": false,
 		"carryingFood": false, 
 		"backtracking": false,
@@ -514,6 +530,7 @@ func spawn_ant_at(world_pos: Vector3):
 		"targetingFood": false,
 		"fleeing": null,
 		"fleeingBool": false,
+		"handled_Death": false, 
 		
 		"reportingEnemy": false, 
 		

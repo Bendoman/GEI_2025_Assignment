@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://dgxho5y4x53ru" path="res://scenes/ant.gd" id="1_4s44o"]
 [ext_resource type="Script" uid="uid://cpcgbk2fobecj" path="res://scenes/meshes.gd" id="2_1c1h0"]
 [ext_resource type="Material" uid="uid://dk8gcqd5r3glh" path="res://materials/and_body.tres" id="2_hkm68"]
-[ext_resource type="Material" uid="uid://bew0o6jcl78f5" path="res://materials/and_abdomem.tres" id="3_1c1h0"]
+[ext_resource type="Material" path="res://materials/and_abdomem.tres" id="3_1c1h0"]
 [ext_resource type="Material" uid="uid://dvsjlvytlj7bj" path="res://materials/ant_head.tres" id="4_ikowd"]
 [ext_resource type="Material" uid="uid://cnr0mcs5skttv" path="res://materials/ant_legs.tres" id="5_dy442"]
 

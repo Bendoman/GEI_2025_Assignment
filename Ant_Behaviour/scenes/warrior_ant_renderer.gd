@@ -54,7 +54,7 @@ func _ready():
 
 	# Set transform for each instance (e.g. random spread)
 	for i in instance_count:
-		#return
+		return
 		var offset_x = randf_range(-0.1, 0.1)
 		var offset_z = randf_range(-0.1, 0.1)	
 		
@@ -151,6 +151,7 @@ func find_nearest_food(center_cell):
 	var foodPositions = []
 	var discoveredTrails = [] 
 	var workers = [] 
+	var discoveredEnemyWorker = null 
 
 	for x in range(center_cell.x - search_depth, center_cell.x + search_depth + 1):
 		for z in range(center_cell.y - search_depth, center_cell.y + search_depth + 1):
@@ -160,8 +161,11 @@ func find_nearest_food(center_cell):
 			var entries = world_grid.get_entities_at_cell(cell)
 			for entry in entries:
 				if entry.type == "ant" and entry.team != team:
-					print(entry.team)
-					workers.append(entry)
+					var foundAnt = base.getAnt(entry.team, entry.index, "worker")
+					if(foundAnt.fleeing == null):
+						#workers.append(entry)
+						discoveredEnemyWorker = entry
+
 					
 				if(entry.has("team") and entry.team != team):
 					continue
@@ -172,22 +176,23 @@ func find_nearest_food(center_cell):
 					#print_debug(entry)
 					discoveredTrails.append({"trailIndex": entry.trailIndex, "nodeIndex": entry.nodeIndex, "source": entry.source})
 	
-	var discoveredEnemyWorker = null 
 
 
 	var discoveredTrail
 	if(discoveredTrails.size() > 0):
 		var index = get_random_index(discoveredTrails)
 		discoveredTrail = discoveredTrails[index]
-	if(workers.size() > 0):
-		var index = get_random_index(workers)
-		discoveredEnemyWorker = workers[index]
+	#if(workers.size() > 0):
+		#var index = get_random_index(workers)
+		#discoveredEnemyWorker = workers[index]
 	
 	return {"discoveredEnemyWorker": discoveredEnemyWorker, "discoveredTrail": discoveredTrail}
 	#return {"foodPos": foodPos, "trailIndex": trailIndex, "nodeIndex": nodeIndex, "trailSource": trailSource}
 
 
 func _physics_process(delta):
+	#if(team == 0): 
+		#return 
 	for i in antData.size():
 		var ant = antData[i]
 		var trailIndex = ant.trailIndex
@@ -202,7 +207,7 @@ func _physics_process(delta):
 			var offset_x = randf_range(-0.1, 0.1)
 			var offset_z = randf_range(-0.1, 0.1)
 			ant.path.append(Vector3(offset_x, 0, offset_z))
-		elif(antData[i].path.size() >= 5):
+		elif(antData[i].path.size() >= 5 and ant.targetingAnt == null):
 			antData[i].backtracking = true 
 		
 		var path = ant.path 
@@ -224,18 +229,25 @@ func _physics_process(delta):
 			ant.trailIndex = -1
 			ant.followingTrail = false 
 			ant.backtracking = true
+			
 			ant.source = null
 
 		if(currentPos.distance_to(targetPos) < 0.1):
+			
 			# Ant reaches target
 			if(ant.targetingAnt != null):
-				if(currentPos.distance_to(to_local(ant.targetingAnt.global_position)) < 0.1):
-					print('caught ant')
+				#if(currentPos.distance_to(to_local(ant.targetingAnt.global_position)) < 0.1):
+				if(ant.global_position.distance_to(ant.targetingAnt.global_position) < 0.1):
+					#print('caught ant')
+					
 					ant.targetingAnt.dead = true
 					ant.targetingAnt = null
 					ant.backtracking = true
+					
+					var start = ant.path[0]
+					ant.path = [] 
+					ant.path.append(start)
 				else: 
-					print("still pursuing")
 					ant.path.append(to_local(ant.targetingAnt.global_position))
 					#ant.path.append(to_local(ant.targetingAnt.path[ant.targetingAnt.path.size() - 1]))
 			if(!ant.backtracking):
@@ -243,6 +255,7 @@ func _physics_process(delta):
 					if(ant.path[pathLength - 1] == to_local(trails[trailIndex].path[trailLength - 1])):
 						# Ant reaches food from trail
 						ant.backtracking = true
+						
 					else:
 						# Add next path node in trail
 						ant.path.append(to_local(trails[trailIndex].path[pathLength]))
@@ -253,7 +266,7 @@ func _physics_process(delta):
 						remove_trail_from_grid(trailIndex)
 						var pos = Vector3(ant.source.position.x, 0, ant.source.position.z)
 						world_grid.unregister_entity(global_position, {"type": "foodsource", "position": pos, "foodLeft": ant.source.foodLeft}, ant.source.cell)
-				else: 
+				elif(ant.targetingAnt == null): 
 					# Wander to new target
 					var forward = (targetPos - currentPos).normalized() 
 					var angle_deg = randf_range(-wander_angle_deg / 2.0, wander_angle_deg / 2.0)
@@ -265,15 +278,25 @@ func _physics_process(delta):
 			else: 
 				# Backtrack
 				ant.path.pop_back() 
-				
-		var direction = (targetPos - currentPos).normalized()
-		var move_vector = direction * antSpeed * delta
+		
+		var to_target = targetPos - currentPos
+		var distance_to_target = to_target.length()
+
+		# Clamp movement to remaining distance
+		var max_move_distance = antSpeed * delta
+		var move_distance = min(distance_to_target, max_move_distance)
+		var direction = to_target.normalized()
+		var move_vector = direction * move_distance
+
+		#var direction = (targetPos - currentPos).normalized()
+		#var move_vector = direction * antSpeed * delta
 		var new_pos = currentPos + move_vector
 		
 		var current_transform = multimesh.get_instance_transform(i)
 		var target_basis = Basis().looking_at(direction, Vector3.UP)
 		var current_basis = current_transform.basis
 		var smoothed_basis = current_basis.slerp(target_basis, 0.2)  # 0.2 = smoothing factor
+
 
 		var currentCell = world_grid.position_to_cell(to_global(new_pos))
 		if(currentCell != ant.cell):
@@ -290,6 +313,7 @@ func _physics_process(delta):
 			if(discoveredEnemyWorker != null and ant.path.size() > 0 and ant.targetingAnt == null):
 				#print(base.getAnt(discoveredEnemyWorker.team, discoveredEnemyWorker.index, "worker"))
 				enemyAnt = base.getAnt(discoveredEnemyWorker.team, discoveredEnemyWorker.index, "worker")
+				ant.backtracking = false
 				#print("Warrior detected, ", enemyAnt)
 				enemyAnt.fleeing = [team, i]
 				ant.followingTrail = false 

@@ -5,7 +5,6 @@ var instance_count
 var team 
 var foodData = []
 @onready var ant_renderer = $"../AntRenderer"
-
 @onready var workers_label = $"../WorkerCountLabel/workersLabel"
 @onready var warriors_label = $"../WarriorCountLabel/warriorsLabel"
 

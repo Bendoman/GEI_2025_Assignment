@@ -34,6 +34,8 @@ var progress_duration := 3.0
 var progress_elapsed := 0.0
 
 var warriorCount: int
+var warriorQueue: int 
+
 
 const ANT_BASE = preload("res://scenes/ant_base.gdshader")
 
@@ -82,15 +84,20 @@ func increaseAntCount():
 func incrementFoodLevel(amount: int): 
 	foodLevel += amount
 	food_level_label.text = str(foodLevel)
-	if(foodLevel >= 10 and !spawn_in_progress):
-		start_ant_spawn_progress()
+	if(!spawn_in_progress):
+		if(warriorQueue > 0):
+			if(foodLevel >= 20):
+				start_ant_spawn_progress(20)
+		else:
+			if(foodLevel >= 10):
+				start_ant_spawn_progress(10)
 
 
-func start_ant_spawn_progress():
+func start_ant_spawn_progress(consumption):
 	spawn_in_progress = true
 	progress = 0.0
 	progress_elapsed = 0.0
-	foodLevel -= 10  # Consume food for the spawn
+	foodLevel -= consumption  # Consume food for the spawn
 
 func reset_spawn_progress():
 	spawn_in_progress = false
@@ -102,8 +109,12 @@ func reset_spawn_progress():
 	if mat and mat is ShaderMaterial:
 		mat.set_shader_parameter("progress", 0.0)
 	
-	if(foodLevel >= 10):
-		start_ant_spawn_progress()
+	if(warriorQueue > 0):
+		if(foodLevel >= 20):
+			start_ant_spawn_progress(20)
+	else:
+		if(foodLevel >= 10):
+			start_ant_spawn_progress(10)
 
 
 func _process(delta): 
@@ -137,5 +148,10 @@ func _process(delta):
 		#pass
 
 func _spawn_ant() -> void:
-	ant_renderer.spawn_ant()
-	pass
+	if(warriorQueue > 0):
+		warrior_ant_renderer.spawn_ant()
+		warriorQueue -= 1 
+	else:
+		ant_renderer.spawn_ant()
+ 
+		
