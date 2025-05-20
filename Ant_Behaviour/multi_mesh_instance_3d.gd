@@ -8,7 +8,7 @@ extends MultiMeshInstance3D
 @export var material_to_use: Material
 @onready var food_trail_renderer = $"../FoodTrailRenderer"
 
-var antSpeed: float = .25
+var antSpeed: float = 1
 @export var wander_distance := 1
 @export var wander_angle_deg := 60.0
 @onready var dead_warrior_renderer = $"../DeadWarriorRenderer"
@@ -284,8 +284,12 @@ func _physics_process(delta):
 				var offset_x = randf_range(-0.1, 0.1)
 				var offset_z = randf_range(-0.1, 0.1)
 				ant.path.append(Vector3(offset_x, 0, offset_z))
-		elif(antData[i].path.size() >= 5 and !ant.followingTrail):
-			antData[i].backtracking = true 
+		#elif(antData[i].path.size() >= 5 and !ant.followingTrail):
+			#antData[i].backtracking = true 
+		elif(!ant.followingTrail):
+			if(ant.global_position.x < -9 or ant.global_position.x > 9 or ant.global_position.z < -9 or ant.global_position.z > 9):
+				antData[i].backtracking = true 
+		
 		
 		var path = ant.path 
 		var pathLength = ant.path.size() 

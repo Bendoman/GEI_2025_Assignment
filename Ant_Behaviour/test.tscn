@@ -1,13 +1,11 @@
-[gd_scene load_steps=18 format=3 uid="uid://bmov0u7ck0qgu"]
+[gd_scene load_steps=16 format=3 uid="uid://bmov0u7ck0qgu"]
 
 [ext_resource type="Script" uid="uid://cpek6qnsms6xd" path="res://test.gd" id="1_6uqi0"]
 [ext_resource type="Script" uid="uid://dlydu00bphbhx" path="res://collision_shape_3d.gd" id="2_g14j6"]
 [ext_resource type="Material" uid="uid://dtd0wnwdssiif" path="res://materials/ground_colour.tres" id="2_ykrsh"]
 [ext_resource type="Script" uid="uid://bsa24v84vydkc" path="res://world_grid.gd" id="4_ppyta"]
 [ext_resource type="PackedScene" uid="uid://cccxu3uljmod8" path="res://scenes/ant_base.tscn" id="4_vbegm"]
-[ext_resource type="PackedScene" uid="uid://cyxbrl25i8okg" path="res://FoodSource.tscn" id="5_ykrsh"]
 [ext_resource type="Material" uid="uid://da4eontgchxa2" path="res://materials/wall.tres" id="7_vbegm"]
-[ext_resource type="PackedScene" uid="uid://dw7f1yfv67ywx" path="res://scenes/xrOrigin.tscn" id="8_ehkex"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_n2cwj"]
 sky_top_color = Color(0.425909, 0.569805, 0.704866, 1)
@@ -53,20 +51,20 @@ environment = SubResource("Environment_gsyhl")
 transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
 light_color = Color(1, 1, 0.898039, 1)
 
-[node name="StaticBody3D" type="StaticBody3D" parent="."]
+[node name="Ground" type="StaticBody3D" parent="."]
 collision_layer = 256
 collision_mask = 256
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
 shape = SubResource("BoxShape3D_fuouj")
 script = ExtResource("2_g14j6")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D/CollisionShape3D"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/CollisionShape3D"]
 material_override = ExtResource("2_ykrsh")
 mesh = SubResource("BoxMesh_16tix")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.344807, 0.938674, 0, -0.938674, 0.344807, 0.329309, 4.71466, 2.99572)
+transform = Transform3D(1, 0, 0, 0, 0.344807, 0.938674, 0, -0.938674, 0.344807, 0.329309, 12.5168, 6.71266)
 
 [node name="AntBase" parent="." instance=ExtResource("4_vbegm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.148342, 0.175, 1.68062)
@@ -76,19 +74,6 @@ spawn_position = Vector3(0, 0, 0)
 script = ExtResource("4_ppyta")
 debug_mesh = SubResource("BoxMesh_ppyta")
 debug_material = SubResource("StandardMaterial3D_ykrsh")
-
-[node name="AntBase2" parent="." instance=ExtResource("4_vbegm")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.86991, 0.175, 1.75741)
-team = 1
-
-[node name="FoodSource" parent="." instance=ExtResource("5_ykrsh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0212, 0.3, 3.65522)
-
-[node name="FoodSource2" parent="." instance=ExtResource("5_ykrsh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.72489, 0.3, -0.498145)
-
-[node name="FoodSource3" parent="." instance=ExtResource("5_ykrsh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.64311, 0, -0.250476)
 
 [node name="Walls" type="Node3D" parent="."]
 
@@ -135,5 +120,3 @@ skeleton = NodePath("../..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/StaticBody3D4"]
 shape = SubResource("BoxShape3D_vbegm")
-
-[node name="XROrigin3D" parent="." instance=ExtResource("8_ehkex")]
