@@ -5,7 +5,7 @@ const AntData = preload("res://ant_data.gd")
 # Multimesh properties
 @export var mesh_to_use: Mesh
 @export var instance_count = 1000
-@export var starting_count = 100
+@export var starting_count = 1
 
 # Wandering
 @export var ant_speed: float = 1
@@ -257,7 +257,7 @@ func calculate_new_transform(currentPos, targetPos, current_transform, delta):
 		
 		return [Transform3D(smoothed_basis, new_pos), new_global, new_pos]
 
-func a_physics_process(delta): 
+func _physics_process(delta): 
 	for i in ant_data.size(): 
 		var ant = ant_data[i]
 		var path = ant.path 
@@ -407,7 +407,7 @@ func scan_world_grid(center_cell, ant_position):
 	
 	return {"food_source": food_source, "discovered_trail": discovered_trail, "enemy_ant": enemy_ant}
 
-func _physics_process(delta):
+func a_physics_process(delta):
 	for i in ant_data.size():
 		var ant = ant_data[i]
 		var trail_index = ant.trail_index
