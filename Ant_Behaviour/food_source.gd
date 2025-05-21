@@ -13,9 +13,16 @@ var radius
 var cylinder_mesh
 var mesh_instance_3d
 
+var pickable_object
+
 func _ready():
-	world_grid = get_node("../WorldGrid") 
+	print("ready in here")
+	world_grid = get_node("../../WorldGrid") 
+	pickable_object = get_node("../PickableObject") 
+	print(world_grid)
+	print(pickable_object)
 	init()
+	
 
 func init(): 
 	foodLeft = 100
@@ -50,6 +57,9 @@ func init():
 
 
 func _process(delta):
+	if(Global.stopped): 
+		position = Vector3(pickable_object.position.x, position.y, pickable_object.position.z)
+	
 	if(entity.foodLeft != foodLeft):
 		foodLeft = entity.foodLeft
 		food_left_label.text = str(foodLeft)

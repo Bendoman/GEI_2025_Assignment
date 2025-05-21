@@ -8,11 +8,12 @@
 [ext_resource type="PackedScene" uid="uid://ctw7nbntd5pcj" path="res://addons/godot-xr-tools/objects/grab_points/grab_point_hand_right.tscn" id="6_mwo4m"]
 [ext_resource type="Animation" uid="uid://daqddcrbpam0c" path="res://addons/godot-xr-tools/hands/animations/right/Grip 1.res" id="7_rat7f"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_s4v0y"]
-size = Vector3(0.05, 0.05, 0.05)
+[sub_resource type="SphereShape3D" id="SphereShape3D_lxmub"]
+radius = 0.025
 
-[sub_resource type="BoxMesh" id="BoxMesh_0ap5u"]
-size = Vector3(0.05, 0.05, 0.05)
+[sub_resource type="SphereMesh" id="SphereMesh_d6vd4"]
+radius = 0.025
+height = 0.05
 
 [sub_resource type="Resource" id="Resource_hegls"]
 script = ExtResource("5_j2b2r")
@@ -25,14 +26,17 @@ open_pose = ExtResource("7_rat7f")
 closed_pose = ExtResource("7_rat7f")
 
 [node name="PickableObject" instance=ExtResource("1_ptj3f")]
+visible = false
 gravity_scale = 0.0
+enabled = false
+release_mode = 1
 
 [node name="CollisionShape3D" parent="." index="0"]
-shape = SubResource("BoxShape3D_s4v0y")
+shape = SubResource("SphereShape3D_lxmub")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." index="1"]
 material_override = ExtResource("2_b8nye")
-mesh = SubResource("BoxMesh_0ap5u")
+mesh = SubResource("SphereMesh_d6vd4")
 
 [node name="GrabPointHandLeft" parent="." index="2" instance=ExtResource("3_s4rp3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0464523, -0.086411)

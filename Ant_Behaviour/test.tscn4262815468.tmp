@@ -1,8 +1,9 @@
-[gd_scene load_steps=17 format=3 uid="uid://bmov0u7ck0qgu"]
+[gd_scene load_steps=18 format=3 uid="uid://bmov0u7ck0qgu"]
 
 [ext_resource type="Script" uid="uid://cpek6qnsms6xd" path="res://test.gd" id="1_6uqi0"]
 [ext_resource type="Material" uid="uid://dtd0wnwdssiif" path="res://materials/ground_colour.tres" id="2_ykrsh"]
 [ext_resource type="Script" uid="uid://bsa24v84vydkc" path="res://world_grid.gd" id="4_ppyta"]
+[ext_resource type="PackedScene" uid="uid://cyxbrl25i8okg" path="res://FoodSource.tscn" id="7_ehkex"]
 [ext_resource type="Material" uid="uid://da4eontgchxa2" path="res://materials/wall.tres" id="7_vbegm"]
 [ext_resource type="PackedScene" uid="uid://dw7f1yfv67ywx" path="res://scenes/xrOrigin.tscn" id="7_xersf"]
 [ext_resource type="PackedScene" uid="uid://eor7icnqpnig" path="res://PickableFoodSource.tscn" id="8_ehkex"]
@@ -45,7 +46,7 @@ size = Vector3(40, 1, 0.5)
 [node name="root" type="Node3D"]
 script = ExtResource("1_6uqi0")
 ant_base_scene = ExtResource("9_xersf")
-food_source_scene = ExtResource("8_ehkex")
+food_source_scene = ExtResource("7_ehkex")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_gsyhl")
@@ -118,5 +119,11 @@ skeleton = NodePath("../..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/StaticBody3D4"]
 shape = SubResource("BoxShape3D_vbegm")
+
+[node name="PickableFoodSource" parent="." instance=ExtResource("8_ehkex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.407803, 0.135, -1.8525)
+
+[node name="PickableAntBase" parent="." instance=ExtResource("9_xersf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.574, 0, -2.989)
 
 [node name="XROrigin3D" parent="." instance=ExtResource("7_xersf")]

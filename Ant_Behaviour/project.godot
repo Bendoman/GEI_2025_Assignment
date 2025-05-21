@@ -103,4 +103,5 @@ rotate_down={
 
 [xr]
 
+openxr/enabled=true
 shaders/enabled=true

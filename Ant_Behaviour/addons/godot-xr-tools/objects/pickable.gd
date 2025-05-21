@@ -121,8 +121,26 @@ func is_xr_class(name : String) -> bool:
 	return name == "XRToolsPickable"
 
 
+func handle_stopped_toggle(): 
+	if(Global.stopped):
+		print("Handle stoping from object")
+		enabled = true
+		visible = true
+	else: 
+		print("Handle resumse from object")
+		visible = false
+		enabled = false
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	Global.connect("toggling_stopped", self.handle_stopped_toggle)
+	if(Global.stopped):
+		enabled = true
+		visible = true
+	else: 
+		visible = false
+		enabled = false
+	
 	# Get all grab points
 	for child in get_children():
 		var grab_point := child as XRToolsGrabPoint

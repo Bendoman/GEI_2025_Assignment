@@ -1,6 +1,7 @@
 extends Node3D
 @export var spawn_interval: float = 1       # seconds between spawns
 @export var consume_interval: float = 1       # seconds between food consumption by existing ants
+@onready var pickable_object = $"../PickableObject"
 
 @export var spawn_position: Vector3 = Vector3.ZERO
 
@@ -73,7 +74,7 @@ func reset():
 	carried_food_renderer.reset()
 
 func _ready():
-	world_grid = get_node("../WorldGrid") 
+	world_grid = get_node("../../WorldGrid") 
 
 	var mesh_instance := MeshInstance3D.new()
 	var quad := QuadMesh.new()
@@ -92,9 +93,9 @@ func _ready():
 
 func getAnt(team: int, index: int, type): 
 	if(type == "worker"):
-		return get_parent().bases[team].ant_renderer.antData[index]
+		return get_parent().get_parent().bases[team].ant_renderer.antData[index]
 	elif(type == "warrior"):
-		return get_parent().bases[team].warrior_ant_renderer.antData[index]
+		return get_parent().get_parent().bases[team].warrior_ant_renderer.antData[index]
 
 func increaseWarriorCount():
 	warriorCount += 1
@@ -152,6 +153,9 @@ func reset_spawn_progress():
 
 
 func _process(delta): 
+	if(Global.stopped): 
+		position = Vector3(pickable_object.position.x, position.y, pickable_object.position.z)
+	
 	if spawn_in_progress:
 		progress_elapsed += delta
 		progress = clamp(progress_elapsed / progress_duration, 0.0, 1.0)

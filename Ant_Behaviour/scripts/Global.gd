@@ -17,3 +17,9 @@ signal test
 func test_emit():
 	print("emitting")
 	emit_signal("test")
+
+
+signal toggling_stopped
+func toggle_stopped(): 
+	stopped = !stopped
+	emit_signal("toggling_stopped")

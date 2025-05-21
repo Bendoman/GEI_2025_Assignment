@@ -13,8 +13,8 @@ signal left_trigger_click_pressed
 signal right_trigger_click_pressed
 
 @onready var xr_origin_3d : XROrigin3D = $XROrigin3D
-#@onready var xr_left_controller : XRController3D = xr_origin_3d.get_node("LeftHand")
-#@onready var xr_right_controller : XRController3D = xr_origin_3d.get_node("RightHand")
+@onready var xr_left_controller : XRController3D = xr_origin_3d.get_node("LeftHand")
+@onready var xr_right_controller : XRController3D = xr_origin_3d.get_node("RightHand")
 
 
 @export var ant_base_scene: PackedScene
@@ -43,8 +43,8 @@ func _ready() -> void:
 		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
 		get_viewport().use_xr = true
 		
-		#xr_left_controller.button_pressed.connect(_on_left_button_pressed)
-		#xr_right_controller.button_pressed.connect(_on_right_button_pressed)
+		xr_left_controller.button_pressed.connect(_on_left_button_pressed)
+		xr_right_controller.button_pressed.connect(_on_right_button_pressed)
 	else:
 		print('Failed to initialize OpenXR')
 		
@@ -55,8 +55,8 @@ func _ready() -> void:
 	for child in get_children(): 
 		if("AntBase" in child.name):
 			basesNumber += 1
-			child.team = bases.size()
-			bases.append(child)
+			child.ant_base.team = bases.size()
+			bases.append(child.ant_base)
 	
 	if show_fps:
 		var fps_layer := CanvasLayer.new()
@@ -73,7 +73,6 @@ func add_food_source():
 	var instance = food_source_scene.instantiate()
 	instance.name = instance.name + str(foodSources)
 	add_child(instance)
-	print(get_children())
 	
 func remove_food_sources():
 	foodSources = 0 
@@ -88,16 +87,18 @@ func add_base():
 		
 	print("add base")
 	var instance = ant_base_scene.instantiate()
-	instance.position = Vector3(0, 0.175, 0)
-	instance.team = bases.size()
+	#instance.position = Vector3(0, 0.175, 0)
+	instance.get_ready()
+	instance.ant_base.team = bases.size()
 	instance.name = instance.name + str(basesNumber)
 	
-	bases.append(instance)
+	bases.append(instance.ant_base)
 	add_child(instance)
 	pass
 
 func remove_bases(): 
 	basesNumber = 0 
+	Global.stopped = true
 	print("remove bases")
 	for child in get_children(): 
 		if("AntBase" in child.name):
@@ -146,8 +147,8 @@ func _input(event):
 		add_base()
 	
 	if Input.is_key_pressed(KEY_K):
-		Global.test_emit()
 		stopped = !stopped
+		Global.toggle_stopped()
 		if(!stopped):
 			Global.stopped = false
 			init()
