@@ -33,6 +33,8 @@ var base
 var colors = [
 	Color(0.0, 0.0, 0.5),  # Navy
 	Color(0.0, 0.0, 0.0),  # Black
+	Color(0.0, 0.0, 0.0),  # Black
+	Color(0.0, 0.0, 0.0),  # Black
 ]
 
 func populate_ant_data(): 

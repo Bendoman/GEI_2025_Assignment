@@ -14,8 +14,8 @@ func _ready():
 	instance_count = ant_renderer.instance_count
 
 	var sphere := SphereMesh.new()
-	sphere.radius = 0.05
-	sphere.height = 0.1
+	sphere.radius = 0.02
+	sphere.height = 0.04
 
 	var material := StandardMaterial3D.new()
 	material.albedo_color = Color("#FFE60080")  # 50% transparent yellow
@@ -36,7 +36,6 @@ func _ready():
 #
 
 func reset(): 
-	print("resserting")
 	foodData = [] 
 	for i in instance_count:
 		var transform = Transform3D(Basis(), Vector3(0, -10, 0))
@@ -63,5 +62,5 @@ func _physics_process(delta):
 		if(ant == null):
 			continue
 		
-		var transform = Transform3D(Basis(), ant.position)
+		var transform = Transform3D(Basis(), ant.position + Vector3(0, 0.025, 0))
 		multimesh.set_instance_transform(i, transform)

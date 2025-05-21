@@ -9,4 +9,11 @@ var starting_ants = 500
 var display_dead_ants = false 
 var display_trail_indicators = false 
 
+var max_bases = 4
+
 var stopped = false 
+
+signal test
+func test_emit():
+	print("emitting")
+	emit_signal("test")

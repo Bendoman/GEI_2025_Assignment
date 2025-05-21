@@ -28,6 +28,8 @@ var base
 var colors = [
 	Color(1.0, 0.0, 0.0),  # Red
 	Color(1.0, 0.5, 0.0),  # Black
+	Color(1.0, 0.5, 0.0),  # Black
+	Color(1.0, 0.5, 0.0),  # Black
 ]
 
 func init(): 

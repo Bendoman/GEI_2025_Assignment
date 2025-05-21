@@ -40,9 +40,11 @@ var warriorQueue: int
 
 const ANT_BASE = preload("res://scenes/ant_base.gdshader")
 
+
 func init(): 
 	#Global.starting_ants = 1
 	ant_renderer.init()
+	warrior_ant_renderer.init()
 	
 func reset(): 
 	# Reset own variables
@@ -72,7 +74,6 @@ func reset():
 
 func _ready():
 	world_grid = get_node("../WorldGrid") 
-
 
 	var mesh_instance := MeshInstance3D.new()
 	var quad := QuadMesh.new()
