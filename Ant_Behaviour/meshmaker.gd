@@ -1,14 +1,17 @@
 extends Node3D
 
-@onready var body = $Body
+
+
+@onready var combined_ant_mesh = $CombinedAntMesh
+@onready var fang = $fang
 @onready var mesh_instance_3d = $MeshInstance3D
+@onready var fang_2 = $fang2
 @onready var mesh_instance_3d_2 = $MeshInstance3D2
-@onready var mesh_instance_3d_3 = $MeshInstance3D3
 
 func _ready():
 	print("here")
 	#var meshes = [abdomen, body, head, front_legs, middle_legs, back_legs]
-	var meshes = [mesh_instance_3d, body, mesh_instance_3d_2, mesh_instance_3d_3]
+	var meshes = [combined_ant_mesh, fang, mesh_instance_3d, fang_2, mesh_instance_3d_2]
 	var combined_mesh := ArrayMesh.new()
 
 	for mesh_instance in meshes: 
@@ -32,7 +35,7 @@ func _ready():
 			
 
 	
-	var save_path = "res://DeadAntMesh.tres"
+	var save_path = "res://Warrior.tres"
 	var result = ResourceSaver.save(combined_mesh, save_path)
 	
 	if result == OK:

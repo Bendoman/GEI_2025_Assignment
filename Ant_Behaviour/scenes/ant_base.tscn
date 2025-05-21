@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://dm83gotx1cipr" path="res://multi_mesh_instance_3d.gd" id="3_anh4v"]
 [ext_resource type="ArrayMesh" uid="uid://cq5dynh2kw4j7" path="res://CombinedAntMesh.tres" id="4_agbvd"]
 [ext_resource type="Script" uid="uid://cy0l3nuebs2rf" path="res://scenes/carried_food_renderer.gd" id="5_agbvd"]
+[ext_resource type="ArrayMesh" path="res://Warrior.tres" id="6_0gare"]
 [ext_resource type="Script" uid="uid://lahw8dgm8bq8" path="res://scenes/dead_warrior_renderer.gd" id="7_0gare"]
 [ext_resource type="Script" uid="uid://bxftc70bcdaul" path="res://scenes/warrior_ant_renderer.gd" id="7_ca7l2"]
 [ext_resource type="Script" uid="uid://dmse48xan8rrw" path="res://scenes/food_trail_renderer.gd" id="9_278b3"]
@@ -20,9 +21,6 @@ height = 0.25
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8ognt"]
 albedo_color = Color(0, 0, 0, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ca7l2"]
-albedo_color = Color(1, 0.026491, 0.026491, 1)
 
 [node name="AntBase" type="Node3D"]
 script = ExtResource("1_cloup")
@@ -90,8 +88,7 @@ font_size = 10
 
 [node name="WarriorAntRenderer" type="MultiMeshInstance3D" parent="."]
 script = ExtResource("7_ca7l2")
-mesh_to_use = ExtResource("4_agbvd")
-material_to_use = SubResource("StandardMaterial3D_ca7l2")
+mesh_to_use = ExtResource("6_0gare")
 
 [node name="DeadWarriorRenderer" type="MultiMeshInstance3D" parent="."]
 script = ExtResource("7_0gare")

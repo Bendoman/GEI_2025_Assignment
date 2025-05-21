@@ -24,12 +24,44 @@ var trails
 var paths = [] 
 var antData = [] 
 var base
+
+var colors = [
+	Color(1.0, 0.0, 0.0),  # Red
+	Color(1.0, 0.5, 0.0),  # Black
+]
+
+func init(): 
+	instance_count = Global.max_ants
+	antSpeed = Global.warrior_speed
+	
+	#starting_count = Global.starting_ants
+	
+	trails = ant_renderer.trails
+	
+	# Create and configure the MultiMesh
+	var material = StandardMaterial3D.new() 
+	material.albedo_color = colors[team]
+	
+	var multimesh = MultiMesh.new()
+	multimesh.mesh = mesh_to_use
+	multimesh.transform_format = MultiMesh.TRANSFORM_3D
+	multimesh.instance_count = instance_count
+	material_override = material
+	self.multimesh = multimesh
+
+func reset(): 
+	antData = [] 
+	self.multimesh = null
+	
 func _ready():
 	await get_tree().process_frame
 	base = get_parent() 
 	world_grid = get_parent().world_grid
 	team = get_parent().team
-	trails = ant_renderer.trails
+	
+	init()
+	return
+	
 	#print_debug(team)
 	
 	# Create red material
@@ -51,45 +83,6 @@ func _ready():
 	else: 
 		material_override = orange_material
 	self.multimesh = multimesh
-
-	# Set transform for each instance (e.g. random spread)
-	for i in instance_count:
-		return
-		var offset_x = randf_range(-0.1, 0.1)
-		var offset_z = randf_range(-0.1, 0.1)	
-		
-		if(team == 0):
-			return
-		else:
-			offset_x = -0.1
-			offset_z = 0.1
-		if i >= 1:
-			continue
-		base.increaseWarriorCount()
-			
-		#var pos = Vector3(randf() * 2 - 1, 0, randf() * 2 - 1).normalized() * randf() * spawn_radius
-		var pos = position
-		var transform = Transform3D(Basis(), pos)
-		multimesh.set_instance_transform(i, transform)
-		
-	
-		antData.append({
-			"position": pos, 
-			"global_position": to_global(pos),
-
-			"cell": Vector2i(0, 0),
-			"path": [pos + Vector3(offset_x, 0, offset_z)],
-			
-			"backtracking": false,
-			"targetingAnt": null,
-
-			"trail": [],
-			"trailIndex": -1,
-			"followingTrail": false
-		})
-
-func init(): 
-	pass
 
 func removeTrail(index): 
 	trails[index] = null 

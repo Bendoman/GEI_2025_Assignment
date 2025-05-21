@@ -1,6 +1,7 @@
 extends Node
 
-var ant_speed = .5
+var ant_speed = .25
+var warrior_speed = .5
 
 var max_ants = 500
 var starting_ants = 500

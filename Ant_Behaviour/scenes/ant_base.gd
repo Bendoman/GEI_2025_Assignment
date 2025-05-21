@@ -67,6 +67,7 @@ func reset():
 	
 	# Reset multimesh
 	ant_renderer.reset()
+	warrior_ant_renderer.reset()
 	carried_food_renderer.reset()
 
 func _ready():
@@ -101,7 +102,7 @@ func increaseWarriorCount():
 func increaseAntCount(): 
 	antCount += 1
 	workers_label.text = str(antCount)
-	ant_renderer.maxWarriors = int(1 + (ant_renderer.antData.size() / 20))
+	ant_renderer.maxWarriors = int(1 + (ant_renderer.antData.size() / 50))
 	max_warriors_number.text = str(ant_renderer.maxWarriors)
 	#print("New max warriors: ", ant_renderer.maxWarriors)
 
