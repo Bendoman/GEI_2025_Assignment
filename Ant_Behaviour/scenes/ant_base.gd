@@ -46,6 +46,7 @@ func init():
 	#Global.starting_ants = 1
 	ant_renderer.init()
 	warrior_ant_renderer.init()
+	carried_food_renderer.init()
 	
 func reset(): 
 	# Reset own variables
@@ -54,6 +55,9 @@ func reset():
 	warriorQueue = 0 
 	nextAnt = "worker"
 	foodLevel = 0
+	
+	next_ant_label.text = "Worker spawning next"
+	
 	
 	progress = 0.0 
 	progress_elapsed = 0.0 
@@ -73,6 +77,7 @@ func reset():
 	warrior_ant_renderer.reset()
 	carried_food_renderer.reset()
 
+var mat 
 func _ready():
 	world_grid = get_node("../../WorldGrid") 
 
@@ -88,6 +93,8 @@ func _ready():
 	
 	worker_progress = mesh_instance
 	add_child(worker_progress)
+	mat = worker_progress.get_active_material(0)
+	
 
 
 
@@ -115,14 +122,17 @@ func addToWarriorQueue():
 func incrementFoodLevel(amount: int): 
 	foodLevel += amount
 	food_level_label.text = str(foodLevel)
+	
 	if(!spawn_in_progress):
 		if(warriorQueue > 0):
 			next_ant_label.text = "Warrior spawning next"
 			if(foodLevel >= 20):
+				mat.set_shader_parameter("color", Vector4(1.0, 0.0, 0.0, 1.0))
 				start_ant_spawn_progress(20)
 		else:
 			next_ant_label.text = "Worker spawning next"
 			if(foodLevel >= 10):
+				mat.set_shader_parameter("color", Vector4(0.0, 1.0, 0.0, 1.0))
 				start_ant_spawn_progress(10)
 
 
@@ -145,10 +155,12 @@ func reset_spawn_progress():
 	if(warriorQueue > 0):
 		next_ant_label.text = "Warrior spawning next"
 		if(foodLevel >= 20):
+			mat.set_shader_parameter("color", Vector4(1.0, 0.0, 0.0, 1.0))
 			start_ant_spawn_progress(20)
 	else:
 		next_ant_label.text = "Worker spawning next"
 		if(foodLevel >= 10):
+			mat.set_shader_parameter("color", Vector4(0.0, 1.0, 0.0, 1.0))
 			start_ant_spawn_progress(10)
 
 
@@ -160,9 +172,9 @@ func _process(delta):
 		progress_elapsed += delta
 		progress = clamp(progress_elapsed / progress_duration, 0.0, 1.0)
 
-		var mat = worker_progress.get_active_material(0)
-		if mat and mat is ShaderMaterial:
-			mat.set_shader_parameter("progress", progress)
+		#var mat = worker_progress.get_active_material(0)
+		#if mat and mat is ShaderMaterial:
+		mat.set_shader_parameter("progress", progress)
 
 		if progress >= 1.0:
 			_spawn_ant()

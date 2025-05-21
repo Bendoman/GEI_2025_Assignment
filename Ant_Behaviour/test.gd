@@ -13,8 +13,8 @@ signal left_trigger_click_pressed
 signal right_trigger_click_pressed
 
 @onready var xr_origin_3d : XROrigin3D = $XROrigin3D
-@onready var xr_left_controller : XRController3D = xr_origin_3d.get_node("LeftHand")
-@onready var xr_right_controller : XRController3D = xr_origin_3d.get_node("RightHand")
+#@onready var xr_left_controller : XRController3D = xr_origin_3d.get_node("LeftHand")
+#@onready var xr_right_controller : XRController3D = xr_origin_3d.get_node("RightHand")
 
 
 @export var ant_base_scene: PackedScene
@@ -37,19 +37,25 @@ func test_signal():
 	print("in here on signal")
 	
 func _ready() -> void:
-	xr_interface = XRServer.find_interface('OpenXR')
-	if(xr_interface and xr_interface.is_initialized()):
-		print('OpenXR initialized')
-		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
-		get_viewport().use_xr = true
-		
-		xr_left_controller.button_pressed.connect(_on_left_button_pressed)
-		xr_right_controller.button_pressed.connect(_on_right_button_pressed)
-	else:
-		print('Failed to initialize OpenXR')
+	#xr_interface = XRServer.find_interface('OpenXR')
+	#if(xr_interface and xr_interface.is_initialized()):
+		#print('OpenXR initialized')
+		#DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+		#get_viewport().use_xr = true
+		#
+		#xr_left_controller.button_pressed.connect(_on_left_button_pressed)
+		#xr_right_controller.button_pressed.connect(_on_right_button_pressed)
+	#else:
+		#print('Failed to initialize OpenXR')
 		
 	#print(ant_base.antCount)
-	Global.connect("test", self.test_signal)
+	Global.connect("add_base_signal", self.add_base)
+	Global.connect("clear_bases_signal", self.remove_bases)
+	
+	Global.connect("add_food_signal", self.add_food_source)
+	Global.connect("clear_food_signal", self.remove_food_sources)
+
+	Global.connect("toggling_stopped", self.toggle_stop)
 
 	#bases = [ant_base, ant_base_2]
 	for child in get_children(): 
@@ -68,6 +74,13 @@ func _ready() -> void:
 		_fps_label.position = Vector2(10, 10)
 		fps_layer.add_child(_fps_label)
 
+func toggle_stop(): 
+	if(!Global.stopped):
+		init()
+	else:
+		reset()
+	pass
+
 func add_food_source(): 
 	foodSources += 1
 	var instance = food_source_scene.instantiate()
@@ -81,6 +94,7 @@ func remove_food_sources():
 			child.queue_free()
 
 func add_base(): 
+	print("reseiving signal")
 	basesNumber += 1
 	if(bases.size() >= Global.max_bases):
 		return 
@@ -147,15 +161,9 @@ func _input(event):
 		add_base()
 	
 	if Input.is_key_pressed(KEY_K):
-		stopped = !stopped
 		Global.toggle_stopped()
-		if(!stopped):
-			Global.stopped = false
-			init()
-		else:
-			Global.stopped = true 
-			reset()
-			
+
+
 func _process(delta: float) -> void:
 	pass
 	#if show_fps and _fps_label:

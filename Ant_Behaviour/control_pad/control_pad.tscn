@@ -9,10 +9,10 @@ visible = false
 script = ExtResource("1_gm1fj")
 
 [node name="Viewport2Din3D" parent="." instance=ExtResource("1_q3mfi")]
-screen_size = Vector2(0.16, 0.08)
+screen_size = Vector2(0.16, 0.12)
 collision_layer = 4194304
 scene = ExtResource("2_hiy0n")
-viewport_size = Vector2(400, 200)
+viewport_size = Vector2(400, 232.595)
 update_mode = 2
 throttle_fps = 15.0
 transparent = 0

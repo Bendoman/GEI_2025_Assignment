@@ -79,6 +79,7 @@ func init():
 	instance_count = Global.max_ants
 	starting_count = Global.starting_ants
 	
+	maxWarriors = int(1 + starting_count / 50)
 	# Create mesh material
 	var material = StandardMaterial3D.new() 
 	material.albedo_color = colors[team]
@@ -96,6 +97,8 @@ func init():
 
 func reset(): 
 	antData = [] 
+	maxWarriors = 1
+	currentWarriors = 0 
 	self.multimesh = null
 	
 func _ready():
@@ -200,7 +203,8 @@ func find_nearest_food(center_cell):
 					foodPositions.append(entry)
 				elif entry.type == "foodTrail":
 					discoveredTrails.append({"trailIndex": entry.trailIndex, "nodeIndex": entry.nodeIndex, "source": entry.source})
-
+				#elif entry.type == "obstacle":
+					
 	var foodPos = null
 	var discoveredTrail = null
 	#var discoveredEnemyWorker = null 

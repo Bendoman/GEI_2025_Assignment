@@ -1,10 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://ungirnwga6pc"]
+[gd_scene load_steps=6 format=3 uid="uid://ungirnwga6pc"]
 
 [ext_resource type="Script" uid="uid://br67e8hgrva5n" path="res://control_pad/control_pad_display.gd" id="1_iqtwx"]
+[ext_resource type="Script" uid="uid://isbbspv7f607" path="res://control_pad/max_ants_label.gd" id="2_y310o"]
+[ext_resource type="Script" uid="uid://c22ktxfek8r40" path="res://control_pad/max_ants_slider.gd" id="3_0nthi"]
+[ext_resource type="Script" uid="uid://ckqxiahcto8o6" path="res://control_pad/starting_ants_label.gd" id="3_40a85"]
+[ext_resource type="Script" uid="uid://dihar3dftk2s1" path="res://control_pad/starting_ants_slider.gd" id="4_d6lwj"]
 
 [node name="ControlPadDisplay" type="TabContainer"]
 offset_right = 400.0
-offset_bottom = 200.0
+offset_bottom = 232.595
 tab_alignment = 1
 current_tab = 0
 script = ExtResource("1_iqtwx")
@@ -25,21 +29,86 @@ metadata/_tab_index = 0
 layout_mode = 2
 alignment = 1
 
-[node name="Scale" type="HBoxContainer" parent="Settings/VBoxContainer"]
+[node name="BaseContainer" type="HBoxContainer" parent="Settings/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="AddBaseButton" type="Button" parent="Settings/VBoxContainer/BaseContainer"]
+layout_mode = 2
+text = "Add Base"
+
+[node name="ClearBasesButton" type="Button" parent="Settings/VBoxContainer/BaseContainer"]
+layout_mode = 2
+text = "Clear Bases"
+
+[node name="FoodContainer" type="HBoxContainer" parent="Settings/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="AddFoodButton" type="Button" parent="Settings/VBoxContainer/FoodContainer"]
+layout_mode = 2
+text = "Add Food Source"
+
+[node name="ClearFoodButton" type="Button" parent="Settings/VBoxContainer/FoodContainer"]
+layout_mode = 2
+text = "Clear Food Sources"
+
+[node name="MaxAnts" type="HBoxContainer" parent="Settings/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Settings/VBoxContainer/Scale"]
+[node name="MaxAntsLabel" type="Label" parent="Settings/VBoxContainer/MaxAnts"]
 custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
-text = "Volume:"
+text = "Max ants:"
+script = ExtResource("2_y310o")
 
-[node name="BodyScaleSlider" type="HSlider" parent="Settings/VBoxContainer/Scale"]
+[node name="MaxAntsSlider" type="HSlider" parent="Settings/VBoxContainer/MaxAnts"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
-max_value = 1.0
-step = 0.001
+min_value = 1.0
+max_value = 1000.0
 value = 1.0
+rounded = true
+script = ExtResource("3_0nthi")
+
+[node name="StartingAnts" type="HBoxContainer" parent="Settings/VBoxContainer"]
+layout_mode = 2
+
+[node name="StartingAntsLabel" type="Label" parent="Settings/VBoxContainer/StartingAnts"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+text = "Starting Ant Count: "
+script = ExtResource("3_40a85")
+
+[node name="StartingAntsSlider" type="HSlider" parent="Settings/VBoxContainer/StartingAnts"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1000.0
+value = 1.0
+rounded = true
+script = ExtResource("4_d6lwj")
+
+[node name="StartStop" type="HBoxContainer" parent="Settings/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Start" type="Button" parent="Settings/VBoxContainer/StartStop"]
+layout_mode = 2
+text = "Start Simulation"
+
+[node name="Stop" type="Button" parent="Settings/VBoxContainer/StartStop"]
+layout_mode = 2
+text = "Stop Simulation"
 
 [connection signal="timeout" from="RefreshTimer" to="." method="_on_refresh_timer_timeout"]
-[connection signal="value_changed" from="Settings/VBoxContainer/Scale/BodyScaleSlider" to="." method="_on_body_scale_slider_value_changed"]
+[connection signal="button_up" from="Settings/VBoxContainer/BaseContainer/AddBaseButton" to="." method="_on_add_base_button_button_up"]
+[connection signal="button_up" from="Settings/VBoxContainer/BaseContainer/ClearBasesButton" to="." method="_on_clear_bases_button_button_up"]
+[connection signal="button_up" from="Settings/VBoxContainer/FoodContainer/AddFoodButton" to="." method="_on_add_food_button_button_up"]
+[connection signal="button_up" from="Settings/VBoxContainer/FoodContainer/ClearFoodButton" to="." method="_on_clear_food_button_button_up"]
+[connection signal="value_changed" from="Settings/VBoxContainer/MaxAnts/MaxAntsSlider" to="." method="_on_body_scale_slider_value_changed"]
+[connection signal="value_changed" from="Settings/VBoxContainer/StartingAnts/StartingAntsSlider" to="." method="_on_starting_ants_slider_value_changed"]
+[connection signal="button_up" from="Settings/VBoxContainer/StartStop/Start" to="." method="_on_start_button_up"]
+[connection signal="button_up" from="Settings/VBoxContainer/StartStop/Stop" to="." method="_on_stop_button_up"]
+[connection signal="pressed" from="Settings/VBoxContainer/StartStop/Stop" to="." method="_on_stop_pressed"]
