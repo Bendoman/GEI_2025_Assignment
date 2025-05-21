@@ -34,6 +34,18 @@ func _ready():
 		multimesh.set_instance_transform(i, transform)
 		foodData.append({"ant": null})
 #
+
+func reset(): 
+	print("resserting")
+	foodData = [] 
+	for i in instance_count:
+		var transform = Transform3D(Basis(), Vector3(0, -10, 0))
+		multimesh.set_instance_transform(i, transform)
+		foodData.append({"ant": null})
+
+func init(): 
+	pass
+	
 	#foodData.append({"position": pos, "ant": null})
 var instances = 0
 

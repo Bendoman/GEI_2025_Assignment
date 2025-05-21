@@ -88,6 +88,9 @@ func _ready():
 			"followingTrail": false
 		})
 
+func init(): 
+	pass
+
 func removeTrail(index): 
 	trails[index] = null 
 	
@@ -207,7 +210,8 @@ func _physics_process(delta):
 			var offset_x = randf_range(-0.1, 0.1)
 			var offset_z = randf_range(-0.1, 0.1)
 			ant.path.append(Vector3(offset_x, 0, offset_z))
-		elif(antData[i].path.size() >= 5 and ant.targetingAnt == null):
+		#elif(antData[i].path.size() >= 5 and ant.targetingAnt == null):
+		if(ant.targetingAnt == null and (ant.global_position.x < -19 or ant.global_position.x > 19 or ant.global_position.z < -19 or ant.global_position.z > 19)):
 			antData[i].backtracking = true 
 		
 		var path = ant.path 

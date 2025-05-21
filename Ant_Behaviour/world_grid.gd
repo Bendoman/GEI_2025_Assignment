@@ -3,6 +3,9 @@ extends Node3D
 var cell_size := .5
 var grid := {}
 
+func reset_grid(): 
+	grid = {} 
+
 func printGrid():
 	print_debug(JSON.stringify(grid, "\t"))
 
