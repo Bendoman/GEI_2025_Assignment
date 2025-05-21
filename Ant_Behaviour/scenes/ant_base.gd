@@ -13,6 +13,7 @@ var worker_progress
 #@onready var worker_progress = $MeshInstance3D/WorkerProgress
 
 var antCount: int
+@onready var max_warriors_number = $WarriorCountLabel/maxWarriorsLabel/MaxWarriorsNumber
 
 @export var antSpeed: int = 0.1
 var world_grid
@@ -23,6 +24,7 @@ var world_grid
 var foodLevel: int
 @onready var food_level_label = $FoodLevelLabel
 @onready var worker_progress_bar = $MeshInstance3D/WorkerProgressBar
+@onready var next_ant_label = $FoodLevelLabel/NextAntLabel
 
 
 var nextAnt = "worker"
@@ -75,19 +77,24 @@ func increaseWarriorCount():
 func increaseAntCount(): 
 	antCount += 1
 	workers_label.text = str(antCount)
-	#ant_renderer.maxWarriors = int(1 + (ant_renderer.antData.size() / 10))
-	ant_renderer.maxWarriors = 10
+	ant_renderer.maxWarriors = int(1 + (ant_renderer.antData.size() / 20))
+	max_warriors_number.text = str(ant_renderer.maxWarriors)
 	#print("New max warriors: ", ant_renderer.maxWarriors)
 
+func addToWarriorQueue(): 
+	warriorQueue += 1
+	next_ant_label.text = "Warrior spawning next"
 
 func incrementFoodLevel(amount: int): 
 	foodLevel += amount
 	food_level_label.text = str(foodLevel)
 	if(!spawn_in_progress):
 		if(warriorQueue > 0):
+			next_ant_label.text = "Warrior spawning next"
 			if(foodLevel >= 20):
 				start_ant_spawn_progress(20)
 		else:
+			next_ant_label.text = "Worker spawning next"
 			if(foodLevel >= 10):
 				start_ant_spawn_progress(10)
 
@@ -109,9 +116,11 @@ func reset_spawn_progress():
 		mat.set_shader_parameter("progress", 0.0)
 	
 	if(warriorQueue > 0):
+		next_ant_label.text = "Warrior spawning next"
 		if(foodLevel >= 20):
 			start_ant_spawn_progress(20)
 	else:
+		next_ant_label.text = "Worker spawning next"
 		if(foodLevel >= 10):
 			start_ant_spawn_progress(10)
 

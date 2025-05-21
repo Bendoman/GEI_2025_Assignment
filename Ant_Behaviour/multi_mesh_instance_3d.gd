@@ -1,14 +1,14 @@
 extends MultiMeshInstance3D
 
-@export var instance_count := 1000
-@export var starting_count = 1000
+var instance_count = Global.max_ants
+var starting_count = Global.starting_ants
 
-@export var spawn_radius := 20.0
 @export var mesh_to_use: Mesh
 @export var material_to_use: Material
 @onready var food_trail_renderer = $"../FoodTrailRenderer"
 
-var antSpeed: float = .25
+var antSpeed: float = Global.ant_speed
+
 @export var wander_distance := 1
 @export var wander_angle_deg := 60.0
 @onready var dead_warrior_renderer = $"../DeadWarriorRenderer"
@@ -266,7 +266,8 @@ func _physics_process(delta):
 				
 			if(ant.reportingEnemy):
 				if(currentWarriors < maxWarriors):
-					base.warriorQueue += 1
+					base.addToWarriorQueue()
+					#base.warriorQueue += 1
 					currentWarriors += 1
 					#warrior_ant_renderer.spawn_ant()
 				

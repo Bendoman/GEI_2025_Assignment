@@ -65,7 +65,7 @@ material_override = ExtResource("2_ykrsh")
 mesh = SubResource("BoxMesh_16tix")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.344807, 0.938674, 0, -0.938674, 0.344807, 0.329309, 12.5168, 6.71266)
+transform = Transform3D(1, 0, 0, 0, 0.344807, 0.938674, 0, -0.938674, 0.344807, 0.329309, 5.33952, 6.71266)
 
 [node name="AntBase" parent="." instance=ExtResource("4_vbegm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.79691, 0.175, 1.68062)
