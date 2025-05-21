@@ -1,6 +1,20 @@
 # World.gd
 extends Node
 class_name World
+var xr_interface: XRInterface
+var _controller : XRController3D
+
+signal left_ax_button_pressed
+signal left_by_button_pressed
+signal right_ax_button_pressed
+signal right_by_button_pressed
+
+signal left_trigger_click_pressed
+signal right_trigger_click_pressed
+
+@onready var xr_origin_3d : XROrigin3D = $XROrigin3D
+#@onready var xr_left_controller : XRController3D = xr_origin_3d.get_node("LeftHand")
+#@onready var xr_right_controller : XRController3D = xr_origin_3d.get_node("RightHand")
 
 
 @export var ant_base_scene: PackedScene
@@ -16,17 +30,32 @@ var bases = []
 var _fps_label: Label
 
 var stopped = false 
+var basesNumber = 0 
+var foodSources = 0 
 
 func test_signal(): 
 	print("in here on signal")
 	
 func _ready() -> void:
+	xr_interface = XRServer.find_interface('OpenXR')
+	if(xr_interface and xr_interface.is_initialized()):
+		print('OpenXR initialized')
+		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+		get_viewport().use_xr = true
+		
+		#xr_left_controller.button_pressed.connect(_on_left_button_pressed)
+		#xr_right_controller.button_pressed.connect(_on_right_button_pressed)
+	else:
+		print('Failed to initialize OpenXR')
+		
 	#print(ant_base.antCount)
 	Global.connect("test", self.test_signal)
 
 	#bases = [ant_base, ant_base_2]
 	for child in get_children(): 
 		if("AntBase" in child.name):
+			basesNumber += 1
+			child.team = bases.size()
 			bases.append(child)
 	
 	if show_fps:
@@ -39,7 +68,6 @@ func _ready() -> void:
 		_fps_label.position = Vector2(10, 10)
 		fps_layer.add_child(_fps_label)
 
-var foodSources = 0 
 func add_food_source(): 
 	foodSources += 1
 	var instance = food_source_scene.instantiate()
@@ -53,7 +81,6 @@ func remove_food_sources():
 		if("FoodSource" in child.name):
 			child.queue_free()
 
-var basesNumber = 0 
 func add_base(): 
 	basesNumber += 1
 	if(bases.size() >= Global.max_bases):
@@ -65,8 +92,8 @@ func add_base():
 	instance.team = bases.size()
 	instance.name = instance.name + str(basesNumber)
 	
-	add_child(instance)
 	bases.append(instance)
+	add_child(instance)
 	pass
 
 func remove_bases(): 
@@ -132,3 +159,21 @@ func _process(delta: float) -> void:
 	pass
 	#if show_fps and _fps_label:
 		#_fps_label.text = "FPS: %d\nAnts: %d" % [Engine.get_frames_per_second(), ant_base.antCount]
+
+
+func _on_left_button_pressed(button_name: String) -> void:
+	match button_name:
+		"ax_button":
+			emit_signal("left_ax_button_pressed")
+		"by_button":
+			emit_signal("left_by_button_pressed")
+		"trigger_click":
+			emit_signal("left_trigger_click_pressed")
+func _on_right_button_pressed(button_name: String) -> void:
+	match button_name:
+		"ax_button":
+			emit_signal("right_ax_button_pressed")
+		"by_button":
+			emit_signal("right_by_button_pressed")
+		"trigger_click":
+			emit_signal("right_trigger_click_pressed")

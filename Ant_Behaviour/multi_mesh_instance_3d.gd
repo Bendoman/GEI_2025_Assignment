@@ -75,6 +75,7 @@ func populate_ant_data():
 		})
 
 func init(): 	
+	print("init from team: ", team)
 	instance_count = Global.max_ants
 	starting_count = Global.starting_ants
 	
@@ -90,7 +91,8 @@ func init():
 	material_override = material
 	self.multimesh = multimesh
 	
-	populate_ant_data()
+	if(!Global.stopped):
+		populate_ant_data()
 
 func reset(): 
 	antData = [] 
@@ -102,6 +104,7 @@ func _ready():
 	world_grid = get_parent().world_grid
 	team = get_parent().team
 	#print_debug(team)
+	
 	
 	init()
 	return 
