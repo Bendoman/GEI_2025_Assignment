@@ -109,6 +109,10 @@ func getAnt(team: int, index: int, type):
 		return get_parent().get_parent().bases[team].warrior_ant_renderer.antData[index]
 
 func decreaseWarriorCount(): 
+	if(foodLevel >= 20 and !spawn_in_progress and warriorQueue > 0): 
+		mat.set_shader_parameter("color", Vector4(1.0, 0.0, 0.0, 1.0))
+		start_ant_spawn_progress(10)
+		
 	ant_renderer.currentWarriors -= 1
 	warriorCount -= 1
 	warriors_label.text = str(warriorCount)	
@@ -118,10 +122,16 @@ func increaseWarriorCount():
 	warriors_label.text = str(warriorCount)	
 
 func decreaseAntCount(): 
+	if(foodLevel >= 10 and !spawn_in_progress and warriorQueue <= 0): 
+		mat.set_shader_parameter("color", Vector4(1.0, 0.0, 0.0, 1.0))
+		start_ant_spawn_progress(10)
+		
 	antCount -= 1
 	workers_label.text = str(antCount)
 	ant_renderer.maxWarriors = int(1 + (ant_renderer.antData.size() / 50))
 	max_warriors_number.text = str(ant_renderer.maxWarriors)
+	
+
 
 func increaseAntCount(): 
 	antCount += 1
@@ -152,6 +162,15 @@ func incrementFoodLevel(amount: int):
 
 
 func start_ant_spawn_progress(consumption):
+	if(consumption == 10):
+		# worker
+		if(ant_renderer.antsAlive >= ant_renderer.instance_count):
+			return
+	else: 
+		#warrior
+		if(warrior_ant_renderer.antsAlive >= warrior_ant_renderer.instance_count):
+			return
+		
 	spawn_in_progress = true
 	progress = 0.0
 	progress_elapsed = 0.0

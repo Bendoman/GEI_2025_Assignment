@@ -55,6 +55,7 @@ func init():
 
 func reset(): 
 	antData = [] 
+	deadAnts = [] 
 	antsAlive = 0 
 	self.multimesh = null
 	
@@ -264,7 +265,9 @@ func _physics_process(delta):
 				#if(currentPos.distance_to(to_local(ant.targetingAnt.global_position)) < 0.1):
 				if(ant.global_position.distance_to(ant.targetingAnt.global_position) < 0.1):
 					#print('caught ant')
-					
+					#if(ant.has("targetingAnt")):
+						## is warrior
+						#pass
 					ant.targetingAnt.dead = true
 					ant.targetingAnt = null
 					ant.backtracking = true

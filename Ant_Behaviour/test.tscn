@@ -139,40 +139,31 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -2)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 2)
 
 [node name="PickableAntBase" parent="." instance=ExtResource("9_xersf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.26359, 0.0500002, -0.760495)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.850277, 0.0500002, -0.760495)
 
 [node name="PickableAntBase2" parent="." instance=ExtResource("9_xersf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.34757, 0.05, 0.57241)
-
-[node name="PickableFoodSource" parent="." instance=ExtResource("8_ehkex")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.02785, 0.135, -2.82366)
-
-[node name="PickableFoodSource2" parent="." instance=ExtResource("8_ehkex")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0648379, 0.135, 1.21243)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.11477, 0.05, 1.42429)
 
 [node name="PickableFoodSource3" parent="." instance=ExtResource("8_ehkex")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.47345, 0.135, 1.34255)
-
-[node name="PickableFoodSource4" parent="." instance=ExtResource("8_ehkex")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.40496, 0.135, -1.09618)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.61289, 0.135, 1.34255)
 
 [node name="PickableFoodSource5" parent="." instance=ExtResource("8_ehkex")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.96615, 0.135001, -0.68053)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.33146, 0.135001, -0.68053)
 
 [node name="PickableFoodSource6" parent="." instance=ExtResource("8_ehkex")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.65594, 0.135, -2.60298)
 
 [node name="PickableFoodSource7" parent="." instance=ExtResource("8_ehkex")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4475, 0.135, 2.27139)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4475, 0.135, 4.00782)
 
 [node name="PickableFoodSource8" parent="." instance=ExtResource("8_ehkex")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8593, 0.135, 2.28418)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.51583, 0.135, 2.28418)
 
 [node name="PickableFoodSource9" parent="." instance=ExtResource("8_ehkex")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00775135, 0.135, -5.32581)
 
 [node name="PickableFoodSource10" parent="." instance=ExtResource("8_ehkex")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.0036, 0.135, -3.66198)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.89221, 0.135, -5.04935)
 
 [node name="PickableFoodSource11" parent="." instance=ExtResource("8_ehkex")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.91761, 0.135, -0.0344181)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.91761, 0.135, -2.269)

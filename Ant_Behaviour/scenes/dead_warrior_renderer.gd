@@ -31,7 +31,6 @@ func _ready():
 	await get_tree().process_frame
 	init()
 
-	
 func addDeadAnt(antIndex: int):
 	var ant = ant_renderer.antData[antIndex]
 	var transform = Transform3D(Basis(), to_local(ant.global_position))

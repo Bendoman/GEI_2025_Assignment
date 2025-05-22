@@ -343,7 +343,7 @@ func _physics_process(delta):
 		#elif(antData[i].path.size() >= 5 and !ant.followingTrail):
 			#antData[i].backtracking = true 
 		elif(!ant.followingTrail):
-			if(ant.path.size() > 15 or ant.global_position.x < -19 or ant.global_position.x > 19 or ant.global_position.z < -19 or ant.global_position.z > 19):
+			if(ant.path.size() > 25 or ant.global_position.x < -19 or ant.global_position.x > 19 or ant.global_position.z < -19 or ant.global_position.z > 19):
 				antData[i].backtracking = true 
 		
 		
@@ -629,7 +629,6 @@ func spawn_ant():
 		
 	if(antsAlive + deadAnts.size() < instance_count):
 		index = antData.size()
-		#index = antData.size()
 		antData.append(data)
 	else:
 		index = deadAnts[0]
