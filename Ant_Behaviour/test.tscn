@@ -137,3 +137,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -2)
 
 [node name="Tree5" parent="Obstacles" instance=ExtResource("7_ehkex")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 2)
+
+[node name="PickableAntBase" parent="." instance=ExtResource("9_xersf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.16451, 0.0500002, -0.31716)
+
+[node name="PickableAntBase2" parent="." instance=ExtResource("9_xersf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.34757, 0.05, -0.427033)
+
+[node name="PickableFoodSource" parent="." instance=ExtResource("8_ehkex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.02785, 0.135, -2.82366)
+
+[node name="PickableFoodSource2" parent="." instance=ExtResource("8_ehkex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0648379, 0.135, 1.21243)

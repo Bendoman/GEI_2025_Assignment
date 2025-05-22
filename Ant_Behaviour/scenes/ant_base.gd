@@ -108,9 +108,19 @@ func getAnt(team: int, index: int, type):
 	elif(type == "warrior"):
 		return get_parent().get_parent().bases[team].warrior_ant_renderer.antData[index]
 
+func decreaseWarriorCount(): 
+	warriorCount -= 1
+	warriors_label.text = str(warriorCount)	
+	
 func increaseWarriorCount():
 	warriorCount += 1
 	warriors_label.text = str(warriorCount)	
+
+func decreaseAntCount(): 
+	antCount -= 1
+	workers_label.text = str(antCount)
+	ant_renderer.maxWarriors = int(1 + (ant_renderer.antData.size() / 50))
+	max_warriors_number.text = str(ant_renderer.maxWarriors)
 
 func increaseAntCount(): 
 	antCount += 1
