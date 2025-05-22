@@ -4,7 +4,8 @@
 [ext_resource type="Script" uid="uid://rd5j1ce8404d" path="res://tree.gd" id="1_nnvrw"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_brfkd"]
-albedo_color = Color(0.275974, 0.173842, 0.0327201, 1)
+transparency = 1
+albedo_color = Color(0.28, 0.177333, 0.0336, 0.427451)
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_brfkd"]
 material = SubResource("StandardMaterial3D_brfkd")
@@ -22,6 +23,7 @@ height = 1.655
 script = ExtResource("1_nnvrw")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0, 0.25)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
@@ -32,9 +34,10 @@ skeleton = NodePath("../..")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 shape = SubResource("BoxShape3D_nnvrw")
 
-[node name="Leaves" type="Node3D" parent="."]
+[node name="Leaves" type="Node3D" parent="StaticBody3D"]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Leaves"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D/Leaves"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.50383, 0)
+visible = false
 material_override = ExtResource("1_brfkd")
 mesh = SubResource("SphereMesh_d2g23")

@@ -7,7 +7,7 @@ extends MultiMeshInstance3D
 @export var material_to_use: Material
 
 @export var antSpeed: float = .35
-@export var wander_distance := 1
+@export var wander_distance := .5
 @export var wander_angle_deg := 60.0
 
 @export var search_depth: int = 1 
@@ -150,6 +150,8 @@ func find_nearest_food(center_cell):
 	var discoveredTrails = [] 
 	var workers = [] 
 	var discoveredEnemyWorker = null 
+	var foundObstacles = [] 
+
 
 	for x in range(center_cell.x - search_depth, center_cell.x + search_depth + 1):
 		for z in range(center_cell.y - search_depth, center_cell.y + search_depth + 1):
@@ -158,6 +160,13 @@ func find_nearest_food(center_cell):
 				continue
 			var entries = world_grid.get_entities_at_cell(cell)
 			for entry in entries:
+				if(entry.type == "obstacle"):
+					foundObstacles.append(entry)
+				if entry.type == "warrior" and entry.team != team:
+					var foundAnt = base.getAnt(entry.team, entry.index, "worker")
+					if(foundAnt.fleeing == null):
+						#workers.append(entry)
+						discoveredEnemyWorker = entry
 				if entry.type == "ant" and entry.team != team:
 					var foundAnt = base.getAnt(entry.team, entry.index, "worker")
 					if(foundAnt.fleeing == null):
@@ -184,7 +193,7 @@ func find_nearest_food(center_cell):
 		#var index = get_random_index(workers)
 		#discoveredEnemyWorker = workers[index]
 	
-	return {"discoveredEnemyWorker": discoveredEnemyWorker, "discoveredTrail": discoveredTrail}
+	return {"discoveredEnemyWorker": discoveredEnemyWorker, "discoveredTrail": discoveredTrail, "foundObstacles": foundObstacles}
 	#return {"foodPos": foodPos, "trailIndex": trailIndex, "nodeIndex": nodeIndex, "trailSource": trailSource}
 
 
@@ -221,6 +230,18 @@ func _physics_process(delta):
 			else:
 				trailLength = trails[trailIndex].path.size()
 
+		if(ant.fleeing != null and !ant.fleeingBool):
+			ant.fleeingBool = true
+			var enemyAnt = base.getAnt(ant.fleeing[0], ant.fleeing[1], "warrior")
+			ant.backtracking = false 
+			ant.followingTrail = false
+			ant.trailIndex = -1
+			ant.targetingAnt = enemyAnt
+			#var start = ant.path[0]
+			#ant.path = [] 
+			#ant.path.append(start)
+			ant.path.append(to_local(enemyAnt.global_position))
+
 		var currentPos:Vector3 = ant.position
 		var targetPos:Vector3 = path[path.size() - 1]
 		if(trailIndex >= 0 and ant.source != null and ant.source.foodLeft <= 0):
@@ -243,9 +264,9 @@ func _physics_process(delta):
 					ant.targetingAnt = null
 					ant.backtracking = true
 					
-					var start = ant.path[0]
-					ant.path = [] 
-					ant.path.append(start)
+					#var start = ant.path[0]
+					#ant.path = [] 
+					#ant.path.append(start)
 				else: 
 					ant.path.append(to_local(ant.targetingAnt.global_position))
 					#ant.path.append(to_local(ant.targetingAnt.path[ant.targetingAnt.path.size() - 1]))
@@ -267,12 +288,38 @@ func _physics_process(delta):
 						world_grid.unregister_entity(global_position, {"type": "foodsource", "position": pos, "foodLeft": ant.source.foodLeft}, ant.source.cell)
 				elif(ant.targetingAnt == null): 
 					# Wander to new target
-					var forward = (targetPos - currentPos).normalized() 
+					#var forward = (targetPos - currentPos).normalized() 
+					#var angle_deg = randf_range(-wander_angle_deg / 2.0, wander_angle_deg / 2.0)
+					#var angle_rad = deg_to_rad(angle_deg)
+					#
+					#var rotated_forward = forward.rotated(Vector3.UP, angle_rad).normalized()
+					#var new_target = (currentPos + rotated_forward) * wander_distance
+					
+					var forward = (targetPos - currentPos).normalized()
 					var angle_deg = randf_range(-wander_angle_deg / 2.0, wander_angle_deg / 2.0)
 					var angle_rad = deg_to_rad(angle_deg)
-					
+
 					var rotated_forward = forward.rotated(Vector3.UP, angle_rad).normalized()
-					var new_target = (currentPos + rotated_forward) * wander_distance
+					var new_target = currentPos + rotated_forward * wander_distance
+					var new_target_half = currentPos + rotated_forward * (wander_distance / 2)
+					
+					if(ant.obstacles.size() > 0): 
+						for obstacle in ant.obstacles: 
+							#print(ant.cell, world_grid.position_to_cell(to_global(new_target)), obstacle.cell)
+							if world_grid.position_to_cell(to_global(ant.position)) != obstacle.cell and (world_grid.position_to_cell(to_global(new_target)) == obstacle.cell or world_grid.position_to_cell(to_global(new_target_half)) == obstacle.cell):
+								var loops = 0 
+								while world_grid.position_to_cell(to_global(new_target)) == obstacle.cell or world_grid.position_to_cell(to_global(new_target_half)) == obstacle.cell:
+									if(loops > 100):
+										break
+									loops += 1
+									forward = (targetPos - currentPos).normalized()
+									angle_deg = randf_range(-wander_angle_deg * 1.2, wander_angle_deg * 1.2)
+									angle_rad = deg_to_rad(angle_deg)
+									rotated_forward = forward.rotated(Vector3.UP, angle_rad).normalized()
+									new_target = currentPos + rotated_forward * wander_distance
+									new_target_half = currentPos + rotated_forward * (wander_distance / 2)
+					
+					
 					ant.path.append(new_target)
 			else: 
 				# Backtrack
@@ -307,7 +354,10 @@ func _physics_process(delta):
 			var trailSource
 			var discoveredTrail = search.discoveredTrail
 			var discoveredEnemyWorker = search.discoveredEnemyWorker
+			ant.obstacles = [] 
+			ant.obstacles = search.foundObstacles
 
+			
 			var enemyAnt
 			if(discoveredEnemyWorker != null and ant.path.size() > 0 and ant.targetingAnt == null):
 				#print(base.getAnt(discoveredEnemyWorker.team, discoveredEnemyWorker.index, "worker"))
@@ -318,9 +368,9 @@ func _physics_process(delta):
 				ant.followingTrail = false 
 				ant.trailIndex = -1
 				ant.targetingAnt = enemyAnt
-				var start = ant.path[0]
-				ant.path = [] 
-				ant.path.append(start)
+				#var start = ant.path[0]
+				#ant.path = [] 
+				#ant.path.append(start)
 				ant.path.append(to_local(enemyAnt.global_position))
 				
 			if(discoveredTrail):
@@ -373,6 +423,9 @@ func spawn_ant():
 		"global_position": to_global(pos),	
 		"cell": Vector2i(0, 0),
 		"path": [pos + Vector3(offset_x, 0, offset_z)],
+		"obstacles": [],
+		"fleeing": null, 
+		"fleeingBool": false, 
 		
 		"backtracking": false,
 		"targetingAnt": null,

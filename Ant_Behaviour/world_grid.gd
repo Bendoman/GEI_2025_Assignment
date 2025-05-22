@@ -31,11 +31,12 @@ func register_entity(pos: Vector3, entity, exactCell=null):
 		grid[cell] = [] 
 	
 	grid[cell].append(entity)
+	#draw_debug_mesh_at_cell(cell, 1)
+	
 	return grid[cell][grid[cell].size() - 1]
 	#print_debug(grid)
 	
 	#if(entity.type == "foodTrail"):
-		#draw_debug_mesh_at_cell(cell)
 	#print_debug(pos, cell)
 
 func unregister_entity(pos: Vector3, entity, exactCell=null):
@@ -60,6 +61,7 @@ func unregister_entity(pos: Vector3, entity, exactCell=null):
 				#print("removing ant: ", entry)
 				grid[cell].remove_at(i)
 			elif(entry.type == "mesh_instance"):
+				grid[cell].remove_at(i)
 				entry.instance.queue_free()
 			elif(entry.type == "foodsource" and entry.position == entity.position):
 				#print_debug("Removing foor source: ")

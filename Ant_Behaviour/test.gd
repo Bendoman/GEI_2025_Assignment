@@ -11,6 +11,7 @@ signal right_by_button_pressed
 
 signal left_trigger_click_pressed
 signal right_trigger_click_pressed
+@onready var obstacles = $Obstacles
 
 @onready var xr_origin_3d : XROrigin3D = $XROrigin3D
 #@onready var xr_left_controller : XRController3D = xr_origin_3d.get_node("LeftHand")
@@ -130,6 +131,7 @@ func reset():
 		
 func init(): 
 	world_grid.reset_grid()
+	obstacles.register_obstaces()
 	
 	for child in get_children(): 
 		if("AntBase" in child.name):

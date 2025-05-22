@@ -1,6 +1,6 @@
 extends Node3D
 
 
-func _ready(): 
+func register_obstaces(): 
 	for tree in get_children(): 
 		tree.register() 

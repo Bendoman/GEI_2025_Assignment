@@ -3,8 +3,8 @@ extends Node
 var ant_speed = .25
 var warrior_speed = .5
 
-var max_ants = 200
-var starting_ants = 200
+var max_ants = 4000
+var starting_ants = 4000
 
 var display_dead_ants = false 
 var display_trail_indicators = false 
