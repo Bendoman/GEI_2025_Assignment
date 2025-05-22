@@ -29,6 +29,7 @@ func register_entity(pos: Vector3, entity, exactCell=null):
 	if not grid.has(cell):
 		grid[cell] = [] 
 	grid[cell].append(entity)
+	draw_debug_mesh_at_cell(cell, 30)
 	return grid[cell][grid[cell].size() - 1]
 
 func unregister_entity(pos: Vector3, entity, exactCell=null):

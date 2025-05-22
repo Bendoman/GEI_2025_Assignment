@@ -85,6 +85,7 @@ script = ExtResource("3_40a85")
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+min_value = 1.0
 max_value = 1000.0
 value = 1.0
 rounded = true
