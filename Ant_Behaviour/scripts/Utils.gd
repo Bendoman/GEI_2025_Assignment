@@ -52,5 +52,3 @@ static func calculate_arrive_force(target:Vector3, slowingDistance:float, transf
 	var limit_length = min(ant_speed, ramped)
 	var desired = (toTarget * limit_length) / dist 
 	return desired - current_velocity
-
-# static func print_object(object): 
