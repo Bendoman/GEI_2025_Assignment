@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://c3am83y6ox1iw"]
+[gd_scene load_steps=19 format=3 uid="uid://c3am83y6ox1iw"]
 
 [ext_resource type="Script" uid="uid://cpek6qnsms6xd" path="res://scripts/world.gd" id="1_mot7s"]
 [ext_resource type="Material" uid="uid://dtd0wnwdssiif" path="res://materials/ground_colour.tres" id="2_4wyf3"]
@@ -11,9 +11,9 @@
 [ext_resource type="Script" uid="uid://bsa24v84vydkc" path="res://scripts/world_grid.gd" id="8_4mrxx"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_rwgxs"]
-sky_top_color = Color(0.425909, 0.569805, 0.704866, 1)
+sky_top_color = Color(0.517647, 0.658824, 0.666667, 1)
 sky_horizon_color = Color(0.618242, 0.691471, 0.767393, 1)
-ground_bottom_color = Color(0.0470588, 0.196078, 0.364706, 1)
+ground_bottom_color = Color(0.172549, 0.219608, 0.219608, 1)
 ground_horizon_color = Color(0.618242, 0.691471, 0.767393, 1)
 
 [sub_resource type="Sky" id="Sky_0xqbg"]
@@ -29,6 +29,7 @@ glow_enabled = true
 size = Vector3(40, 0.1, 40)
 
 [sub_resource type="BoxMesh" id="BoxMesh_71j4m"]
+material = ExtResource("2_4wyf3")
 size = Vector3(40, 0.1, 40)
 
 [sub_resource type="BoxMesh" id="BoxMesh_k0juu"]
@@ -36,6 +37,13 @@ size = Vector3(40, 1, 0.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_71j4m"]
 size = Vector3(40, 1, 0.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_7r4gi"]
+size = Vector3(0.5, 0.5, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w7kh3"]
+transparency = 1
+albedo_color = Color(0.165, 0.30525, 0.66, 1)
 
 [node name="root" type="Node3D"]
 script = ExtResource("1_mot7s")
@@ -60,7 +68,6 @@ collision_mask = 256
 shape = SubResource("BoxShape3D_k0juu")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/CollisionShape3D"]
-material_override = ExtResource("2_4wyf3")
 mesh = SubResource("BoxMesh_71j4m")
 
 [node name="Walls" type="Node3D" parent="."]
@@ -113,21 +120,62 @@ shape = SubResource("BoxShape3D_71j4m")
 script = ExtResource("4_7r4gi")
 
 [node name="Tree" parent="Obstacles" instance=ExtResource("5_71j4m")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+transform = Transform3D(0.87462, 0, 0.48481, 0, 1, 0, -0.48481, 0, 0.87462, 2.5, 0, -5)
 
 [node name="Tree2" parent="Obstacles" instance=ExtResource("5_71j4m")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+transform = Transform3D(0.927184, 0, -0.374607, 0, 1, 0, 0.374607, 0, 0.927184, -11.5, 0, -6.5)
 
-[node name="PickableAntBase" parent="." instance=ExtResource("6_i7141")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.94, 0, -0.726)
+[node name="Tree3" parent="Obstacles" instance=ExtResource("5_71j4m")]
+transform = Transform3D(-0.997564, 0, -0.0697564, 0, 1, 0, 0.0697564, 0, -0.997564, -8, 0, 8.5)
 
-[node name="PickableFoodSource" parent="." instance=ExtResource("7_4mrxx")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.09875, 0.135, 0.745675)
+[node name="Tree4" parent="Obstacles" instance=ExtResource("5_71j4m")]
+transform = Transform3D(0.0784591, 0, -0.996917, 0, 1, 0, 0.996917, 0, 0.0784591, 5, 0, 5)
 
-[node name="PickableFoodSource2" parent="." instance=ExtResource("7_4mrxx")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.17934, 0.135, -2.88135)
+[node name="Tree5" parent="Obstacles" instance=ExtResource("5_71j4m")]
+transform = Transform3D(0.997564, 0, -0.0697565, 0, 1, 0, 0.0697565, 0, 0.997564, -7, 0, -3.5)
 
-[node name="XROrigin3D" parent="." instance=ExtResource("7_i7141")]
+[node name="Tree6" parent="Obstacles" instance=ExtResource("5_71j4m")]
+transform = Transform3D(-0.743145, 0, 0.669131, 0, 1, 0, -0.669131, 0, -0.743145, 7, 0, 0)
+
+[node name="Tree7" parent="Obstacles" instance=ExtResource("5_71j4m")]
+transform = Transform3D(-0.669131, 0, 0.743145, 0, 1, 0, -0.743145, 0, -0.669131, 0, 0, 7)
+
+[node name="Tree8" parent="Obstacles" instance=ExtResource("5_71j4m")]
+transform = Transform3D(-0.788011, 0, 0.615661, 0, 1, 0, -0.615661, 0, -0.788011, -5, 0, 2)
+
+[node name="Tree9" parent="Obstacles" instance=ExtResource("5_71j4m")]
+transform = Transform3D(0.891007, 0, 0.453991, 0, 1, 0, -0.453991, 0, 0.891007, 0, 0, -12.5)
+
+[node name="Tree10" parent="Obstacles" instance=ExtResource("5_71j4m")]
+transform = Transform3D(0.913545, 0, 0.406737, 0, 1, 0, -0.406737, 0, 0.913545, 9, 0, -7)
+
+[node name="Tree11" parent="Obstacles" instance=ExtResource("5_71j4m")]
+transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, -4, 0, -9.5)
+
+[node name="Tree12" parent="Obstacles" instance=ExtResource("5_71j4m")]
+transform = Transform3D(-0.267238, 0, 0.96363, 0, 1, 0, -0.96363, 0, -0.267238, 13.5, 0, 2)
+
+[node name="Tree13" parent="Obstacles" instance=ExtResource("5_71j4m")]
+transform = Transform3D(0.97437, 0, 0.224951, 0, 1, 0, -0.224951, 0, 0.97437, -2, 0, 11.5)
+
+[node name="Tree14" parent="Obstacles" instance=ExtResource("5_71j4m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, 1.5)
+
+[node name="Tree15" parent="Obstacles" instance=ExtResource("5_71j4m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0, 12.5)
+
+[node name="Tree16" parent="Obstacles" instance=ExtResource("5_71j4m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -12)
+
+[node name="Tree17" parent="Obstacles" instance=ExtResource("5_71j4m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.5, 0, 2.5)
+
+[node name="Tree18" parent="Obstacles" instance=ExtResource("5_71j4m")]
+transform = Transform3D(0.748956, 0, -0.66262, 0, 1, 0, 0.66262, 0, 0.748956, 9, 0, 6)
 
 [node name="WorldGrid" type="Node3D" parent="."]
 script = ExtResource("8_4mrxx")
+debug_mesh = SubResource("BoxMesh_7r4gi")
+debug_material = SubResource("StandardMaterial3D_w7kh3")
+
+[node name="XROrigin3D" parent="." instance=ExtResource("7_i7141")]

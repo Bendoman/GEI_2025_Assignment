@@ -110,24 +110,19 @@ var _highlight_requests : Dictionary = {}
 # Is this node highlighted
 var _highlighted : bool = false
 
-
 # Remember some state so we can return to it when the user drops the object
 @onready var original_collision_mask : int = collision_mask
 @onready var original_collision_layer : int = collision_layer
-
 
 # Add support for is_xr_class on XRTools classes
 func is_xr_class(name : String) -> bool:
 	return name == "XRToolsPickable"
 
-
 func handle_stopped_toggle(): 
 	if(Global.stopped):
-		print("Handle stoping from object")
 		enabled = true
 		visible = true
 	else: 
-		print("Handle resumse from object")
 		visible = false
 		enabled = false
 

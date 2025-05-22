@@ -1,42 +1,102 @@
-[gd_scene load_steps=7 format=3 uid="uid://ctklq1esgqach"]
+[gd_scene load_steps=16 format=3 uid="uid://ctklq1esgqach"]
 
-[ext_resource type="Material" uid="uid://ditkjjo4i2xck" path="res://materials/tree.tres" id="1_brfkd"]
 [ext_resource type="Script" uid="uid://rd5j1ce8404d" path="res://scripts/tree.gd" id="1_nnvrw"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_brfkd"]
-transparency = 1
-albedo_color = Color(0.28, 0.177333, 0.0336, 1)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vplca"]
+albedo_color = Color(0.278431, 0.176471, 0.0352941, 1)
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_brfkd"]
-material = SubResource("StandardMaterial3D_brfkd")
+material = SubResource("StandardMaterial3D_vplca")
 radius = 0.25
 height = 3.5
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_nnvrw"]
-size = Vector3(0.5, 3, 0.5)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_viusy"]
+albedo_color = Color(0.278431, 0.176471, 0.0352941, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_qd6xs"]
+material = SubResource("StandardMaterial3D_viusy")
+top_radius = 0.0
+bottom_radius = 0.13
+height = 1.445
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_vplca"]
+material = SubResource("StandardMaterial3D_viusy")
+top_radius = 0.0
+bottom_radius = 0.25
+height = 1.445
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_viusy"]
+material = SubResource("StandardMaterial3D_viusy")
+top_radius = 0.015
+bottom_radius = 0.23
+height = 1.445
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_avsvi"]
+albedo_color = Color(0.215686, 0.498039, 0.0117647, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_d2g23"]
-radius = 0.87
+material = SubResource("StandardMaterial3D_avsvi")
+radius = 1.04
 height = 1.655
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qd6xs"]
+albedo_color = Color(0.411765, 0.662745, 0.235294, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_vplca"]
+material = SubResource("StandardMaterial3D_qd6xs")
+radius = 0.57
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ake3r"]
+albedo_color = Color(0.411765, 0.662745, 0.235294, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_viusy"]
+material = SubResource("StandardMaterial3D_ake3r")
+radius = 0.575
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_18mvg"]
+albedo_color = Color(0.168627, 0.388235, 0.00784314, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_qd6xs"]
+material = SubResource("StandardMaterial3D_18mvg")
+radius = 0.44
+height = 0.615
 
 [node name="Tree" type="Node3D"]
 script = ExtResource("1_nnvrw")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 1.5, 0.25)
+mesh = SubResource("CapsuleMesh_brfkd")
+
+[node name="branches" type="Node3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="branches"]
+transform = Transform3D(1, 0, 0, 0, 0.801379, 0.598157, 0, -0.598157, 0.801379, 0.232296, 1.74741, -0.141648)
+mesh = SubResource("CylinderMesh_qd6xs")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="branches"]
+transform = Transform3D(-0.412388, 0.765445, -0.493994, 0.0818836, 0.571199, 0.816717, 0.907321, 0.296354, -0.298233, 0.766106, 2.25855, 0.454861)
+mesh = SubResource("CylinderMesh_vplca")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="branches"]
+transform = Transform3D(-0.0359461, -0.59777, 0.800861, 0, 0.801379, 0.598157, -0.999354, 0.0215014, -0.0288064, -0.151649, 1.96161, 0.272339)
+mesh = SubResource("CylinderMesh_viusy")
+
+[node name="Leaves" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0, 0.25)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
-mesh = SubResource("CapsuleMesh_brfkd")
-skeleton = NodePath("../..")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
-shape = SubResource("BoxShape3D_nnvrw")
-
-[node name="Leaves" type="Node3D" parent="StaticBody3D"]
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D/Leaves"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Leaves"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.50383, 0)
-material_override = ExtResource("1_brfkd")
 mesh = SubResource("SphereMesh_d2g23")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Leaves"]
+transform = Transform3D(0.998352, 0.0573898, 0, -0.0573898, 0.998352, 0, 0, 0, 1, 0.898306, 2.67452, 0.4668)
+mesh = SubResource("SphereMesh_vplca")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Leaves"]
+transform = Transform3D(0.985235, -0.171207, 0, 0.171207, 0.985235, 0, 0, 0, 1, -0.756107, 2.61313, 0.0438602)
+mesh = SubResource("SphereMesh_viusy")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Leaves"]
+transform = Transform3D(1, 0, 0, 0, 0.916195, 0.400733, 0, -0.400733, 0.916195, 0, 2.24233, -0.70587)
+mesh = SubResource("SphereMesh_qd6xs")

@@ -29,7 +29,6 @@ func register_entity(pos: Vector3, entity, exactCell=null):
 	if not grid.has(cell):
 		grid[cell] = [] 
 	grid[cell].append(entity)
-	
 	return grid[cell][grid[cell].size() - 1]
 
 func unregister_entity(pos: Vector3, entity, exactCell=null):

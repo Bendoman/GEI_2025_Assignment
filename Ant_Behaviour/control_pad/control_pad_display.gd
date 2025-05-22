@@ -32,10 +32,7 @@ var _player_body : XRToolsPlayerBody
 var controls = [] 
 
 func handle_stopped_toggle(): 
-	print(Global.stopped)
 	if(Global.stopped):
-		print("Enabling buttons")
-
 		max_ants_slider.editable = true
 		starting_ants_slider.editable = true
 		add_base_button.disabled = false
@@ -43,7 +40,6 @@ func handle_stopped_toggle():
 		add_food_button.disabled = false
 		clear_food_button.disabled = false
 	else: 
-
 		max_ants_slider.editable = false
 		starting_ants_slider.editable = false
 		
@@ -62,8 +58,6 @@ func _ready():
 	_player_body = XRToolsPlayerBody.find_instance(self)
 	Global.connect("toggling_stopped", self.handle_stopped_toggle)
 
-
-
 # Called to refresh the display
 func _on_refresh_timer_timeout():
 	if _player_body and $Settings.visible:
@@ -78,12 +72,10 @@ func _on_refresh_timer_timeout():
 func _on_body_scale_slider_value_changed(value : float) -> void:
 	Global.change_max_ants(value)
 	max_ants_label.text = "Max ants: " + str(value)
-	print(value)
 
 func _on_starting_ants_slider_value_changed(value):
 	Global.change_starting_ants(value)
 	starting_ants_label.text = "Starting ants: " + str(value)
-	print(value)
 
 # Handle user selecting main scene
 func _on_main_scene_pressed():
@@ -96,14 +88,11 @@ func _on_quit_pressed():
 func _set_world_scale(new_scale : float) -> void:
 	XRServer.world_scale = new_scale
 
-
 func _on_start_button_up():
-	print("Starting")
 	if(Global.stopped): 
 		Global.toggle_stopped()
 
 func _on_stop_button_up():
-	print("Stopping")
 	if(!Global.stopped): 
 		Global.toggle_stopped()
 		
@@ -114,7 +103,6 @@ func _on_clear_food_button_button_up():
 	Global.clear_food()
 
 func _on_add_base_button_button_up():
-	print("Adding base")
 	Global.add_base()
 
 func _on_clear_bases_button_button_up():
