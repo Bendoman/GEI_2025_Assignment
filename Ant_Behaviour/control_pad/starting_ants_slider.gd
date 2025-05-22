@@ -1,7 +1,6 @@
 extends HSlider
 
 func handle_max_ants_change():
-	print("From in here: ", Global.max_ants)
 	if(value > Global.max_ants):
 		Global.change_starting_ants(Global.max_ants)	
 		value = Global.max_ants

@@ -33,7 +33,6 @@ func change_starting_ants(value):
 signal add_base_signal
 func add_base(): 
 	if(stopped):
-		print("Adding base in here")
 		emit_signal("add_base_signal")
 
 signal clear_bases_signal
@@ -44,7 +43,6 @@ func clear_bases():
 signal add_food_signal 
 func add_food(): 
 	if(stopped):
-		print("adding food global")
 		emit_signal("add_food_signal")
 
 signal clear_food_signal
