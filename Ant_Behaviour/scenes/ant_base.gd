@@ -109,6 +109,7 @@ func getAnt(team: int, index: int, type):
 		return get_parent().get_parent().bases[team].warrior_ant_renderer.antData[index]
 
 func decreaseWarriorCount(): 
+	ant_renderer.currentWarriors -= 1
 	warriorCount -= 1
 	warriors_label.text = str(warriorCount)	
 	

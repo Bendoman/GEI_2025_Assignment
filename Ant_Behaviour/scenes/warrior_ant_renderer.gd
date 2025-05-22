@@ -24,6 +24,8 @@ var trails
 var paths = [] 
 var antData = [] 
 var base
+var antsAlive = 0 
+var deadAnts = []
 
 var colors = [
 	Color(1.0, 0.0, 0.0),  # Red
@@ -53,6 +55,7 @@ func init():
 
 func reset(): 
 	antData = [] 
+	antsAlive = 0 
 	self.multimesh = null
 	
 func _ready():
@@ -62,29 +65,6 @@ func _ready():
 	team = get_parent().team
 	
 	init()
-	return
-	
-	#print_debug(team)
-	
-	# Create red material
-	var red_material := StandardMaterial3D.new()
-	red_material.albedo_color = Color(1.0, 0.0, 0.0)  # Red
-
-	# Create orange material
-	var orange_material := StandardMaterial3D.new()
-	orange_material.albedo_color = Color(1.0, 0.5, 0.0)  # Orange
-	
-	# Create and configure the MultiMesh
-	var multimesh = MultiMesh.new()
-	multimesh.mesh = mesh_to_use
-	multimesh.transform_format = MultiMesh.TRANSFORM_3D
-	multimesh.instance_count = instance_count
-
-	if(team == 1):
-		material_override = red_material
-	else: 
-		material_override = orange_material
-	self.multimesh = multimesh
 
 func removeTrail(index): 
 	trails[index] = null 
@@ -210,6 +190,10 @@ func _physics_process(delta):
 			world_grid.unregister_entity(to_global(ant.position), {"type": "warrior", "team": team, "index": i}, ant.cell)
 			#dead_warrior_renderer.addDeadAnt(i)
 			ant.handled_Death = true
+			antsAlive -= 1
+			base.decreaseWarriorCount() 
+			deadAnts.append(i)
+
 		
 		if(ant.dead):
 			continue
@@ -433,34 +417,48 @@ func _physics_process(delta):
 		multimesh.set_instance_transform(i, transform)
 
 func spawn_ant(): 
-	if(antData.size() >= instance_count):
+	if(antsAlive >= instance_count):
 		return 
 		
 	base.increaseWarriorCount()
-	#var pos = Vector3(randf() * 2 - 1, 0, randf() * 2 - 1).normalized() * randf() * spawn_radius
-	var index = antData.size()
 	
 	var pos = position
 	var transform = Transform3D(Basis(), pos)
-	multimesh.set_instance_transform(index, transform)
-	
+	#var pos = Vector3(randf() * 2 - 1, 0, randf() * 2 - 1).normalized() * randf() * spawn_radius
+	# var index = antData.size()
+	var index 
 	var offset_x = randf_range(-0.1, 0.1)
-	var offset_z = randf_range(-0.1, 0.1)		
-	antData.append({
-		"position": pos, 
-		"global_position": to_global(pos),	
-		"cell": Vector2i(0, 0),
-		"path": [pos + Vector3(offset_x, 0, offset_z)],
-		"obstacles": [],
-		"fleeing": null, 
-		"fleeingBool": false, 
-		"dead": false, 
-		"handled_Death": false,
-		
-		"backtracking": false,
-		"targetingAnt": null,
+	var offset_z = randf_range(-0.1, 0.1)	
 
-		"trail": [],
-		"trailIndex": -1,
-		"followingTrail": false
-	})
+	var data = {
+			"position": pos, 
+			"global_position": to_global(pos),	
+			"cell": Vector2i(0, 0),
+			"path": [pos + Vector3(offset_x, 0, offset_z)],
+			"obstacles": [],
+			"fleeing": null, 
+			"fleeingBool": false, 
+			"dead": false, 
+			"handled_Death": false,
+			
+			"backtracking": false,
+			"targetingAnt": null,
+
+			"trail": [],
+			"trailIndex": -1,
+			"followingTrail": false
+		}
+
+	if(antsAlive + deadAnts.size() < instance_count):
+		# Append new
+		index = antData.size()
+		antData.append(data)
+	else: 
+		# Reuse dead ant index
+		index = deadAnts[0]
+		deadAnts.pop_front()
+		antData[index] = data
+	
+	antsAlive += 1 
+
+	multimesh.set_instance_transform(index, transform)

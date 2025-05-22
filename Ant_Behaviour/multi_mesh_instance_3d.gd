@@ -598,63 +598,43 @@ func spawn_ant():
 	var transform = Transform3D(Basis(), pos)
 	
 	var offset_x = randf_range(-0.1, 0.1)
-	var offset_z = randf_range(-0.1, 0.1)		
-	if(antsAlive < instance_count):
-		index = deadAnts[0]
-		deadAnts.pop_front()
-		antData[index] = {
-				"index": antData.size() - 1,
-				
-				"position": pos, 
-				"cell": Vector2i(0, 0),
-				"global_position": to_global(pos),
-				"path": [pos + Vector3(offset_x, 0, offset_z)],
-				
-				"obstacles": [],
-				
-				"dead": false,
-				"fleeing": null,
-				"fleeingBool": false,
-				"handled_Death": false,
-				
-				"carryingFood": false, 
-				"backtracking": false,
-				"targetingFood": false,
-				"reportingEnemy": false, 
-				
-				"trail": [],
-				"source": null,
-				"trailIndex": -1,
-				"followingTrail": false,
-		}
-	else:
+	var offset_z = randf_range(-0.1, 0.1)
+	
+	var data = {
+		"index": antData.size() - 1,
+		
+		"position": pos, 
+		"cell": Vector2i(0, 0),
+		"global_position": to_global(pos),
+		"path": [pos + Vector3(offset_x, 0, offset_z)],
+		
+		"obstacles": [],
+		
+		"dead": false,
+		"fleeing": null,
+		"fleeingBool": false,
+		"handled_Death": false,
+		
+		"carryingFood": false, 
+		"backtracking": false,
+		"targetingFood": false,
+		"reportingEnemy": false, 
+		
+		"trail": [],
+		"source": null,
+		"trailIndex": -1,
+		"followingTrail": false,
+	}
+
+		
+	if(antsAlive + deadAnts.size() < instance_count):
 		index = antData.size()
 		#index = antData.size()
-		antData.append({
-				"index": antData.size() - 1,
-				
-				"position": pos, 
-				"cell": Vector2i(0, 0),
-				"global_position": to_global(pos),
-				"path": [pos + Vector3(offset_x, 0, offset_z)],
-				
-				"obstacles": [],
-				
-				"dead": false,
-				"fleeing": null,
-				"fleeingBool": false,
-				"handled_Death": false,
-				
-				"carryingFood": false, 
-				"backtracking": false,
-				"targetingFood": false,
-				"reportingEnemy": false, 
-				
-				"trail": [],
-				"source": null,
-				"trailIndex": -1,
-				"followingTrail": false,
-		})
+		antData.append(data)
+	else:
+		index = deadAnts[0]
+		deadAnts.pop_front()
+		antData[index] = data
 
 	multimesh.set_instance_transform(index, transform)
 
