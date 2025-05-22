@@ -167,9 +167,8 @@ func _input(event):
 
 
 func _process(delta: float) -> void:
-	pass
-	#if show_fps and _fps_label:
-		#_fps_label.text = "FPS: %d\nAnts: %d" % [Engine.get_frames_per_second(), ant_base.antCount]
+	if show_fps and _fps_label:
+		_fps_label.text = "FPS: %d" % [Engine.get_frames_per_second()]
 
 
 func _on_left_button_pressed(button_name: String) -> void:

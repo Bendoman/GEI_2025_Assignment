@@ -33,7 +33,7 @@ var colors = [
 ]
 
 func init(): 
-	instance_count = Global.max_ants
+	instance_count = 1 + int(Global.max_ants / 50)
 	antSpeed = Global.warrior_speed
 	
 	#starting_count = Global.starting_ants
@@ -163,10 +163,12 @@ func find_nearest_food(center_cell):
 				if(entry.type == "obstacle"):
 					foundObstacles.append(entry)
 				if entry.type == "warrior" and entry.team != team:
-					var foundAnt = base.getAnt(entry.team, entry.index, "worker")
+					#print("found other warrior")
+					var foundAnt = base.getAnt(entry.team, entry.index, "warrior")
 					if(foundAnt.fleeing == null):
-						#workers.append(entry)
+						workers.append(entry)
 						discoveredEnemyWorker = entry
+						break
 				if entry.type == "ant" and entry.team != team:
 					var foundAnt = base.getAnt(entry.team, entry.index, "worker")
 					if(foundAnt.fleeing == null):
@@ -204,6 +206,24 @@ func _physics_process(delta):
 		var ant = antData[i]
 		var trailIndex = ant.trailIndex
 		
+		if(ant.dead and !ant.handled_Death):
+			world_grid.unregister_entity(to_global(ant.position), {"type": "warrior", "team": team, "index": i}, ant.cell)
+			#dead_warrior_renderer.addDeadAnt(i)
+			ant.handled_Death = true
+		
+		if(ant.dead):
+			continue
+		
+		# Ant reaches target
+		if(ant.targetingAnt != null):
+			#if(currentPos.distance_to(to_local(ant.targetingAnt.global_position)) < 0.1):
+			if(ant.global_position.distance_to(ant.targetingAnt.global_position) < 0.1):
+				#print('caught ant')
+				
+				ant.targetingAnt.dead = true
+				ant.targetingAnt = null
+				ant.backtracking = true
+					
 		if(ant.path.size() == 0):
 			# Ant is at base
 			ant.backtracking = false 
@@ -231,6 +251,7 @@ func _physics_process(delta):
 				trailLength = trails[trailIndex].path.size()
 
 		if(ant.fleeing != null and !ant.fleeingBool):
+			#print(" in here")
 			ant.fleeingBool = true
 			var enemyAnt = base.getAnt(ant.fleeing[0], ant.fleeing[1], "warrior")
 			ant.backtracking = false 
@@ -361,7 +382,14 @@ func _physics_process(delta):
 			var enemyAnt
 			if(discoveredEnemyWorker != null and ant.path.size() > 0 and ant.targetingAnt == null):
 				#print(base.getAnt(discoveredEnemyWorker.team, discoveredEnemyWorker.index, "worker"))
-				enemyAnt = base.getAnt(discoveredEnemyWorker.team, discoveredEnemyWorker.index, "worker")
+				#print(discoveredEnemyWorker)
+				var type
+				if(discoveredEnemyWorker.type == "ant"):
+					type = "worker"
+				else:
+					type = "warrior"
+				enemyAnt = base.getAnt(discoveredEnemyWorker.team, discoveredEnemyWorker.index, type)
+				
 				ant.backtracking = false
 				#print("Warrior detected, ", enemyAnt)
 				enemyAnt.fleeing = [team, i]
@@ -393,9 +421,9 @@ func _physics_process(delta):
 						if index > nodeIndex:
 							break
 					ant.path.resize(nodeIndex + 1)	
-			world_grid.unregister_entity(to_global(ant.position), {"type": "warrior", "team": team, "index": i})
+			world_grid.unregister_entity(to_global(ant.position), {"type": "warrior", "team": team, "index": i}, ant.cell)
 			ant.cell = world_grid.position_to_cell(to_global(new_pos))
-			world_grid.register_entity(to_global(new_pos), {"type": "warrior", "team": team, "index": i})
+			world_grid.register_entity(to_global(new_pos), {"type": "warrior", "team": team, "index": i}, ant.cell)
 
 		
 		ant.position = new_pos
@@ -426,6 +454,8 @@ func spawn_ant():
 		"obstacles": [],
 		"fleeing": null, 
 		"fleeingBool": false, 
+		"dead": false, 
+		"handled_Death": false,
 		
 		"backtracking": false,
 		"targetingAnt": null,

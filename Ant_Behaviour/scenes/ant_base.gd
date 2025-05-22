@@ -26,6 +26,7 @@ var foodLevel: int
 @onready var food_level_label = $FoodLevelLabel
 @onready var worker_progress_bar = $MeshInstance3D/WorkerProgressBar
 @onready var next_ant_label = $FoodLevelLabel/NextAntLabel
+@onready var dead_warrior_renderer = $DeadWarriorRenderer
 
 
 var nextAnt = "worker"
@@ -47,6 +48,8 @@ func init():
 	ant_renderer.init()
 	warrior_ant_renderer.init()
 	carried_food_renderer.init()
+	dead_warrior_renderer.init()
+	
 	
 func reset(): 
 	# Reset own variables
@@ -76,7 +79,8 @@ func reset():
 	ant_renderer.reset()
 	warrior_ant_renderer.reset()
 	carried_food_renderer.reset()
-
+	dead_warrior_renderer.reset()
+	
 var mat 
 func _ready():
 	world_grid = get_node("../../WorldGrid") 

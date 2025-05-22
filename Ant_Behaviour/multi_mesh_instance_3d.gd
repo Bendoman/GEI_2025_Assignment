@@ -302,6 +302,7 @@ func remove_trail_from_grid(index):
 # "trail": [],
 # "trailIndex": 0,
 # "followingTrail": false,
+var deadAnts = [] 
 func _physics_process(delta):
 	if(Global.stopped): 
 		return 
@@ -312,8 +313,9 @@ func _physics_process(delta):
 		
 		if(ant.dead and !ant.handled_Death):
 			world_grid.unregister_entity(to_global(ant.position), {"type": "ant", "team": team, "index": i}, ant.cell)
-			#dead_warrior_renderer.addDeadAnt(i)
+			dead_warrior_renderer.addDeadAnt(i)
 			ant.handled_Death = true
+			deadAnts.append(i)
 		
 		if(ant.dead):
 			continue
@@ -342,7 +344,7 @@ func _physics_process(delta):
 			var rotated_forward = forward.rotated(Vector3.UP, angle_rad).normalized()
 			var new_target = (ant.position + rotated_forward) * wander_distance
 			ant.path.append(new_target)
-					
+			
 			#print("Ant fleeing from: ", enemyAnt)
 
 			#world_grid.unregister_entity(to_global(ant.position), {"type": "ant", "team": team, "index": i}, ant.cell)
@@ -400,7 +402,7 @@ func _physics_process(delta):
 		#elif(antData[i].path.size() >= 5 and !ant.followingTrail):
 			#antData[i].backtracking = true 
 		elif(!ant.followingTrail):
-			if(ant.global_position.x < -19 or ant.global_position.x > 19 or ant.global_position.z < -19 or ant.global_position.z > 19):
+			if(ant.path.size() > 15 or ant.global_position.x < -19 or ant.global_position.x > 19 or ant.global_position.z < -19 or ant.global_position.z > 19):
 				antData[i].backtracking = true 
 		
 		
@@ -476,7 +478,6 @@ func _physics_process(delta):
 							if world_grid.position_to_cell(to_global(ant.position)) != obstacle.cell and (world_grid.position_to_cell(to_global(new_target)) == obstacle.cell or world_grid.position_to_cell(to_global(new_target_half)) == obstacle.cell):
 								var loops = 0 
 								while world_grid.position_to_cell(to_global(new_target)) == obstacle.cell or world_grid.position_to_cell(to_global(new_target_half)) == obstacle.cell:
-									print("infinite?")
 									if(loops > 100):
 										break
 									loops += 1
@@ -486,7 +487,6 @@ func _physics_process(delta):
 									rotated_forward = forward.rotated(Vector3.UP, angle_rad).normalized()
 									new_target = currentPos + rotated_forward * wander_distance
 									new_target_half = currentPos + rotated_forward * (wander_distance / 2)
-								print(loops)
 								
 								#print("About to walk through obstacle")
 							#if world_grid.position_to_cell(to_global(new_target_half)) == obstacle.cell:
@@ -503,30 +503,36 @@ func _physics_process(delta):
 			elif(ant.fleeingBool):
 				#print('process next flee target')
 				var enemyAnt = base.getAnt(ant.fleeing[0], ant.fleeing[1], "warrior")	
-				var forward = (ant.global_position - enemyAnt.global_position).normalized()
-				var angle_deg = randf_range(-wander_angle_deg / 2.0, wander_angle_deg / 2.0)
-				var angle_rad = deg_to_rad(angle_deg)
-				
-				var rotated_forward = forward.rotated(Vector3.UP, angle_rad).normalized()
-				var new_target = (ant.position + rotated_forward) * wander_distance
-				var new_target_half = currentPos + rotated_forward * (wander_distance / 2)	
-				ant.path.append(new_target)
-				
-				if(ant.obstacles.size() > 0): 
-					for obstacle in ant.obstacles: 
-						#print(ant.cell, world_grid.position_to_cell(to_global(new_target)), obstacle.cell)
-						if world_grid.position_to_cell(to_global(ant.position)) != obstacle.cell and (world_grid.position_to_cell(to_global(new_target)) == obstacle.cell or world_grid.position_to_cell(to_global(new_target_half)) == obstacle.cell):
-							var loops = 0 
-							while world_grid.position_to_cell(to_global(new_target)) == obstacle.cell or world_grid.position_to_cell(to_global(new_target_half)) == obstacle.cell:
-								if(loops > 100):
-									break
-								loops += 1
-								forward = (targetPos - currentPos).normalized()
-								angle_deg = randf_range(-wander_angle_deg * 1.2, wander_angle_deg * 1.2)
-								angle_rad = deg_to_rad(angle_deg)
-								rotated_forward = forward.rotated(Vector3.UP, angle_rad).normalized()
-								new_target = currentPos + rotated_forward * wander_distance
-								new_target_half = currentPos + rotated_forward * (wander_distance / 2)
+				if(enemyAnt.dead):
+					print("Oops fleeing ant is dead")
+					ant.fleeing = null
+					ant.fleeingBool = false
+					ant.backtracking = true 
+				else:
+					var forward = (ant.global_position - enemyAnt.global_position).normalized()
+					var angle_deg = randf_range(-wander_angle_deg / 2.0, wander_angle_deg / 2.0)
+					var angle_rad = deg_to_rad(angle_deg)
+					
+					var rotated_forward = forward.rotated(Vector3.UP, angle_rad).normalized()
+					var new_target = (ant.position + rotated_forward) * wander_distance
+					var new_target_half = currentPos + rotated_forward * (wander_distance / 2)	
+					ant.path.append(new_target)
+					
+					if(ant.obstacles.size() > 0): 
+						for obstacle in ant.obstacles: 
+							#print(ant.cell, world_grid.position_to_cell(to_global(new_target)), obstacle.cell)
+							if world_grid.position_to_cell(to_global(ant.position)) != obstacle.cell and (world_grid.position_to_cell(to_global(new_target)) == obstacle.cell or world_grid.position_to_cell(to_global(new_target_half)) == obstacle.cell):
+								var loops = 0 
+								while world_grid.position_to_cell(to_global(new_target)) == obstacle.cell or world_grid.position_to_cell(to_global(new_target_half)) == obstacle.cell:
+									if(loops > 100):
+										break
+									loops += 1
+									forward = (targetPos - currentPos).normalized()
+									angle_deg = randf_range(-wander_angle_deg * 1.2, wander_angle_deg * 1.2)
+									angle_rad = deg_to_rad(angle_deg)
+									rotated_forward = forward.rotated(Vector3.UP, angle_rad).normalized()
+									new_target = currentPos + rotated_forward * wander_distance
+									new_target_half = currentPos + rotated_forward * (wander_distance / 2)
 		
 		#var offset_x = randf_range(-0.075, 0.075)
 		#var offset_z = randf_range(-0.05, 0.05)

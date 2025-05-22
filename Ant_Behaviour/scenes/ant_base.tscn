@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://cccxu3uljmod8"]
+[gd_scene load_steps=14 format=3 uid="uid://cccxu3uljmod8"]
 
 [ext_resource type="Script" uid="uid://bjdcgwmuykbl1" path="res://scenes/ant_base.gd" id="1_cloup"]
 [ext_resource type="Script" uid="uid://dm83gotx1cipr" path="res://multi_mesh_instance_3d.gd" id="3_anh4v"]
@@ -7,6 +7,8 @@
 [ext_resource type="ArrayMesh" path="res://Warrior.tres" id="6_0gare"]
 [ext_resource type="Script" uid="uid://lahw8dgm8bq8" path="res://scenes/dead_warrior_renderer.gd" id="7_0gare"]
 [ext_resource type="Script" uid="uid://bxftc70bcdaul" path="res://scenes/warrior_ant_renderer.gd" id="7_ca7l2"]
+[ext_resource type="ArrayMesh" path="res://DeadAntMesh.tres" id="8_nnj6s"]
+[ext_resource type="Material" uid="uid://d2j37yt2trra0" path="res://materials/dead_ant.tres" id="9_6pylk"]
 [ext_resource type="Script" uid="uid://dmse48xan8rrw" path="res://scenes/food_trail_renderer.gd" id="9_278b3"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_anh4v"]
@@ -91,6 +93,8 @@ mesh_to_use = ExtResource("6_0gare")
 
 [node name="DeadWarriorRenderer" type="MultiMeshInstance3D" parent="."]
 script = ExtResource("7_0gare")
+mesh_to_use = ExtResource("8_nnj6s")
+material_to_use = ExtResource("9_6pylk")
 
 [node name="FoodTrailRenderer" type="MultiMeshInstance3D" parent="."]
 script = ExtResource("9_278b3")
