@@ -21,10 +21,10 @@ var deadAnts = []
 var antsAlive = 0 
 
 var colors = [
-	Color(1.0, 0.0, 2.5),
-	Color(1.0, 0.0, 0.0),
-	Color(1.0, 2.5, 2.5),
-	Color(3.5, 2.5, 2.5),
+	Color(0.0, 0.0, 3.5),
+	Color(0.0, 0.0, 0.0),
+	Color(0.0, 3.5, 3.5),
+	Color(0.0, 3.5, 3.5),
 ]
 
 func init(): 
