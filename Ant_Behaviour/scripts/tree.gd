@@ -11,4 +11,3 @@ func register():
 			"type": "obstacle", 
 			"global_position": global_position
 		}, cell)
-	world_grid.printGrid()

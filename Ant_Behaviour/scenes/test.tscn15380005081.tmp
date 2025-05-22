@@ -1,0 +1,172 @@
+[gd_scene load_steps=19 format=3 uid="uid://bmov0u7ck0qgu"]
+
+[ext_resource type="Script" uid="uid://cpek6qnsms6xd" path="res://scripts/test.gd" id="1_6uqi0"]
+[ext_resource type="Material" uid="uid://dtd0wnwdssiif" path="res://materials/ground_colour.tres" id="2_ykrsh"]
+[ext_resource type="Script" uid="uid://bsa24v84vydkc" path="res://scripts/world_grid.gd" id="4_ppyta"]
+[ext_resource type="PackedScene" uid="uid://ctklq1esgqach" path="res://scenes/tree.tscn" id="7_ehkex"]
+[ext_resource type="Material" uid="uid://da4eontgchxa2" path="res://materials/wall.tres" id="7_vbegm"]
+[ext_resource type="Script" uid="uid://bgqh7k36dixjy" path="res://scripts/obstacles.gd" id="7_xersf"]
+[ext_resource type="PackedScene" uid="uid://eor7icnqpnig" path="res://scenes/PickableFoodSource.tscn" id="8_ehkex"]
+[ext_resource type="PackedScene" uid="uid://dw7f1yfv67ywx" path="res://scenes/xrOrigin.tscn" id="9_00tp4"]
+[ext_resource type="PackedScene" uid="uid://dmwv8dlpipsxb" path="res://scenes/PickableAntBase.tscn" id="9_xersf"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_n2cwj"]
+sky_top_color = Color(0.425909, 0.569805, 0.704866, 1)
+sky_horizon_color = Color(0.618242, 0.691471, 0.767393, 1)
+ground_bottom_color = Color(0.0470588, 0.196078, 0.364706, 1)
+ground_horizon_color = Color(0.618242, 0.691471, 0.767393, 1)
+
+[sub_resource type="Sky" id="Sky_0xqbg"]
+sky_material = SubResource("ProceduralSkyMaterial_n2cwj")
+
+[sub_resource type="Environment" id="Environment_gsyhl"]
+background_mode = 2
+sky = SubResource("Sky_0xqbg")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fuouj"]
+size = Vector3(40, 0.1, 40)
+
+[sub_resource type="BoxMesh" id="BoxMesh_16tix"]
+size = Vector3(40, 0.1, 40)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ppyta"]
+size = Vector3(0.5, 0.5, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ykrsh"]
+transparency = 1
+albedo_color = Color(0.28, 0.388, 1, 0.376471)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ehkex"]
+size = Vector3(40, 1, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vbegm"]
+size = Vector3(40, 1, 0.5)
+
+[node name="root" type="Node3D"]
+script = ExtResource("1_6uqi0")
+ant_base_scene = ExtResource("9_xersf")
+food_source_scene = ExtResource("8_ehkex")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_gsyhl")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+light_color = Color(1, 1, 0.898039, 1)
+
+[node name="Ground" type="StaticBody3D" parent="."]
+collision_layer = 256
+collision_mask = 256
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("BoxShape3D_fuouj")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/CollisionShape3D"]
+material_override = ExtResource("2_ykrsh")
+mesh = SubResource("BoxMesh_16tix")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.174628, 0.984634, 0, -0.984634, 0.174628, -0.485766, 5.60498, 0.691789)
+
+[node name="WorldGrid" type="Node3D" parent="."]
+script = ExtResource("4_ppyta")
+debug_mesh = SubResource("BoxMesh_ppyta")
+debug_material = SubResource("StandardMaterial3D_ykrsh")
+
+[node name="Walls" type="Node3D" parent="."]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Walls/StaticBody3D"]
+material_override = ExtResource("7_vbegm")
+mesh = SubResource("BoxMesh_ehkex")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/StaticBody3D"]
+shape = SubResource("BoxShape3D_vbegm")
+
+[node name="StaticBody3D2" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 20)
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Walls/StaticBody3D2"]
+material_override = ExtResource("7_vbegm")
+mesh = SubResource("BoxMesh_ehkex")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/StaticBody3D2"]
+shape = SubResource("BoxShape3D_vbegm")
+
+[node name="StaticBody3D3" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 20, 0, 0)
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Walls/StaticBody3D3"]
+material_override = ExtResource("7_vbegm")
+mesh = SubResource("BoxMesh_ehkex")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/StaticBody3D3"]
+shape = SubResource("BoxShape3D_vbegm")
+
+[node name="StaticBody3D4" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -20, 0, 0)
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Walls/StaticBody3D4"]
+material_override = ExtResource("7_vbegm")
+mesh = SubResource("BoxMesh_ehkex")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/StaticBody3D4"]
+shape = SubResource("BoxShape3D_vbegm")
+
+[node name="Obstacles" type="Node3D" parent="."]
+script = ExtResource("7_xersf")
+
+[node name="Tree" parent="Obstacles" instance=ExtResource("7_ehkex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 0)
+
+[node name="Tree2" parent="Obstacles" instance=ExtResource("7_ehkex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 0)
+
+[node name="Tree3" parent="Obstacles" instance=ExtResource("7_ehkex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="Tree4" parent="Obstacles" instance=ExtResource("7_ehkex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -2)
+
+[node name="Tree5" parent="Obstacles" instance=ExtResource("7_ehkex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 2)
+
+[node name="PickableAntBase" parent="." instance=ExtResource("9_xersf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.85, 0, -0.76)
+
+[node name="PickableAntBase2" parent="." instance=ExtResource("9_xersf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.115, 0, 1.424)
+
+[node name="PickableFoodSource3" parent="." instance=ExtResource("8_ehkex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.10936, 0.135, 1.80244)
+
+[node name="PickableFoodSource5" parent="." instance=ExtResource("8_ehkex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.33146, 0.135001, -0.68053)
+
+[node name="PickableFoodSource6" parent="." instance=ExtResource("8_ehkex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.312, 0.135, -2.60298)
+
+[node name="PickableFoodSource7" parent="." instance=ExtResource("8_ehkex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4475, 0.135, 4.00782)
+
+[node name="PickableFoodSource8" parent="." instance=ExtResource("8_ehkex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.51583, 0.135, 2.28418)
+
+[node name="PickableFoodSource9" parent="." instance=ExtResource("8_ehkex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00775135, 0.135, -5.32581)
+
+[node name="PickableFoodSource10" parent="." instance=ExtResource("8_ehkex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.31284, 0.135, -2.14663)
+
+[node name="PickableFoodSource11" parent="." instance=ExtResource("8_ehkex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.91761, 0.135, -2.269)
+
+[node name="XROrigin3D" parent="." instance=ExtResource("9_00tp4")]

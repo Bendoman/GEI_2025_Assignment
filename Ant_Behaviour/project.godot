@@ -11,8 +11,12 @@ config_version=5
 [application]
 
 config/name="Games Engines 2024"
-run/main_scene="uid://bmov0u7ck0qgu"
+run/main_scene="uid://c3am83y6ox1iw"
 config/features=PackedStringArray("4.4", "Forward Plus")
+
+[audio]
+
+buses/default_bus_layout=""
 
 [autoload]
 

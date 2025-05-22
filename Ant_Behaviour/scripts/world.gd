@@ -16,7 +16,6 @@ var _controller : XRController3D
 @onready var xr_left_controller : XRController3D = xr_origin_3d.get_node("LeftHand")
 @onready var xr_right_controller : XRController3D = xr_origin_3d.get_node("RightHand")
 
-
 var _fps_label: Label
 @export var show_fps: bool = true
 @onready var obstacles = $Obstacles
@@ -95,6 +94,7 @@ func add_base():
 	
 	bases.append(instance.ant_base)
 	add_child(instance)
+
 func remove_bases(): 
 	basesNumber = 0 
 	Global.stopped = true

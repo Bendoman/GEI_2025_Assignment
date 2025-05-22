@@ -1,11 +1,11 @@
 [gd_scene load_steps=7 format=3 uid="uid://ctklq1esgqach"]
 
 [ext_resource type="Material" uid="uid://ditkjjo4i2xck" path="res://materials/tree.tres" id="1_brfkd"]
-[ext_resource type="Script" uid="uid://rd5j1ce8404d" path="res://tree.gd" id="1_nnvrw"]
+[ext_resource type="Script" uid="uid://rd5j1ce8404d" path="res://scripts/tree.gd" id="1_nnvrw"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_brfkd"]
 transparency = 1
-albedo_color = Color(0.28, 0.177333, 0.0336, 0.427451)
+albedo_color = Color(0.28, 0.177333, 0.0336, 1)
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_brfkd"]
 material = SubResource("StandardMaterial3D_brfkd")
@@ -38,6 +38,5 @@ shape = SubResource("BoxShape3D_nnvrw")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D/Leaves"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.50383, 0)
-visible = false
 material_override = ExtResource("1_brfkd")
 mesh = SubResource("SphereMesh_d2g23")

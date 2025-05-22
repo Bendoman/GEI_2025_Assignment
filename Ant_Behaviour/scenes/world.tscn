@@ -1,58 +1,133 @@
-[gd_scene load_steps=10 format=3 uid="uid://c0m0jj5cxlrjs"]
+[gd_scene load_steps=17 format=3 uid="uid://c3am83y6ox1iw"]
 
-[ext_resource type="Script" path="res://scripts/world.gd" id="1_mot7s"]
+[ext_resource type="Script" uid="uid://cpek6qnsms6xd" path="res://scripts/world.gd" id="1_mot7s"]
 [ext_resource type="Material" uid="uid://dtd0wnwdssiif" path="res://materials/ground_colour.tres" id="2_4wyf3"]
-[ext_resource type="PackedScene" uid="uid://dw7f1yfv67ywx" path="res://scenes/xrOrigin.tscn" id="2_qpxi4"]
-[ext_resource type="PackedScene" uid="uid://cccxu3uljmod8" path="res://scenes/ant_base.tscn" id="3_71j4m"]
+[ext_resource type="Material" uid="uid://da4eontgchxa2" path="res://materials/wall.tres" id="3_4wyf3"]
+[ext_resource type="Script" uid="uid://bgqh7k36dixjy" path="res://scripts/obstacles.gd" id="4_7r4gi"]
+[ext_resource type="PackedScene" uid="uid://ctklq1esgqach" path="res://scenes/tree.tscn" id="5_71j4m"]
+[ext_resource type="PackedScene" uid="uid://dmwv8dlpipsxb" path="res://scenes/PickableAntBase.tscn" id="6_i7141"]
+[ext_resource type="PackedScene" uid="uid://eor7icnqpnig" path="res://scenes/PickableFoodSource.tscn" id="7_4mrxx"]
+[ext_resource type="PackedScene" uid="uid://dw7f1yfv67ywx" path="res://scenes/xrOrigin.tscn" id="7_i7141"]
+[ext_resource type="Script" uid="uid://bsa24v84vydkc" path="res://scripts/world_grid.gd" id="8_4mrxx"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_n2cwj"]
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_rwgxs"]
 sky_top_color = Color(0.425909, 0.569805, 0.704866, 1)
 sky_horizon_color = Color(0.618242, 0.691471, 0.767393, 1)
 ground_bottom_color = Color(0.0470588, 0.196078, 0.364706, 1)
 ground_horizon_color = Color(0.618242, 0.691471, 0.767393, 1)
 
 [sub_resource type="Sky" id="Sky_0xqbg"]
-sky_material = SubResource("ProceduralSkyMaterial_n2cwj")
+sky_material = SubResource("ProceduralSkyMaterial_rwgxs")
 
-[sub_resource type="Environment" id="Environment_gsyhl"]
+[sub_resource type="Environment" id="Environment_4wyf3"]
 background_mode = 2
 sky = SubResource("Sky_0xqbg")
 tonemap_mode = 2
 glow_enabled = true
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_fuouj"]
-size = Vector3(10, 0.1, 10)
+[sub_resource type="BoxShape3D" id="BoxShape3D_k0juu"]
+size = Vector3(40, 0.1, 40)
 
-[sub_resource type="BoxMesh" id="BoxMesh_16tix"]
-size = Vector3(50, 0.1, 50)
+[sub_resource type="BoxMesh" id="BoxMesh_71j4m"]
+size = Vector3(40, 0.1, 40)
+
+[sub_resource type="BoxMesh" id="BoxMesh_k0juu"]
+size = Vector3(40, 1, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_71j4m"]
+size = Vector3(40, 1, 0.5)
 
 [node name="root" type="Node3D"]
 script = ExtResource("1_mot7s")
+ant_base_scene = ExtResource("6_i7141")
+food_source_scene = ExtResource("7_4mrxx")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_gsyhl")
+environment = SubResource("Environment_4wyf3")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+transform = Transform3D(-0.866024, -0.433016, 0.250001, 0, 0.499998, 0.866026, -0.500003, 0.749999, -0.43301, 0, 0, 0)
 light_color = Color(1, 1, 0.898039, 1)
 
-[node name="StaticBody3D" type="StaticBody3D" parent="."]
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.174628, 0.984635, 0, -0.984635, 0.174628, -0.485766, 5.60498, 0.691789)
+
+[node name="Ground" type="StaticBody3D" parent="."]
 collision_layer = 256
 collision_mask = 256
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
-shape = SubResource("BoxShape3D_fuouj")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("BoxShape3D_k0juu")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D/CollisionShape3D"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground/CollisionShape3D"]
 material_override = ExtResource("2_4wyf3")
-mesh = SubResource("BoxMesh_16tix")
+mesh = SubResource("BoxMesh_71j4m")
 
-[node name="XROrigin3D" parent="." instance=ExtResource("2_qpxi4")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.55598)
+[node name="Walls" type="Node3D" parent="."]
 
-[node name="AntBase" parent="." instance=ExtResource("3_71j4m")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.926592, 0.175, 0.177432)
-spawn_position = Vector3(0, 0, 0)
+[node name="StaticBody3D" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.969868, 0.243632, 0, -0.243632, 0.969868, 0, 1.38551, 2.63907)
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Walls/StaticBody3D"]
+material_override = ExtResource("3_4wyf3")
+mesh = SubResource("BoxMesh_k0juu")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/StaticBody3D"]
+shape = SubResource("BoxShape3D_71j4m")
+
+[node name="StaticBody3D2" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 20)
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Walls/StaticBody3D2"]
+material_override = ExtResource("3_4wyf3")
+mesh = SubResource("BoxMesh_k0juu")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/StaticBody3D2"]
+shape = SubResource("BoxShape3D_71j4m")
+
+[node name="StaticBody3D3" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 20, 0, 0)
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Walls/StaticBody3D3"]
+material_override = ExtResource("3_4wyf3")
+mesh = SubResource("BoxMesh_k0juu")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/StaticBody3D3"]
+shape = SubResource("BoxShape3D_71j4m")
+
+[node name="StaticBody3D4" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -20, 0, 0)
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Walls/StaticBody3D4"]
+material_override = ExtResource("3_4wyf3")
+mesh = SubResource("BoxMesh_k0juu")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/StaticBody3D4"]
+shape = SubResource("BoxShape3D_71j4m")
+
+[node name="Obstacles" type="Node3D" parent="."]
+script = ExtResource("4_7r4gi")
+
+[node name="Tree" parent="Obstacles" instance=ExtResource("5_71j4m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Tree2" parent="Obstacles" instance=ExtResource("5_71j4m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+
+[node name="PickableAntBase" parent="." instance=ExtResource("6_i7141")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.94, 0, -0.726)
+
+[node name="PickableFoodSource" parent="." instance=ExtResource("7_4mrxx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.09875, 0.135, 0.745675)
+
+[node name="PickableFoodSource2" parent="." instance=ExtResource("7_4mrxx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.17934, 0.135, -2.88135)
+
+[node name="XROrigin3D" parent="." instance=ExtResource("7_i7141")]
+
+[node name="WorldGrid" type="Node3D" parent="."]
+script = ExtResource("8_4mrxx")

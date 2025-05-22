@@ -1,14 +1,14 @@
 [gd_scene load_steps=4 format=3 uid="uid://dmwv8dlpipsxb"]
 
-[ext_resource type="Script" uid="uid://bvqypsd5vtn8x" path="res://pickable_ant_base.gd" id="1_l3ymm"]
+[ext_resource type="Script" uid="uid://bvqypsd5vtn8x" path="res://scripts/pickable_ant_base.gd" id="1_l3ymm"]
 [ext_resource type="PackedScene" uid="uid://cccxu3uljmod8" path="res://scenes/ant_base.tscn" id="1_vpm8d"]
-[ext_resource type="PackedScene" uid="uid://ja2mapygqodu" path="res://scenes/Old/pickable_object.tscn" id="2_jfmdv"]
+[ext_resource type="PackedScene" uid="uid://ja2mapygqodu" path="res://scenes/pickable_object.tscn" id="2_jfmdv"]
 
 [node name="PickableAntBase" type="Node3D"]
 script = ExtResource("1_l3ymm")
 
 [node name="AntBase" parent="." instance=ExtResource("1_vpm8d")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.175, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 
 [node name="PickableObject" parent="." instance=ExtResource("2_jfmdv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.65566, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0)

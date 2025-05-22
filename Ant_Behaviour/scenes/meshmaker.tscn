@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://ow1q4unc5k5a"]
 
-[ext_resource type="Script" uid="uid://l46lkk0m1r3i" path="res://meshmaker.gd" id="1_wk7nh"]
-[ext_resource type="ArrayMesh" uid="uid://cq5dynh2kw4j7" path="res://CombinedAntMesh.tres" id="2_yn64c"]
+[ext_resource type="Script" uid="uid://l46lkk0m1r3i" path="res://scripts/meshmaker.gd" id="1_wk7nh"]
+[ext_resource type="ArrayMesh" uid="uid://cq5dynh2kw4j7" path="res://materials/Meshes/CombinedAntMesh.tres" id="2_yn64c"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_7p42d"]
 top_radius = 0.003
